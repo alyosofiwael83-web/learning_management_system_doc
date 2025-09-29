@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>4.1 تصميم قاعدة البيانات - نظام إدارة التعلم</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- الكود الموحد للتنسيقات مع إضافة تنسيقات جديدة -->
+    <style>
+        :root { --primary: #2c3e50; --secondary: #3498db; --accent: #e74c3c; --success: #2ecc71; --purple: #8e44ad; --light: #ecf0f1; --sidebar-width: 280px; --transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275  ); --shadow: 0 10px 30px rgba(0, 0, 0, 0.1); --radius: 12px; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #f9f9f9; color: #333; display: flex; min-height: 100vh; direction: rtl; }
+        .sidebar { width: var(--sidebar-width); background: linear-gradient(165deg, var(--primary) 0%, #1a2530 100%); color: white; height: 100vh; overflow-y: auto; box-shadow: var(--shadow); border-left: 1px solid rgba(255, 255, 255, 0.1); flex-shrink: 0; }
+        .sidebar-header { padding: 25px 20px; text-align: center; border-bottom: 1px solid rgba(255, 255, 255, 0.1); background: rgba(0, 0, 0, 0.2); }
+        .sidebar-header .logo { display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 10px; }
+        .sidebar-header .logo i { font-size: 2rem; color: var(--secondary); background: rgba(255, 255, 255, 0.1); padding: 10px; border-radius: 50%; }
+        .sidebar-header h1 { font-size: 1.4rem; font-weight: 600; margin: 0; }
+        .sidebar-header p { font-size: 0.85rem; opacity: 0.8; margin: 5px 0 0; }
+        .sidebar-nav { padding: 20px 0; }
+        .nav-item { margin-bottom: 5px; position: relative; }
+        .nav-item a { display: flex; align-items: center; padding: 15px 25px; color: rgba(255, 255, 255, 0.8); text-decoration: none; transition: var(--transition); border-right: 4px solid transparent; }
+        .nav-item a i { margin-left: 15px; font-size: 1.2rem; width: 24px; text-align: center; }
+        .nav-item a:hover, .nav-item.active > a { background: rgba(255, 255, 255, 0.1); color: white; border-right-color: var(--secondary); padding-right: 30px; }
+        .nav-item a:hover i, .nav-item.active > a i { color: var(--secondary); transform: scale(1.1); }
+        .submenu { max-height: 0; overflow: hidden; transition: max-height 0.5s ease; background: rgba(0, 0, 0, 0.2); }
+        .nav-item.active .submenu { max-height: 500px; }
+        .submenu a { padding: 12px 25px 12px 40px; font-size: 0.9rem; border-right: 3px solid transparent; display: block; color: rgba(255, 255, 255, 0.8); text-decoration: none; transition: var(--transition); }
+        .submenu a:hover, .submenu a.active { border-right-color: var(--accent) !important; background: rgba(255, 255, 255, 0.05); padding-right: 35px; color: white; }
+        .submenu a::before { content: "•"; margin-left: 10px; color: var(--secondary); }
+        .nav-toggle .toggle-icon { margin-right: auto; transition: var(--transition); }
+        .nav-item.active > .nav-toggle .toggle-icon { transform: rotate(-180deg); }
+        .mobile-menu-btn { display: none; position: fixed; top: 20px; right: 20px; background: var(--primary); color: white; border: none; border-radius: 8px; width: 45px; height: 45px; font-size: 1.2rem; cursor: pointer; z-index: 1100; transition: var(--transition); }
+        .mobile-menu-btn:hover { background: var(--secondary); transform: rotate(90deg); }
+        .main-content { flex-grow: 1; overflow-y: auto; height: 100vh; background-color: white; }
+        .content-page { max-width: 1100px; margin: 0 auto; padding: 60px 40px; color: #333; }
+        .content-page h1 { color: var(--primary); font-size: 2.5rem; margin-bottom: 30px; text-align: center; position: relative; padding-bottom: 15px; }
+        .content-page h1::after { content: ""; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 100px; height: 4px; background: var(--secondary); border-radius: 2px; }
+        .content-page > p { margin-bottom: 40px; font-size: 1.1rem; line-height: 1.8; text-align: justify; }
+        .content-page h2 { color: var(--primary); margin: 50px 0 25px; font-size: 1.8rem; border-bottom: 2px solid var(--light); padding-bottom: 10px; display: flex; align-items: center; gap: 15px; }
+        
+        /* --- تنسيقات جديدة للصفحة --- */
+        .design-principle {
+            background: var(--light);
+            border-right: 5px solid var(--secondary);
+            padding: 25px;
+            border-radius: var(--radius);
+            margin-bottom: 40px;
+        }
+        .design-principle h3 { margin-top: 0; color: var(--secondary); }
+        .design-principle p { margin-bottom: 0; line-height: 1.7; }
+
+        .table-explanation {
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: var(--radius);
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        .table-explanation-header {
+            padding: 15px 20px;
+            background: var(--primary);
+            color: white;
+            border-radius: var(--radius) var(--radius) 0 0;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        .table-explanation-body {
+            padding: 25px;
+        }
+        .table-explanation-body p { margin-bottom: 15px; }
+        .table-explanation-body code {
+            background: #e0e0e0;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+            color: var(--primary);
+        }
+        .table-explanation-body .relation-type {
+            font-weight: bold;
+            color: var(--accent);
+        }
+
+        .code-block {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: var(--radius);
+            margin-top: 20px;
+            direction: ltr;
+            text-align: left;
+            font-family: 'Fira Code', monospace;
+            white-space: pre-wrap;
+            font-size: 0.9em;
+        }
+        .code-block .comment { color: #9ca3af; }
+        .code-block .keyword { color: #9f7aea; }
+        .code-block .function { color: #63b3ed; }
+        .code-block .variable { color: #f6ad55; }
+        .code-block .string { color: #a3be8c; }
+
+        .pagination { display: flex; justify-content: space-between; margin-top: 50px; padding-top: 30px; border-top: 1px solid #eee; }
+        .btn { display: inline-flex; align-items: center; gap: 10px; padding: 12px 25px; border-radius: 50px; text-decoration: none; font-weight: 600; transition: var(--transition); box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .btn i { font-size: 1.1rem; }
+        .btn-next { background: var(--secondary); color: white; }
+        .btn-prev { background: var(--primary); color: white; }
+    </style>
+</head>
+<body>
+    <div id="sidebar-container"></div>
+    <main class="main-content">
+        <section class="content-page">
+            <h1>4.1 تصميم قاعدة البيانات</h1>
+            <p>تصميم قاعدة البيانات هو حجر الزاوية في أي نظام برمجي ناجح. إنه ليس مجرد مكان لتخزين البيانات، بل هو الهيكل العظمي الذي يحدد قوة النظام، كفاءته، وقدرته على التطور مستقبلاً. في هذا القسم، سنستعرض بالتفصيل كيف تم تحويل مخطط علاقات الكيانات (ERD) من الفصل السابق إلى تصميم عملي ومنطقي باستخدام إطار العمل Laravel.</p>
+
+            <div class="design-principle">
+                <h3><i class="fas fa-sitemap"></i> مبدأ التصميم: التوحيد القياسي (Normalization)</h3>
+                <p>تم تصميم جميع الجداول مع مراعاة قواعد التوحيد القياسي (على الأقل حتى المستوى الثالث - 3NF). هذا المبدأ يضمن تقليل تكرار البيانات إلى أقصى حد ممكن، ويحافظ على سلامة البيانات (Data Integrity)، ويجعل قاعدة البيانات أكثر مرونة وسهولة في الصيانة والتطوير.</p>
+            </div>
+
+            <h2><i class="fas fa-table"></i> شرح الجداول الرئيسية والعلاقات</h2>
+            
+            <div class="table-explanation">
+                <div class="table-explanation-header">1. نواة النظام: المستخدمون والأدوار (Users, Students, Doctors)</div>
+                <div class="table-explanation-body">
+                    <p>الجدول المركزي هو <code>users</code>، الذي يحتوي على معلومات الدخول الأساسية (البريد الإلكتروني، كلمة المرور). يرتبط هذا الجدول بعلاقة <span class="relation-type">One-to-One</span> مع جدولي <code>students</code> و <code>doctors</code>.</p>
+                    <p>هذا التصميم يفصل بذكاء بين "بيانات المصادقة" (Authentication Data) و "بيانات الملف الشخصي" (Profile Data)، مما يزيد من الأمان وينظم البنية. عندما يقوم مستخدم بتسجيل الدخول، نتحقق أولاً من جدول <code>users</code>، ثم بناءً على دوره، نقوم بجلب بياناته من جدول <code>students</code> أو <code>doctors</code>.</p>
+                </div>
+            </div>
+
+            <div class="table-explanation">
+                <div class="table-explanation-header">2. الهيكل الأكاديمي (Departments, Specializations, Batches)</div>
+                <div class="table-explanation-body">
+                    <p>تم تصميم الهيكل الأكاديمي بشكل هرمي ومنطقي:</p>
+                    <ul>
+                        <li>الـ <code>departments</code> (الأقسام) يحتوي على عدة <code>specializations</code> (تخصصات). (علاقة <span class="relation-type">One-to-Many</span>).</li>
+                        <li>الـ <code>specializations</code> (التخصصات) يحتوي على عدة <code>batches</code> (دفعات). (علاقة <span class="relation-type">One-to-Many</span>).</li>
+                        <li>الـ <code>batches</code> (الدفعات) تحتوي على عدة <code>students</code> (طلاب). (علاقة <span class="relation-type">One-to-Many</span>).</li>
+                    </ul>
+                    <p>هذا التصميم الهرمي يسمح لنا بسهولة بجلب جميع طلاب تخصص معين، أو جميع تخصصات قسم معين باستعلامات بسيطة وفعالة.</p>
+                </div>
+            </div>
+
+            <div class="table-explanation">
+                <div class="table-explanation-header">3. العلاقة المعقدة: المواد والتخصصات (Courses & Specializations)</div>
+                <div class="table-explanation-body">
+                    <p>العلاقة بين المواد والتخصصات هي علاقة <span class="relation-type">Many-to-Many</span>، لأن "التخصص الواحد" يمكن أن يحتوي على "عدة مواد"، و "المادة الواحدة" يمكن أن تُدرّس في "عدة تخصصات".</p>
+                    <p>لحل هذه العلاقة، تم إنشاء جدول وسيط (Pivot Table) اسمه <code>specialization_course_academic_period</code>. هذا الجدول لا يربط فقط بين <code>course_id</code> و <code>specialization_id</code>، بل يضيف أيضاً معلومات حيوية مثل <code>doctor_id</code> (من هو الدكتور الذي يدرس هذه المادة لهذا التخصص في هذه الفترة)، بالإضافة إلى السنة والفصل الدراسي. هذا التصميم الذكي يجعل الجدول الوسيط غنياً بالمعلومات ويحل العديد من المشاكل المعقدة في مكان واحد.</p>
+                    <div class="code-block">
+                        <span class="comment">// في موديل Specialization.php</span>
+                        <div><span class="keyword">public function</span> <span class="function">courses</span>()</div>
+                        <div>{</div>
+                        <div>    <span class="keyword">return</span> <span class="variable">$this</span>-><span class="function">belongsToMany</span>(Course::class, <span class="string">'specialization_course_academic_period'</span>)</div>
+                        <div>        -><span class="function">withPivot</span>(<span class="string">'doctor_id'</span>, <span class="string">'academic_year'</span>, <span class="string">'semester'</span>);</div>
+                        <div>}</div>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="pagination">
+                <a href="../chapter3/3.8_erd.html" class="btn btn-prev"><i class="fas fa-arrow-right"></i> السابق: مخطط علاقات الكيانات</a>
+                <a href="4.2_forms_queries_design.html" class="btn btn-next">التالي: تصميم النماذج والاستعلامات <i class="fas fa-arrow-left"></i></a>
+            </nav>
+        </section>
+    </main>
+
+    <!-- الكود الموحد للجافاسكريبت -->
+     <!-- الكود الموحد للجافاسكريبت -->
+    <script>
+        function setActiveLink() {
+            const currentPath = window.location.pathname;
+            document.querySelectorAll('.sidebar-nav a').forEach(link => {
+                const linkPath = new URL(link.href, window.location.origin).pathname;
+                if (currentPath.endsWith(linkPath.split('/').pop())) {
+                    document.querySelectorAll('.nav-item.active, .submenu a.active').forEach(i => i.classList.remove('active'));
+                    link.classList.add('active');
+                    const parentNavItem = link.closest('.nav-item');
+                    if (parentNavItem) {
+                        parentNavItem.classList.add('active');
+                    }
+                }
+            });
+        }
+
+        function initializeSidebarScripts() {
+            document.querySelectorAll('.nav-toggle').forEach(toggle => {
+                toggle.addEventListener('click', function(e) { e.preventDefault(); this.parentElement.classList.toggle('active'); });
+            });
+            const menuToggle = document.getElementById('menuToggle');
+            const sidebar = document.getElementById('sidebar');
+            if (menuToggle && sidebar) {
+                menuToggle.addEventListener('click', (e) => { e.stopPropagation(); sidebar.classList.toggle('active'); });
+            }
+            document.addEventListener('click', function(e) {
+                if (window.innerWidth <= 768 && sidebar?.classList.contains('active') && !sidebar.contains(e.target) && !menuToggle.contains(e.target)) {
+                    sidebar.classList.remove('active');
+                }
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            fetch('../sidebar.html')
+                .then(response => response.ok ? response.text() : Promise.reject('Failed to load sidebar'))
+                .then(data => {
+                    document.getElementById('sidebar-container').innerHTML = data;
+                    initializeSidebarScripts();
+                    setActiveLink();
+                })
+                .catch(error => console.error('خطأ في تحميل الشريط الجانبي:', error));
+        });
+    </script>
+</body>
+</html>

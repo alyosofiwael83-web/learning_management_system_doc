@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3.5 حالة الاستخدام</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- الكود الموحد للتنسيقات مع التصحيح -->
+    <style>
+        :root { --primary: #2c3e50; --secondary: #3498db; --accent: #e74c3c; --success: #2ecc71; --light: #ecf0f1; --sidebar-width: 280px; --transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275  ); --shadow: 0 10px 30px rgba(0, 0, 0, 0.1); --radius: 12px; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #f9f9f9; color: #333; display: flex; min-height: 100vh; direction: rtl; }
+        .sidebar { width: var(--sidebar-width); background: linear-gradient(165deg, var(--primary) 0%, #1a2530 100%); color: white; height: 100vh; overflow-y: auto; box-shadow: var(--shadow); border-left: 1px solid rgba(255, 255, 255, 0.1); flex-shrink: 0; }
+        .sidebar-header { padding: 25px 20px; text-align: center; border-bottom: 1px solid rgba(255, 255, 255, 0.1); background: rgba(0, 0, 0, 0.2); }
+        .sidebar-header .logo { display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 10px; }
+        .sidebar-header .logo i { font-size: 2rem; color: var(--secondary); background: rgba(255, 255, 255, 0.1); padding: 10px; border-radius: 50%; }
+        .sidebar-header h1 { font-size: 1.4rem; font-weight: 600; margin: 0; }
+        .sidebar-header p { font-size: 0.85rem; opacity: 0.8; margin: 5px 0 0; }
+        .sidebar-nav { padding: 20px 0; }
+        .nav-item { margin-bottom: 5px; position: relative; }
+        .nav-item a { display: flex; align-items: center; padding: 15px 25px; color: rgba(255, 255, 255, 0.8); text-decoration: none; transition: var(--transition); border-right: 4px solid transparent; }
+        .nav-item a i { margin-left: 15px; font-size: 1.2rem; width: 24px; text-align: center; }
+        .nav-item a:hover, .nav-item.active > a { background: rgba(255, 255, 255, 0.1); color: white; border-right-color: var(--secondary); padding-right: 30px; }
+        .nav-item a:hover i, .nav-item.active > a i { color: var(--secondary); transform: scale(1.1); }
+        .submenu { max-height: 0; overflow: hidden; transition: max-height 0.5s ease; background: rgba(0, 0, 0, 0.2); }
+        .nav-item.active .submenu { max-height: 500px; }
+        .submenu a { padding: 12px 25px 12px 40px; font-size: 0.9rem; border-right: 3px solid transparent; display: block; color: rgba(255, 255, 255, 0.8); text-decoration: none; transition: var(--transition); }
+        .submenu a:hover, .submenu a.active { border-right-color: var(--accent) !important; background: rgba(255, 255, 255, 0.05); padding-right: 35px; color: white; }
+        .submenu a::before { content: "•"; margin-left: 10px; color: var(--secondary); }
+        .nav-toggle .toggle-icon { margin-right: auto; transition: var(--transition); }
+        .nav-item.active > .nav-toggle .toggle-icon { transform: rotate(-180deg); }
+        .mobile-menu-btn { display: none; position: fixed; top: 20px; right: 20px; background: var(--primary); color: white; border: none; border-radius: 8px; width: 45px; height: 45px; font-size: 1.2rem; cursor: pointer; z-index: 1100; transition: var(--transition); }
+        .mobile-menu-btn:hover { background: var(--secondary); transform: rotate(90deg); }
+        .main-content { flex-grow: 1; overflow-y: auto; height: 100vh; background-color: white; }
+        .content-page { max-width: 1000px; margin: 0 auto; padding: 60px 40px; }
+        .content-page h1 { color: var(--primary); font-size: 2.5rem; margin-bottom: 30px; text-align: center; position: relative; padding-bottom: 15px; }
+        .content-page h1::after { content: ""; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 100px; height: 4px; background: var(--secondary); border-radius: 2px; }
+        .content-page > p { margin-bottom: 40px; font-size: 1.1rem; line-height: 1.8; text-align: justify; color: #333; }
+        
+        /* --- أنماط جدول حالات الاستخدام (مع التصحيح) --- */
+        .table-container { overflow-x: auto; margin-top: 40px; box-shadow: var(--shadow); border-radius: var(--radius); }
+        .use-case-table { width: 100%; border-collapse: collapse; }
+        .use-case-table th, .use-case-table td { padding: 15px; text-align: right; border: 1px solid #e0e0e0; }
+        .use-case-table thead { background-color: var(--primary); color: white; }
+        .use-case-table tbody tr:nth-child(even) { background-color: #f9f9f9; }
+        .use-case-table tbody tr:hover { background-color: #f1f8ff; }
+        .use-case-table .uc-id { font-family: monospace; font-weight: bold; color: var(--accent); }
+        .use-case-table .actor-badge { display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 0.85rem; margin: 2px; color: white; }
+        .actor-admin { background-color: var(--primary); }
+        .actor-doctor { background-color: var(--success); }
+        .actor-student { background-color: #8e44ad; }
+        .use-case-table td { color: #333 !important; /* <<< الحل السحري هنا */ }
+
+        .pagination { display: flex; justify-content: space-between; margin-top: 50px; padding-top: 30px; border-top: 1px solid #eee; }
+        .btn { display: inline-flex; align-items: center; gap: 10px; padding: 12px 25px; border-radius: 50px; text-decoration: none; font-weight: 600; transition: var(--transition); box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .btn i { font-size: 1.1rem; }
+        .btn-next { background: var(--secondary); color: white; }
+        .btn-next:hover { background: #2980b9; transform: translateY(-3px) scale(1.05); box-shadow: 0 7px 20px rgba(52, 152, 219, 0.4); }
+        .btn-prev { background: var(--primary); color: white; }
+        .btn-prev:hover { background: #1a252f; transform: translateY(-3px) scale(1.05); box-shadow: 0 7px 20px rgba(44, 62, 80, 0.3); }
+        @media (max-width: 768px) { body { flex-direction: column; } .sidebar { position: fixed; top: 0; right: 0; z-index: 1000; transform: translateX(100%); } .sidebar.active { transform: translateX(0); } .main-content { padding-top: 60px; } .mobile-menu-btn { display: flex; align-items: center; justify-content: center; } .pagination { flex-direction: column; gap: 15px; align-items: stretch; text-align: center; } }
+    </style>
+</head>
+<body>
+    <div id="sidebar-container"></div>
+    <main class="main-content">
+        <section class="content-page">
+            <h1>3.5 حالة الاستخدام</h1>
+            <p>لترجمة المتطلبات الوظيفية إلى مواصفات واضحة ومفهومة، نستخدم تقنية "حالات الاستخدام" (Use Cases). كل حالة استخدام تصف تفاعلاً محدداً بين مستخدم (يُسمى "الممثل" أو Actor) والنظام لتحقيق هدف معين. يمثل الجدول التالي ملخصاً لحالات الاستخدام الرئيسية في النظام، والتي ستكون أساساً للمخططات التفصيلية اللاحقة.</p>
+
+            <div class="table-container">
+                <table class="use-case-table">
+                    <thead>
+                        <tr>
+                            <th>الرمز</th>
+                            <th>اسم حالة الاستخدام</th>
+                            <th>وصف مختصر</th>
+                            <th>الممثلون (Actors)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="uc-id">UC-01</td>
+                            <td>إدارة المستخدمين</td>
+                            <td>إضافة وتعديل وحذف حسابات المستخدمين وتحديد أدوارهم.</td>
+                            <td><span class="actor-badge actor-admin">المدير</span></td>
+                        </tr>
+                        <tr>
+                            <td class="uc-id">UC-02</td>
+                            <td>إدارة الهيكل الأكاديمي</td>
+                            <td>إدارة الأقسام والتخصصات والدفعات الدراسية.</td>
+                            <td><span class="actor-badge actor-admin">المدير</span></td>
+                        </tr>
+                        <tr>
+                            <td class="uc-id">UC-03</td>
+                            <td>إدارة المواد الدراسية</td>
+                            <td>إنشاء المواد وربطها بالخطط الدراسية والدكاترة.</td>
+                            <td><span class="actor-badge actor-admin">المدير</span></td>
+                        </tr>
+                        <tr>
+                            <td class="uc-id">UC-04</td>
+                            <td>إدارة المحتوى التعليمي</td>
+                            <td>رفع المحاضرات والملفات التعليمية وتنظيمها ضمن المواد.</td>
+                            <td><span class="actor-badge actor-doctor">الدكتور</span></td>
+                        </tr>
+                        <tr>
+                            <td class="uc-id">UC-05</td>
+                            <td>تصفح المحتوى التعليمي</td>
+                            <td>عرض وتنزيل المحاضرات والملفات الخاصة بالمواد المسجلة.</td>
+                            <td><span class="actor-badge actor-student">الطالب</span></td>
+                        </tr>
+                        <tr>
+                            <td class="uc-id">UC-06</td>
+                            <td>إدارة التكليفات</td>
+                            <td>إنشاء التكليفات وتحديد مواعيدها وتقييم تسليمات الطلاب.</td>
+                            <td><span class="actor-badge actor-doctor">الدكتور</span></td>
+                        </tr>
+                        <tr>
+                            <td class="uc-id">UC-07</td>
+                            <td>تسليم التكليفات</td>
+                            <td>رفع ملفات حلول التكليفات قبل الموعد النهائي.</td>
+                            <td><span class="actor-badge actor-student">الطالب</span></td>
+                        </tr>
+                        <tr>
+                            <td class="uc-id">UC-08</td>
+                            <td>إدارة المشاريع</td>
+                            <td>طرح أفكار المشاريع، قبول طلبات الإشراف، ومتابعة التقدم.</td>
+                            <td><span class="actor-badge actor-doctor">الدكتور</span></td>
+                        </tr>
+                        <tr>
+                            <td class="uc-id">UC-09</td>
+                            <td>المشاركة في النقاشات</td>
+                            <td>طرح الأسئلة والرد على الزملاء والدكتور في ساحة النقاش.</td>
+                            <td><span class="actor-badge actor-doctor">الدكتور</span><span class="actor-badge actor-student">الطالب</span></td>
+                        </tr>
+                        <tr>
+                            <td class="uc-id">UC-10</td>
+                            <td>عرض التقارير</td>
+                            <td>استعراض الإحصائيات والتقارير حول أداء النظام.</td>
+                            <td><span class="actor-badge actor-admin">المدير</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <nav class="pagination">
+                <a href="3.3_requirements_definition.html" class="btn btn-prev"><i class="fas fa-arrow-right"></i> السابق: تحديد المتطلبات</a>
+                <a href="3.6_context_diagram.html" class="btn btn-next">التالي: حالة الاستخدام (مخطط) <i class="fas fa-arrow-left"></i></a>
+            </nav>
+        </section>
+    </main>
+
+    <!-- الكود الموحد والمحسن للجافاسكريبت -->
+    <script>
+        function setActiveLink() {
+            const currentPath = window.location.pathname;
+            document.querySelectorAll('.sidebar-nav a').forEach(link => {
+                const linkPath = new URL(link.href, window.location.origin).pathname;
+                if (currentPath.endsWith(linkPath.split('/').pop())) {
+                    document.querySelectorAll('.nav-item.active, .submenu a.active').forEach(i => i.classList.remove('active'));
+                    link.classList.add('active');
+                    const parentNavItem = link.closest('.nav-item');
+                    if (parentNavItem) {
+                        parentNavItem.classList.add('active');
+                    }
+                }
+            });
+        }
+
+        function initializeSidebarScripts() {
+            document.querySelectorAll('.nav-toggle').forEach(toggle => {
+                toggle.addEventListener('click', function(e) { e.preventDefault(); this.parentElement.classList.toggle('active'); });
+            });
+            const menuToggle = document.getElementById('menuToggle');
+            const sidebar = document.getElementById('sidebar');
+            if (menuToggle && sidebar) {
+                menuToggle.addEventListener('click', (e) => { e.stopPropagation(); sidebar.classList.toggle('active'); });
+            }
+            document.addEventListener('click', function(e) {
+                if (window.innerWidth <= 768 && sidebar?.classList.contains('active') && !sidebar.contains(e.target) && !menuToggle.contains(e.target)) {
+                    sidebar.classList.remove('active');
+                }
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            fetch('../sidebar.html')
+                .then(response => response.ok ? response.text() : Promise.reject('Failed to load sidebar'))
+                .then(data => {
+                    document.getElementById('sidebar-container').innerHTML = data;
+                    initializeSidebarScripts();
+                    setActiveLink();
+                })
+                .catch(error => console.error('خطأ في تحميل الشريط الجانبي:', error));
+        });
+    </script>
+</body>
+</html>

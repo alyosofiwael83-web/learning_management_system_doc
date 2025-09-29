@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>5.3 تنفيذ الواجهات - نظام إدارة التعلم</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.28.0/themes/prism-tomorrow.min.css">
+
+    <style>
+        :root { --primary: #2c3e50; --secondary: #3498db; --accent: #e74c3c; --success: #2ecc71; --warning: #f39c12; --light: #ecf0f1; --sidebar-width: 280px; --transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275  ); --shadow: 0 10px 30px rgba(0, 0, 0, 0.1); --radius: 12px; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #f9f9f9; color: #333; display: flex; min-height: 100vh; direction: rtl; }
+        .sidebar { width: var(--sidebar-width); background: linear-gradient(165deg, var(--primary) 0%, #1a2530 100%); color: white; height: 100vh; overflow-y: auto; box-shadow: var(--shadow); border-left: 1px solid rgba(255, 255, 255, 0.1); flex-shrink: 0; }
+        .main-content { flex-grow: 1; overflow-y: auto; height: 100vh; background-color: white; }
+        .content-page { max-width: 1100px; margin: 0 auto; padding: 60px 40px; color: #333; }
+        .content-page h1 { color: var(--primary); font-size: 2.5rem; margin-bottom: 30px; text-align: center; position: relative; padding-bottom: 15px; display: flex; align-items: center; justify-content: center; gap: 15px; }
+        .content-page h1::after { content: ""; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 100px; height: 4px; background: var(--secondary); border-radius: 2px; }
+        .content-page > p { margin-bottom: 40px; font-size: 1.1rem; line-height: 1.8; text-align: justify; }
+        .content-page h2 { color: var(--primary); margin: 50px 0 25px; font-size: 1.8rem; border-bottom: 2px solid var(--light); padding-bottom: 10px; display: flex; align-items: center; gap: 15px; }
+        
+        /* --- تصميم البطاقات الفاخرة --- */
+        .anatomy-card {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 30px;
+            align-items: center;
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: var(--radius);
+            padding: 30px;
+            margin-bottom: 50px;
+            box-shadow: var(--shadow);
+        }
+        .anatomy-preview { text-align: center; }
+        .anatomy-preview .stat-card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 20px;
+            border: 1px solid #ddd;
+            display: inline-block;
+        }
+        .stat-card .icon { font-size: 2rem; color: var(--secondary); }
+        .stat-card .number { font-size: 2.5rem; font-weight: bold; color: var(--primary); margin: 10px 0; }
+        .stat-card .title { font-size: 1rem; color: #666; }
+        
+        pre[class*="language-"] {
+            margin: 0;
+            border-radius: var(--radius);
+            border: 1px solid #ddd;
+            max-height: 400px;
+        }
+
+        /* --- تصميم جدول الألوان --- */
+        .colors-table-container { overflow-x: auto; }
+        .colors-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            box-shadow: var(--shadow);
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+        .colors-table th, .colors-table td {
+            padding: 15px;
+            text-align: right;
+            border-bottom: 1px solid #eee;
+        }
+        .colors-table thead { background-color: var(--primary); color: white; }
+        .colors-table tbody tr:nth-child(even) { background-color: #f9f9f9; }
+        .color-swatch {
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: inline-block;
+            vertical-align: middle;
+            margin-left: 10px;
+            border: 2px solid white;
+            box-shadow: 0 0 5px rgba(0,0,0,0.2);
+        }
+
+        /* --- تصميم قسم التجاوبية --- */
+        .responsive-section {
+            display: flex;
+            justify-content: space-around;
+            text-align: center;
+            background: var(--light);
+            padding: 30px;
+            border-radius: var(--radius);
+            margin-top: 30px;
+        }
+        .responsive-device { font-size: 1.2rem; color: var(--primary); }
+        .responsive-device i { font-size: 3rem; display: block; margin-bottom: 15px; color: var(--secondary); }
+
+        .pagination { display: flex; justify-content: space-between; margin-top: 50px; padding-top: 30px; border-top: 1px solid #eee; }
+        .btn { display: inline-flex; align-items: center; gap: 10px; padding: 12px 25px; border-radius: 50px; text-decoration: none; font-weight: 600; transition: var(--transition); box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .btn-prev { background: var(--primary); color: white; }
+        .btn-next { background: var(--secondary); color: white; }
+        @media (max-width: 992px) {
+            .anatomy-card { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div id="sidebar-container"></div>
+    <main class="main-content">
+        <section class="content-page">
+            <h1><i class="fas fa-paint-roller"></i> 5.3 تنفيذ الواجهات (UI Implementation)</h1>
+            <p>في هذا القسم، نترجم لغة التصميم الجمالي إلى لغة برمجية عملية. تم تحويل كل واجهة تم تصميمها في الفصل الرابع إلى مكونات `Blade` ديناميكية، مع الاعتماد على إطار العمل `Tailwind CSS` لبناء تصميم مرن، متجاوب، وسهل الصيانة. الهدف هو بناء واجهات لا تبدو جميلة فحسب، بل تعمل بكفاءة أيضاً.</p>
+
+            <h2><i class="fas fa-atom"></i> 1. فلسفة المكونات (Component-Based Philosophy)</h2>
+            <p>تم بناء الواجهات باستخدام نهج المكونات، حيث يتم تقسيم كل صفحة إلى أجزاء صغيرة قابلة لإعادة الاستخدام (مثل الأزرار، بطاقات الإحصائيات، النماذج). هذا النهج يضمن التناسق في التصميم ويسهل عملية التطوير والصيانة المستقبلية.</p>
+            
+            <div class="anatomy-card">
+                <div class="anatomy-preview">
+                    <h4>الشكل النهائي</h4>
+                    <div class="stat-card">
+                        <div class="icon"><i class="fas fa-users"></i></div>
+                        <div class="number">31</div>
+                        <div class="title">إجمالي المستخدمين</div>
+                    </div>
+                </div>
+                <div class="anatomy-code">
+                    <h4>الكود المصدري (`Blade` with `Tailwind CSS`)</h4>
+                    <pre><code class="language-html">
+&lt;!-- resources/views/components/stat-card.blade.php --&gt;
+&lt;div class="bg-white p-6 rounded-lg shadow-md text-center"&gt;
+    &lt;div class="text-3xl text-blue-500 mb-2"&gt;
+        &lt;i class="{{ $icon }}"&gt;&lt;/i&gt;
+    &lt;/div&gt;
+    &lt;div class="text-4xl font-bold text-gray-800"&gt;
+        {{ $number }}
+    &lt;/div&gt;
+    &lt;div class="text-gray-500 mt-1"&gt;
+        {{ $title }}
+    &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- استدعاء المكون في أي صفحة --&gt;
+&lt;x-stat-card icon="fas fa-users" number="31" title="إجمالي المستخدمين" /&gt;
+                    </code></pre>
+                </div>
+            </div>
+
+            <h2><i class="fas fa-palette"></i> 2. تطبيق الهوية البصرية</h2>
+            <p>تم تحويل لوحة الألوان التي تم اختيارها في مرحلة التصميم إلى `classes` قابلة للاستخدام في `Tailwind CSS`، مما يضمن تطبيق الألوان بشكل متسق في جميع أنحاء النظام.</p>
+            <div class="colors-table-container">
+                <table class="colors-table">
+                    <thead>
+                        <tr>
+                            <th>اللون</th>
+                            <th>الاستخدام</th>
+                            <th>مثال على الكود</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="color-swatch" style="background-color: var(--success);"></span> نجاح</td>
+                            <td>للعمليات الناجحة، الحالات المكتملة، والأزرار الإيجابية.</td>
+                            <td><code>class="bg-green-500 text-white"</code></td>
+                        </tr>
+                        <tr>
+                            <td><span class="color-swatch" style="background-color: var(--warning);"></span> تنبيه</td>
+                            <td>للحالات قيد الانتظار، أو التنبيهات غير الحرجة.</td>
+                            <td><code>class="bg-yellow-500 text-white"</code></td>
+                        </tr>
+                        <tr>
+                            <td><span class="color-swatch" style="background-color: var(--accent);"></span> خطر</td>
+                            <td>لعمليات الحذف، الأخطاء، والمواعيد النهائية الفائتة.</td>
+                            <td><code>class="bg-red-500 text-white"</code></td>
+                        </tr>
+                        <tr>
+                            <td><span class="color-swatch" style="background-color: var(--secondary);"></span> ثانوي</td>
+                            <td>للروابط، الأيقونات، والعناصر التفاعلية الرئيسية.</td>
+                            <td><code>class="text-blue-500"</code></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h2><i class="fas fa-mobile-alt"></i> 3. التصميم المتجاوب (Responsive Design)</h2>
+            <p>تم بناء كل مكون مع الأخذ في الاعتبار الشاشات المختلفة. باستخدام `breakpoints` المدمجة في `Tailwind CSS` (مثل `md:`, `lg:`), يتكيف تصميم النظام بسلاسة ليوفر تجربة مثالية على جميع الأجهزة.</p>
+            <div class="responsive-section">
+                <div class="responsive-device">
+                    <i class="fas fa-desktop"></i>
+                    <span>شاشة الحاسوب</span>
+                </div>
+                <div class="responsive-device">
+                    <i class="fas fa-tablet-alt"></i>
+                    <span>الجهاز اللوحي</span>
+                </div>
+                <div class="responsive-device">
+                    <i class="fas fa-mobile-alt"></i>
+                    <span>الهاتف الذكي</span>
+                </div>
+            </div>
+
+            <nav class="pagination">
+                <a href="5.2_forms_queries_implementation.html" class="btn btn-prev"><i class="fas fa-arrow-right"></i> السابق: تنفيذ النماذج والمنطق</a>
+                <a href="5.4_system_integration.html" class="btn btn-next">التالي: تكامل النظام <i class="fas fa-arrow-left"></i></a>
+            </nav>
+        </section>
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.28.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.28.0/components/prism-markup.min.js"></script>
+     <!-- الكود الموحد للجافاسكريبت -->
+    <script>
+        function setActiveLink() {
+            const currentPath = window.location.pathname;
+            document.querySelectorAll('.sidebar-nav a').forEach(link => {
+                const linkPath = new URL(link.href, window.location.origin).pathname;
+                if (currentPath.endsWith(linkPath.split('/').pop())) {
+                    document.querySelectorAll('.nav-item.active, .submenu a.active').forEach(i => i.classList.remove('active'));
+                    link.classList.add('active');
+                    const parentNavItem = link.closest('.nav-item');
+                    if (parentNavItem) {
+                        parentNavItem.classList.add('active');
+                    }
+                }
+            });
+        }
+
+        function initializeSidebarScripts() {
+            document.querySelectorAll('.nav-toggle').forEach(toggle => {
+                toggle.addEventListener('click', function(e) { e.preventDefault(); this.parentElement.classList.toggle('active'); });
+            });
+            const menuToggle = document.getElementById('menuToggle');
+            const sidebar = document.getElementById('sidebar');
+            if (menuToggle && sidebar) {
+                menuToggle.addEventListener('click', (e) => { e.stopPropagation(); sidebar.classList.toggle('active'); });
+            }
+            document.addEventListener('click', function(e) {
+                if (window.innerWidth <= 768 && sidebar?.classList.contains('active') && !sidebar.contains(e.target) && !menuToggle.contains(e.target)) {
+                    sidebar.classList.remove('active');
+                }
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            fetch('../sidebar.html')
+                .then(response => response.ok ? response.text() : Promise.reject('Failed to load sidebar'))
+                .then(data => {
+                    document.getElementById('sidebar-container').innerHTML = data;
+                    initializeSidebarScripts();
+                    setActiveLink();
+                })
+                .catch(error => console.error('خطأ في تحميل الشريط الجانبي:', error));
+        });
+    </script>
+</body>
+</html>

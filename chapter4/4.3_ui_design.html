@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>4.3 تصميم الواجهات - نظام إدارة التعلم</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" />
+
+    <style>
+        :root { --primary: #2c3e50; --secondary: #3498db; --accent: #e74c3c; --success: #2ecc71; --purple: #8e44ad; --light: #ecf0f1; --sidebar-width: 280px; --transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275  ); --shadow: 0 10px 30px rgba(0, 0, 0, 0.1); --radius: 12px; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #f9f9f9; color: #333; display: flex; min-height: 100vh; direction: rtl; }
+        .sidebar { width: var(--sidebar-width); background: linear-gradient(165deg, var(--primary) 0%, #1a2530 100%); color: white; height: 100vh; overflow-y: auto; box-shadow: var(--shadow); border-left: 1px solid rgba(255, 255, 255, 0.1); flex-shrink: 0; }
+        .main-content { flex-grow: 1; overflow-y: auto; height: 100vh; background-color: white; }
+        .content-page { max-width: 1100px; margin: 0 auto; padding: 60px 40px; color: #333; }
+        .content-page h1 { color: var(--primary); font-size: 2.5rem; margin-bottom: 30px; text-align: center; position: relative; padding-bottom: 15px; }
+        .content-page h1::after { content: ""; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 100px; height: 4px; background: var(--secondary); border-radius: 2px; }
+        .content-page > p { margin-bottom: 40px; font-size: 1.1rem; line-height: 1.8; text-align: justify; }
+        .content-page h2 { color: var(--primary); margin: 50px 0 25px; font-size: 1.8rem; border-bottom: 2px solid var(--light); padding-bottom: 10px; display: flex; align-items: center; gap: 15px; }
+        
+        /* --- تنسيقات أقسام الشرح --- */
+        .design-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        .design-card {
+            background: #fff;
+            border: 1px solid #eee;
+            border-radius: var(--radius);
+            padding: 25px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+        .design-card h3 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.3rem;
+            color: var(--primary);
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+        .design-card p { font-size: 1rem; line-height: 1.7; color: #555; }
+        .color-palette { display: flex; gap: 15px; flex-wrap: wrap; margin-top: 15px; }
+        .color-swatch { text-align: center; }
+        .color-circle { width: 60px; height: 60px; border-radius: 50%; border: 1px solid #e5e7eb; }
+        .color-swatch span { display: block; margin-top: 8px; font-size: 0.85rem; font-weight: 600; }
+
+        /* --- تنسيقات المعرض --- */
+        .roles-gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; margin-top: 40px; }
+        .role-card { background: #fff; border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; display: flex; flex-direction: column; transition: var(--transition); }
+        .role-card:hover { transform: translateY(-10px); }
+        .role-card-image { height: 200px; overflow: hidden; }
+        .role-card-image img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
+        .role-card-body { padding: 25px; text-align: center; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
+        .role-card-body h3 { margin-top: 0; margin-bottom: 15px; font-size: 1.5rem; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .role-card-body .admin-title { color: var(--primary); }
+        .role-card-body .doctor-title { color: var(--success); }
+        .role-card-body .student-title { color: var(--purple); }
+        .role-card-body p { color: #555; line-height: 1.6; margin-bottom: 25px; flex-grow: 1; }
+        .view-gallery-btn { display: inline-block; padding: 12px 30px; border-radius: 50px; text-decoration: none; font-weight: 600; color: white; transition: var(--transition); }
+        .view-gallery-btn.admin-btn { background-color: var(--primary); }
+        .view-gallery-btn.doctor-btn { background-color: var(--success); }
+        .view-gallery-btn.student-btn { background-color: var(--purple); }
+        .view-gallery-btn:hover { transform: scale(1.05); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+
+        .pagination { display: flex; justify-content: space-between; margin-top: 50px; padding-top: 30px; border-top: 1px solid #eee; }
+        .btn { display: inline-flex; align-items: center; gap: 10px; padding: 12px 25px; border-radius: 50px; text-decoration: none; font-weight: 600; transition: var(--transition); box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .btn-prev { background: var(--primary); color: white; }
+    </style>
+</head>
+<body>
+    <div id="sidebar-container"></div>
+    <main class="main-content">
+        <section class="content-page">
+            <h1>4.3 تصميم واجهات المستخدم (UI Design)</h1>
+            <p>تصميم الواجهة ليس مجرد ترتيب للعناصر، بل هو فن بناء تجربة استخدام ممتعة وبديهية. في هذا القسم، نستعرض الهوية البصرية للنظام، نشرح الفلسفة التفاعلية التي تم اعتمادها، ونقدم لمحة عن الواجهات الرئيسية المصممة لكل دور.</p>
+
+            <h2><i class="fas fa-palette"></i> 1. الهوية البصرية (Visual Identity)</h2>
+            <div class="design-section">
+                <div class="design-card">
+                    <h3><i class="fas fa-paint-brush"></i> لوحة الألوان</h3>
+                    <p>تم اختيار لوحة ألوان احترافية تهدف إلى الوضوح والراحة البصرية، مع استخدام ألوان مميزة لكل دور لسهولة التمييز.</p>
+                    <div class="color-palette">
+                        <div class="color-swatch"><div class="color-circle" style="background-color: #2c3e50;"></div><span>أساسي</span></div>
+                        <div class="color-swatch"><div class="color-circle" style="background-color: #3498db;"></div><span>ثانوي</span></div>
+                        <div class="color-swatch"><div class="color-circle" style="background-color: #2ecc71;"></div><span>نجاح</span></div>
+                        <div class="color-swatch"><div class="color-circle" style="background-color: #8e44ad;"></div><span>مميز</span></div>
+                        <div class="color-swatch"><div class="color-circle" style="background-color: #e74c3c;"></div><span>خطر</span></div>
+                    </div>
+                </div>
+                <div class="design-card">
+                    <h3><i class="fas fa-font"></i> الخطوط</h3>
+                    <p>تم اعتماد خط 'Segoe UI' كخط أساسي للنظام، وهو خط حديث وواضح يضمن سهولة القراءة على مختلف الشاشات والأجهزة، مع الحفاظ على مظهر احترافي ومتناسق.</p>
+                </div>
+            </div>
+
+            <h2><i class="fas fa-bolt"></i> 2. فلسفة التصميم التفاعلي</h2>
+            <div class="design-section">
+                <div class="design-card">
+                    <h3><i class="fas fa-sync-alt"></i> التحديث التلقائي (Reactivity)</h3>
+                    <p>بفضل إطار العمل Livewire، تتحدث أجزاء كثيرة من الصفحة تلقائياً دون الحاجة لإعادة تحميل. عند إضافة تعليق أو تغيير حالة، يرى المستخدم النتيجة فوراً، مما يعطي إحساساً بالسرعة والحيوية.</p>
+                </div>
+                <div class="design-card">
+                    <h3><i class="fas fa-mobile-alt"></i> التصميم المتجاوب (Responsiveness)</h3>
+                    <p>تم بناء كل واجهة باستخدام نهج "Mobile-First"، مما يضمن أن النظام يعمل بشكل مثالي على شاشات الهواتف المحمولة، الأجهزة اللوحية، وشاشات الكمبيوتر الكبيرة على حد سواء.</p>
+                </div>
+                <div class="design-card">
+                    <h3><i class="fas fa-moon"></i> الوضع الليلي والنهاري</h3>
+                    <p>يحتوي النظام على ميزة تبديل المظهر بين الوضع الفاتح والداكن. هذا لا يضيف لمسة جمالية فحسب، بل يحسن تجربة المستخدم في ظروف الإضاءة المختلفة ويقلل من إجهاد العين.</p>
+                </div>
+            </div>
+
+            <h2><i class="fas fa-images"></i> 3. معرض واجهات النظام</h2>
+            <p>تم تقسيم الواجهات حسب دور المستخدم لتسهيل الاستعراض. انقر على الزر المخصص لكل دور لتصفح معرض الصور التفاعلي الخاص به.</p>
+
+            <div class="roles-gallery-grid">
+                <!-- بطاقة المدير -->
+                <div class="role-card">
+                    <div class="role-card-image"><img src="../images/admin/admin_dashboard.png" alt="صورة مصغرة لواجهة المدير"></div>
+                    <div class="role-card-body">
+                        <h3 class="admin-title"><i class="fas fa-user-shield"></i> واجهات المدير</h3>
+                        <p>واجهات تمنح المدير تحكماً كاملاً في النظام، من إدارة المستخدمين والهيكل الأكاديمي إلى عرض التقارير.</p>
+                        <a href="../images/admin_dashboard.png" class="view-gallery-btn admin-btn glightbox" data-gallery="admin-gallery"><i class="fas fa-camera"></i> استعراض الواجهات</a>
+                    </div>
+                </div>
+                <!-- بطاقة الدكتور -->
+                <div class="role-card">
+                    <div class="role-card-image"><img src="../images/doctor/doctor_my_courses.png" alt="صورة مصغرة لواجهة الدكتور"></div>
+                    <div class="role-card-body">
+                        <h3 class="doctor-title"><i class="fas fa-user-tie"></i> واجهات الدكتور</h3>
+                        <p>واجهات تمكن الدكتور من إدارة محتواه التعليمي، إنشاء التكليفات، وتقييم الطلاب بكفاءة وسهولة.</p>
+                        <a href="../images/doctor_my_courses.png" class="view-gallery-btn doctor-btn glightbox" data-gallery="doctor-gallery"><i class="fas fa-camera"></i> استعراض الواجهات</a>
+                    </div>
+                </div>
+                <!-- بطاقة الطالب -->
+                <div class="role-card">
+                    <div class="role-card-image"><img src="../images/student/student_course_details.png" alt="صورة مصغرة لواجهة الطالب"></div>
+                    <div class="role-card-body">
+                        <h3 class="student-title"><i class="fas fa-user-graduate"></i> واجهات الطالب</h3>
+                        <p>تجربة استخدام سلسة تضع كل ما يحتاجه الطالب في متناول يده، من تصفح المحاضرات إلى تسليم الواجبات.</p>
+                        <a href="../images/student_course_details.png" class="view-gallery-btn student-btn glightbox" data-gallery="student-gallery"><i class="fas fa-camera"></i> استعراض الواجهات</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- الروابط المخفية للمعرض -->
+            <div style="display:none;">
+                <!-- معرض المدير -->
+                <a href="../images/admin_dashboard.png" class="glightbox" data-gallery="admin-gallery" data-title="لوحة تحكم المدير"></a>
+                <!-- <a href="../images/admin/admin_dashboard.png" class="glightbox" data-gallery="admin-gallery" data-title="لوحة تحكم المدير"></a> -->
+                <a href="../images/admin/admin_departments.png" class="glightbox" data-gallery="admin-gallery" data-title="إدارة الأقسام"></a>
+                <a href="../images/admin/admin-specializations.png" class="glightbox" data-gallery="admin-gallery" data-title="إدارة التخصصات"></a>
+                <a href="../images/admin/admin_users.png" class="glightbox" data-gallery="admin-gallery" data-title="إدارة المستخدمين"></a>
+                <a href="../images/admin/4.png" class="glightbox" data-gallery="admin-gallery" data-title=" عرض جميع التقارير للطلاب والاقسام والتخصصات "></a>
+                <a href="../images/admin/5.png" class="glightbox" data-gallery="admin-gallery" data-title="عرض جميع سجلات الحضور والغياب لكل طلاب الجامعه  "></a>
+                <a href="../images/admin/6.png" class="glightbox" data-gallery="admin-gallery" data-title="عرض جميع سجلات الحضور والغياب لكل طلاب الجامعه  "></a>
+                <a href="../images/admin/7.png" class="glightbox" data-gallery="admin-gallery" data-title="عرض جميع تسليم الطلاب للتكاليف والادارة الحدذف والتعديل والعرض للمدير  "></a>
+
+
+
+
+                
+                <!-- معرض الدكتور -->
+                <a href="../images/doctor_my_courses.png" class="glightbox" data-gallery="doctor-gallery" data-title="صفحة مادي"></a>
+                <a href="../images/doctor/1.png" class="glightbox" data-gallery="doctor-gallery" data-title="إنشاء تكليف جديد"></a>
+                <a href="../images/doctor/2.png" class="glightbox" data-gallery="doctor-gallery" data-title="إنشاء تكليف جديد"></a>
+                <a href="../images/doctor/3.png" class="glightbox" data-gallery="doctor-gallery" data-title="عرض جميع  المشاريع التي يشرف عليها الدكتور   "></a>
+                <a href="../images/doctor/4.png" class="glightbox" data-gallery="doctor-gallery" data-title="   عرض جميع لااعلانات  "></a>
+                <a href="../images/doctor/5.png" class="glightbox" data-gallery="doctor-gallery" data-title="   عرض جميع الجداول للدكتور وحقه المحاضرات   "></a>
+
+
+
+                <!-- معرض الطالب -->
+                <a href="../images/student/3.png" class="glightbox" data-gallery="student-gallery" data-title="تفاصيل المادة"></a>
+                <a href="../images/student/2.png" class="glightbox" data-gallery="student-gallery" data-title="تسليم التكليف"></a>
+                <a href="../images/student/1.png" class="glightbox" data-gallery="student-gallery" data-title="ساحة النقاش"></a>
+                <a href="../images/student/4.png" class="glightbox" data-gallery="student-gallery" data-title="الحضور والغيب الخاص بكل لوحة تحكم للطالب  "></a>
+
+            </div>
+
+            <nav class="pagination">
+                <a href="4.2_forms_queries_design.html" class="btn btn-prev"><i class="fas fa-arrow-right"></i> السابق: تصميم النماذج والاستعلامات</a>
+                <a href="../chapter5/5.1_database_implementation.html" class="btn btn-next">التالي: تنفيذ قاعدة البيانات <i class="fas fa-arrow-left"></i></a>
+            </nav>
+        </section>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/gh/mcstudios/glightbox/dist/js/glightbox.min.js"></script>
+    <script type="text/javascript">
+        const lightbox = GLightbox({ touchNavigation: true, loop: true } );
+    </script>
+     <!-- الكود الموحد للجافاسكريبت -->
+    <script>
+        function setActiveLink() {
+            const currentPath = window.location.pathname;
+            document.querySelectorAll('.sidebar-nav a').forEach(link => {
+                const linkPath = new URL(link.href, window.location.origin).pathname;
+                if (currentPath.endsWith(linkPath.split('/').pop())) {
+                    document.querySelectorAll('.nav-item.active, .submenu a.active').forEach(i => i.classList.remove('active'));
+                    link.classList.add('active');
+                    const parentNavItem = link.closest('.nav-item');
+                    if (parentNavItem) {
+                        parentNavItem.classList.add('active');
+                    }
+                }
+            });
+        }
+
+        function initializeSidebarScripts() {
+            document.querySelectorAll('.nav-toggle').forEach(toggle => {
+                toggle.addEventListener('click', function(e) { e.preventDefault(); this.parentElement.classList.toggle('active'); });
+            });
+            const menuToggle = document.getElementById('menuToggle');
+            const sidebar = document.getElementById('sidebar');
+            if (menuToggle && sidebar) {
+                menuToggle.addEventListener('click', (e) => { e.stopPropagation(); sidebar.classList.toggle('active'); });
+            }
+            document.addEventListener('click', function(e) {
+                if (window.innerWidth <= 768 && sidebar?.classList.contains('active') && !sidebar.contains(e.target) && !menuToggle.contains(e.target)) {
+                    sidebar.classList.remove('active');
+                }
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            fetch('../sidebar.html')
+                .then(response => response.ok ? response.text() : Promise.reject('Failed to load sidebar'))
+                .then(data => {
+                    document.getElementById('sidebar-container').innerHTML = data;
+                    initializeSidebarScripts();
+                    setActiveLink();
+                })
+                .catch(error => console.error('خطأ في تحميل الشريط الجانبي:', error));
+        });
+    </script>
+</body>
+</html>

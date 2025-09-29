@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>4.2 تصميم النماذج والاستعلامات - نظام إدارة التعلم</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- الكود الموحد للتنسيقات مع إضافة تنسيقات جديدة -->
+    <style>
+        :root { --primary: #2c3e50; --secondary: #3498db; --accent: #e74c3c; --success: #2ecc71; --purple: #8e44ad; --light: #ecf0f1; --sidebar-width: 280px; --transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275  ); --shadow: 0 10px 30px rgba(0, 0, 0, 0.1); --radius: 12px; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #f9f9f9; color: #333; display: flex; min-height: 100vh; direction: rtl; }
+        .sidebar { width: var(--sidebar-width); background: linear-gradient(165deg, var(--primary) 0%, #1a2530 100%); color: white; height: 100vh; overflow-y: auto; box-shadow: var(--shadow); border-left: 1px solid rgba(255, 255, 255, 0.1); flex-shrink: 0; }
+        .main-content { flex-grow: 1; overflow-y: auto; height: 100vh; background-color: white; }
+        .content-page { max-width: 1100px; margin: 0 auto; padding: 60px 40px; color: #333; }
+        .content-page h1 { color: var(--primary); font-size: 2.5rem; margin-bottom: 30px; text-align: center; position: relative; padding-bottom: 15px; }
+        .content-page h1::after { content: ""; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 100px; height: 4px; background: var(--secondary); border-radius: 2px; }
+        .content-page > p { margin-bottom: 40px; font-size: 1.1rem; line-height: 1.8; text-align: justify; }
+        .content-page h2 { color: var(--primary); margin: 50px 0 25px; font-size: 1.8rem; border-bottom: 2px solid var(--light); padding-bottom: 10px; display: flex; align-items: center; gap: 15px; }
+        .content-page h3 { color: var(--secondary); margin: 40px 0 20px; font-size: 1.4rem; }
+        
+        /* --- تنسيقات جديدة للصفحة --- */
+        .philosophy-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 50px;
+        }
+        .philosophy-card {
+            background: #fff;
+            border-radius: var(--radius);
+            padding: 25px;
+            text-align: center;
+            border: 1px solid #eee;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+        .philosophy-card i { font-size: 2.5rem; color: var(--secondary); margin-bottom: 15px; }
+        .philosophy-card h4 { font-size: 1.3rem; color: var(--primary); margin-bottom: 10px; }
+        .philosophy-card p { font-size: 1rem; line-height: 1.6; color: #555; }
+
+        .explanation-card {
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: var(--radius);
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            overflow: hidden;
+        }
+        .explanation-card-body {
+            padding: 25px;
+        }
+        .explanation-card-body p { margin-bottom: 15px; line-height: 1.8; }
+        .explanation-card-body code {
+            background: #e0e0e0;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+            color: var(--primary);
+        }
+        
+        .code-block {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 0 0 var(--radius) var(--radius);
+            direction: ltr;
+            text-align: left;
+            font-family: 'Fira Code', monospace;
+            white-space: pre-wrap;
+            font-size: 0.9em;
+            border-top: 1px solid #4a5568;
+        }
+        .code-block .comment { color: #9ca3af; }
+        .code-block .keyword { color: #9f7aea; }
+        .code-block .function { color: #63b3ed; }
+        .code-block .variable { color: #f6ad55; }
+        .code-block .string { color: #a3be8c; }
+
+        .pagination { display: flex; justify-content: space-between; margin-top: 50px; padding-top: 30px; border-top: 1px solid #eee; }
+        .btn { display: inline-flex; align-items: center; gap: 10px; padding: 12px 25px; border-radius: 50px; text-decoration: none; font-weight: 600; transition: var(--transition); box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .btn i { font-size: 1.1rem; }
+        .btn-next { background: var(--secondary); color: white; }
+        .btn-prev { background: var(--primary); color: white; }
+    </style>
+</head>
+<body>
+    <div id="sidebar-container"></div>
+    <main class="main-content">
+        <section class="content-page">
+            <h1>4.2 تصميم النماذج والاستعلامات</h1>
+            <p>بعد بناء الهيكل الصلب لقاعدة البيانات، ننتقل الآن إلى تصميم "الجهاز العصبي" للنظام: النماذج التي يتفاعل معها المستخدم، والاستعلامات التي تجلب له البيانات. تم تصميم هذه المكونات بناءً على فلسفة واضحة تهدف إلى تقديم تجربة استخدام ذكية، آمنة، وسريعة.</p>
+
+            <div class="philosophy-grid">
+                <div class="philosophy-card">
+                    <i class="fas fa-lightbulb"></i>
+                    <h4>البساطة والوضوح</h4>
+                    <p>تصميم نماذج بديهية تطلب المعلومات الضرورية فقط وتوجه المستخدم بوضوح لإكمال مهامه بسهولة.</p>
+                </div>
+                <div class="philosophy-card">
+                    <i class="fas fa-shield-halved"></i>
+                    <h4>الأمان أولاً</h4>
+                    <p>تطبيق قواعد تحقق صارمة في الواجهة الخلفية لضمان عدم حفظ أي بيانات غير صحيحة أو ضارة في قاعدة البيانات.</p>
+                </div>
+                <div class="philosophy-card">
+                    <i class="fas fa-bolt"></i>
+                    <h4>الكفاءة في الأداء</h4>
+                    <p>كتابة استعلامات محسّنة تتجنب جلب بيانات غير ضرورية، مما يسرّع من استجابة النظام ويقلل العبء على الخادم.</p>
+                </div>
+            </div>
+
+            <h2><i class="fab fa-wpforms"></i> 1. تصميم نماذج إدخال البيانات (Forms Design)</h2>
+            
+            <div class="explanation-card">
+                <div class="explanation-card-body">
+                    <h3>أ. التحقق الفوري من صحة البيانات (Real-time Validation)</h3>
+                    <p>بدلاً من أن يملأ المستخدم نموذجاً طويلاً ثم يضغط "حفظ" ليفاجأ بقائمة من الأخطاء، تم تصميم النماذج لتقديم تغذية راجعة فورية. بفضل تقنية Livewire، بمجرد أن ينتقل المستخدم من حقل معين، يتم إرسال قيمته إلى الخادم للتحقق منها وعرض رسالة الخطأ فوراً إذا كانت القيمة غير صالحة. هذا يحسن تجربة المستخدم بشكل كبير ويقلل من الإحباط.</p>
+                </div>
+                <div class="code-block">
+                    <span class="comment">// في مكون Livewire، هذه الدالة السحرية تقوم بالتحقق من أي حقل يتم تحديثه</span>
+                    <div><span class="keyword">public function</span> <span class="function">updated</span>(<span class="variable">$propertyName</span>)</div>
+                    <div>{</div>
+                    <div>    <span class="variable">$this</span>-><span class="function">validateOnly</span>(<span class="variable">$propertyName</span>);</div>
+                    <div>}</div>
+                </div>
+            </div>
+
+            <div class="explanation-card">
+                <div class="explanation-card-body">
+                    <h3>ب. ضمان سلامة العمليات المعقدة (ACID Transactions)</h3>
+                    <p>بعض العمليات تتطلب تعديل أكثر من جدول في نفس الوقت، مثل "إضافة دكتور جديد" التي تتطلب إنشاء سجل في جدول <code>users</code> وسجل آخر في جدول <code>doctors</code>. ماذا لو نجحت العملية الأولى وفشلت الثانية؟ سينتج عن ذلك بيانات غير متناسقة. لحل هذه المشكلة، تم تغليف جميع هذه العمليات داخل <code>DB::transaction</code>. هذا يضمن أن جميع الخطوات إما أن تنجح معاً (Commit) أو تفشل معاً ويتم التراجع عنها بالكامل (Rollback)، مما يضمن سلامة قاعدة البيانات 100%.</p>
+                </div>
+                <div class="code-block">
+                    <span class="comment">// مثال لعملية إضافة دكتور جديد بشكل آمن</span>
+                    <div><span class="function">DB</span>::<span class="function">transaction</span>(<span class="keyword">function</span> () {</div>
+                    <div>    <span class="variable">$user</span> = <span class="function">User</span>::<span class="function">create</span>([...]);</div>
+                    <div>    <span class="variable">$user</span>-><span class="function">doctor</span>()-><span class="function">create</span>([...]);</div>
+                    <div>});</div>
+                </div>
+            </div>
+
+            <h2><i class="fas fa-database"></i> 2. تصميم استعلامات عرض البيانات (Queries Design)</h2>
+
+            <div class="explanation-card">
+                <div class="explanation-card-body">
+                    <h3>أ. حل مشكلة N+1 عبر التحميل المسبق (Eager Loading)</h3>
+                    <p>تخيل أننا نريد عرض قائمة بـ 50 مشروعاً مع أسماء الطلاب المشرفين عليها. الطريقة الساذجة ستقوم بتنفيذ استعلام واحد لجلب المشاريع، ثم 50 استعلاماً إضافياً (واحد لكل مشروع) لجلب اسم الطالب، أي ما مجموعه 51 استعلاماً! هذا يسمى "مشكلة N+1" وهو مدمر لأداء النظام.</p>
+                    <p>الحل هو استخدام تقنية "التحميل المسبق" (Eager Loading) التي يوفرها Laravel. عبر إضافة كلمة <code>with('student')</code>، نطلب من النظام جلب جميع المشاريع وجميع الطلاب المرتبطين بها في استعلامين اثنين فقط، بغض النظر عن عدد المشاريع. هذا يحسن سرعة الصفحة بشكل هائل.</p>
+                </div>
+                <div class="code-block">
+                    <span class="comment">// الطريقة السيئة (N+1 Problem)</span>
+                    <div><span class="variable">$projects</span> = <span class="function">Project</span>::<span class="function">all</span>(); <span class="comment">// 1 query</span></div>
+                    <div><span class="comment">// inside a loop: $project->student->name; // N queries</span></div>
+                      
+
+                    <span class="comment">// الطريقة الصحيحة (Eager Loading)</span>
+                    <div><span class="variable">$projects</span> = <span class="function">Project</span>::<span class="function">with</span>(<span class="string">'student'</span>, <span class="string">'supervisor'</span>)-><span class="function">get</span>(); <span class="comment">// Only 2-3 queries!</span></div>
+                </div>
+            </div>
+
+            <nav class="pagination">
+                <a href="4.1_database_design.html" class="btn btn-prev"><i class="fas fa-arrow-right"></i> السابق: تصميم قاعدة البيانات</a>
+                <a href="4.3_ui_design.html" class="btn btn-next">التالي: تصميم الواجهات <i class="fas fa-arrow-left"></i></a>
+            </nav>
+        </section>
+    </main>
+
+    <!-- الكود الموحد للجافاسكريبت -->
+     <!-- الكود الموحد للجافاسكريبت -->
+    <script>
+        function setActiveLink() {
+            const currentPath = window.location.pathname;
+            document.querySelectorAll('.sidebar-nav a').forEach(link => {
+                const linkPath = new URL(link.href, window.location.origin).pathname;
+                if (currentPath.endsWith(linkPath.split('/').pop())) {
+                    document.querySelectorAll('.nav-item.active, .submenu a.active').forEach(i => i.classList.remove('active'));
+                    link.classList.add('active');
+                    const parentNavItem = link.closest('.nav-item');
+                    if (parentNavItem) {
+                        parentNavItem.classList.add('active');
+                    }
+                }
+            });
+        }
+
+        function initializeSidebarScripts() {
+            document.querySelectorAll('.nav-toggle').forEach(toggle => {
+                toggle.addEventListener('click', function(e) { e.preventDefault(); this.parentElement.classList.toggle('active'); });
+            });
+            const menuToggle = document.getElementById('menuToggle');
+            const sidebar = document.getElementById('sidebar');
+            if (menuToggle && sidebar) {
+                menuToggle.addEventListener('click', (e) => { e.stopPropagation(); sidebar.classList.toggle('active'); });
+            }
+            document.addEventListener('click', function(e) {
+                if (window.innerWidth <= 768 && sidebar?.classList.contains('active') && !sidebar.contains(e.target) && !menuToggle.contains(e.target)) {
+                    sidebar.classList.remove('active');
+                }
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            fetch('../sidebar.html')
+                .then(response => response.ok ? response.text() : Promise.reject('Failed to load sidebar'))
+                .then(data => {
+                    document.getElementById('sidebar-container').innerHTML = data;
+                    initializeSidebarScripts();
+                    setActiveLink();
+                })
+                .catch(error => console.error('خطأ في تحميل الشريط الجانبي:', error));
+        });
+    </script>   
+</body>
+</html>

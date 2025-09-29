@@ -1,0 +1,167 @@
+<!-- chapter2/2.2_literature_review.html (جاهز للاستخدام) -->
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2.2 الدراسات السابقة - نظام إدارة التعلم</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- الكود الموحد للتنسيقات -->
+    <style>
+        :root { --primary: #2c3e50; --secondary: #3498db; --accent: #e74c3c; --success: #2ecc71; --light: #ecf0f1; --sidebar-width: 280px; --transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275 ); --shadow: 0 10px 30px rgba(0, 0, 0, 0.1); --radius: 12px; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #f9f9f9; color: #333; display: flex; min-height: 100vh; direction: rtl; }
+        .sidebar { width: var(--sidebar-width); background: linear-gradient(165deg, var(--primary) 0%, #1a2530 100%); color: white; height: 100vh; overflow-y: auto; box-shadow: var(--shadow); border-left: 1px solid rgba(255, 255, 255, 0.1); flex-shrink: 0; }
+        .sidebar-header { padding: 25px 20px; text-align: center; border-bottom: 1px solid rgba(255, 255, 255, 0.1); background: rgba(0, 0, 0, 0.2); }
+        .sidebar-header .logo { display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 10px; }
+        .sidebar-header .logo i { font-size: 2rem; color: var(--secondary); background: rgba(255, 255, 255, 0.1); padding: 10px; border-radius: 50%; }
+        .sidebar-header h1 { font-size: 1.4rem; font-weight: 600; margin: 0; }
+        .sidebar-header p { font-size: 0.85rem; opacity: 0.8; margin: 5px 0 0; }
+        .sidebar-nav { padding: 20px 0; }
+        .nav-item { margin-bottom: 5px; position: relative; }
+        .nav-item a { display: flex; align-items: center; padding: 15px 25px; color: rgba(255, 255, 255, 0.8); text-decoration: none; transition: var(--transition); border-right: 4px solid transparent; }
+        .nav-item a i { margin-left: 15px; font-size: 1.2rem; width: 24px; text-align: center; }
+        .nav-item a:hover, .nav-item.active > a { background: rgba(255, 255, 255, 0.1); color: white; border-right-color: var(--secondary); padding-right: 30px; }
+        .nav-item a:hover i, .nav-item.active > a i { color: var(--secondary); transform: scale(1.1); }
+        .submenu { max-height: 0; overflow: hidden; transition: max-height 0.5s ease; background: rgba(0, 0, 0, 0.2); }
+        .nav-item.active .submenu { max-height: 500px; }
+        .submenu a { padding: 12px 25px 12px 40px; font-size: 0.9rem; border-right: 3px solid transparent; display: block; color: rgba(255, 255, 255, 0.8); text-decoration: none; transition: var(--transition); }
+        .submenu a:hover, .submenu a.active { border-right-color: var(--accent) !important; background: rgba(255, 255, 255, 0.05); padding-right: 35px; color: white; }
+        .submenu a::before { content: "•"; margin-left: 10px; color: var(--secondary); }
+        .nav-toggle .toggle-icon { margin-right: auto; transition: var(--transition); }
+        .nav-item.active > .nav-toggle .toggle-icon { transform: rotate(-180deg); }
+        .mobile-menu-btn { display: none; position: fixed; top: 20px; right: 20px; background: var(--primary); color: white; border: none; border-radius: 8px; width: 45px; height: 45px; font-size: 1.2rem; cursor: pointer; z-index: 1100; transition: var(--transition); }
+        .mobile-menu-btn:hover { background: var(--secondary); transform: rotate(90deg); }
+        .main-content { flex-grow: 1; overflow-y: auto; height: 100vh; background-color: white; }
+        .content-page { max-width: 1000px; margin: 0 auto; padding: 60px 40px; }
+        .content-page h1 { color: var(--primary); font-size: 2.5rem; margin-bottom: 30px; text-align: center; position: relative; padding-bottom: 15px; }
+        .content-page h1::after { content: ""; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 100px; height: 4px; background: var(--secondary); border-radius: 2px; }
+        .content-page > p { margin-bottom: 40px; font-size: 1.1rem; line-height: 1.8; text-align: justify; color: #333; }
+        
+        /* --- أنماط بطاقات المراجعة --- */
+        .review-cards { display: grid; grid-template-columns: 1fr; gap: 30px; }
+        .review-card { background: #fff; border-radius: var(--radius); box-shadow: 0 5px 20px rgba(0,0,0,0.08); overflow: hidden; }
+        .review-header { display: flex; align-items: center; gap: 15px; padding: 20px; background: var(--primary); color: white; }
+        .review-header i { font-size: 1.8rem; color: var(--secondary); }
+        .review-header h2 { margin: 0; font-size: 1.4rem; }
+        .review-card > p { padding: 20px 25px 0; margin: 0; font-size: 1.05rem; line-height: 1.7; color: #555; }
+        .pros-cons { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; padding: 20px 25px; }
+        .pros-cons h4 { display: flex; align-items: center; gap: 8px; font-size: 1.1rem; margin-bottom: 10px; }
+        .pros h4 { color: var(--success); }
+        .cons h4 { color: var(--accent); }
+        .pros-cons ul { list-style: none; padding: 0; }
+        .pros-cons li { position: relative; padding-right: 20px; margin-bottom: 8px; font-size: 0.95rem; color: #444; }
+        .pros li::before { content: '✓'; position: absolute; right: 0; color: var(--success); }
+        .cons li::before { content: '✗'; position: absolute; right: 0; color: var(--accent); }
+
+        /* --- صندوق خلاصة الفجوة --- */
+        .gap-summary-box { background: var(--light); border-radius: var(--radius); padding: 30px; margin-top: 50px; border-top: 5px solid var(--secondary); }
+        .gap-summary-header { display: flex; align-items: center; gap: 15px; color: var(--primary); margin-bottom: 20px; }
+        .gap-summary-header i { font-size: 2rem; }
+        .gap-summary-header h3 { margin: 0; font-size: 1.6rem; }
+        .gap-summary-box p { font-size: 1.1rem; line-height: 1.8; color: #444; margin-bottom: 15px; }
+        .gap-summary-box p:last-child { margin-bottom: 0; }
+
+        .pagination { display: flex; justify-content: space-between; margin-top: 50px; padding-top: 30px; border-top: 1px solid #eee; }
+        .btn { display: inline-flex; align-items: center; gap: 10px; padding: 12px 25px; border-radius: 50px; text-decoration: none; font-weight: 600; transition: var(--transition); box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .btn i { font-size: 1.1rem; }
+        .btn-next { background: var(--secondary); color: white; }
+        .btn-next:hover { background: #2980b9; transform: translateY(-3px) scale(1.05); box-shadow: 0 7px 20px rgba(52, 152, 219, 0.4); }
+        .btn-prev { background: var(--primary); color: white; }
+        .btn-prev:hover { background: #1a252f; transform: translateY(-3px) scale(1.05); box-shadow: 0 7px 20px rgba(44, 62, 80, 0.3); }
+        @media (max-width: 992px) { .pros-cons { grid-template-columns: 1fr; } }
+        @media (max-width: 768px) { body { flex-direction: column; } .sidebar { position: fixed; top: 0; right: 0; z-index: 1000; transform: translateX(100%); } .sidebar.active { transform: translateX(0); } .main-content { padding-top: 60px; } .mobile-menu-btn { display: flex; align-items: center; justify-content: center; } .pagination { flex-direction: column; gap: 15px; align-items: stretch; text-align: center; } }
+    </style>
+</head>
+<body>
+    <div id="sidebar-container"></div>
+    <main class="main-content">
+        <section class="content-page">
+            <h1>2.2 الدراسات السابقة (Literature Review)</h1>
+            <p>لضمان بناء المشروع على أساس علمي وعملي متين، تم إجراء مراجعة شاملة للأنظمة والأبحاث الموجودة في مجال أنظمة إدارة التعلم (LMS). تم تقسيم المراجعة إلى ثلاثة محاور رئيسية:</p>
+
+            <div class="review-cards">
+                <div class="review-card">
+                    <div class="review-header"><i class="fas fa-dollar-sign"></i><h2>1. أنظمة إدارة التعلم التجارية</h2></div>
+                    <p>تُعد أنظمة مثل <strong>Blackboard Learn</strong> و <strong>Canvas</strong> من رواد هذا المجال. تتميز بالنضج العالي والميزات الواسعة والدعم الفني القوي.</p>
+                    <div class="pros-cons">
+                        <div class="pros"><h4><i class="fas fa-plus-circle"></i> الإيجابيات:</h4><ul><li>نضج عالي وميزات شاملة</li><li>دعم فني وضمانات موثوقية</li></ul></div>
+                        <div class="cons"><h4><i class="fas fa-minus-circle"></i> السلبيات:</h4><ul><li>تكلفة باهظة (اشتراكات ورخص)</li><li>مغلقة المصدر (صعبة التخصيص)</li></ul></div>
+                    </div>
+                </div>
+                <div class="review-card">
+                    <div class="review-header"><i class="fas fa-code-branch"></i><h2>2. أنظمة إدارة التعلم مفتوحة المصدر</h2></div>
+                    <p>يُعتبر نظام <strong>Moodle</strong> المثال الأبرز في هذه الفئة. تكمن قوته في كونه مجانياً ومفتوح المصدر، مما يمنح حرية كاملة في التعديل والاستخدام.</p>
+                    <div class="pros-cons">
+                        <div class="pros"><h4><i class="fas fa-plus-circle"></i> الإيجابيات:</h4><ul><li>مجاني ومفتوح المصدر</li><li>مجتمع ضخم وإضافات كثيرة</li></ul></div>
+                        <div class="cons"><h4><i class="fas fa-minus-circle"></i> السلبيات:</h4><ul><li>واجهات قديمة وأداء بطيء أحياناً</li><li>يتطلب خبرة تقنية عالية للإعداد</li></ul></div>
+                    </div>
+                </div>
+                <div class="review-card">
+                    <div class="review-header"><i class="fas fa-microscope"></i><h2>3. المشاريع الأكاديمية والأبحاث</h2></div>
+                    <p>تم الاطلاع على مشاريع تخرج وأبحاث استخدمت إطار العمل <strong>Laravel</strong>. أظهرت هذه المشاريع قدرة الإطار على بناء أنظمة قوية وآمنة.</p>
+                    <div class="pros-cons">
+                        <div class="pros"><h4><i class="fas fa-plus-circle"></i> الإيجابيات:</h4><ul><li>تثبت جدوى استخدام Laravel</li><li>تعتبر أساساً جيداً للبناء عليه</li></ul></div>
+                        <div class="cons"><h4><i class="fas fa-minus-circle"></i> السلبيات:</h4><ul><li>تفتقر للشمولية والتكامل</li><li>تعتمد على تقنيات واجهة أمامية تقليدية</li></ul></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gap-summary-box">
+                <div class="gap-summary-header"><i class="fas fa-map-signs"></i><h3>خلاصة الدراسات السابقة وتحديد الفجوة</h3></div>
+                <p>من خلال استعراض الحلول المتاحة، تتضح فجوة واضحة: الأنظمة التجارية باهظة ومقيدة، والأنظمة المفتوحة المصدر قديمة، والمشاريع الأكاديمية غير متكاملة.</p>
+                <p><strong>يهدف مشروعنا الحالي إلى سد هذه الفجوة</strong> عبر تقديم نظام يجمع بين أفضل ما في العالمين: مرونة وقابلية تخصيص الأنظمة مفتوحة المصدر، مع الأداء العالي والواجهات العصرية التفاعلية التي توفرها أحدث التقنيات مثل <strong>Laravel</strong> و <strong>Livewire</strong>، وكل ذلك بتكلفة تطوير وتشغيل أقل بكثير من الحلول التجارية الجاهزة.</p>
+            </div>
+
+            <nav class="pagination">
+                <a href="2.1_background.html" class="btn btn-prev"><i class="fas fa-arrow-right"></i> السابق: خلفية الدراسة</a>
+                <a href="2.3_existing_system.html" class="btn btn-next">التالي: النظام الحالي <i class="fas fa-arrow-left"></i></a>
+            </nav>
+        </section>
+    </main>
+
+    <!-- الكود الموحد والمحسن للجافاسكريبت -->
+    <script>
+        function setActiveLink() {
+            const currentPath = window.location.pathname;
+            document.querySelectorAll('.sidebar-nav a').forEach(link => {
+                const linkPath = new URL(link.href, window.location.origin).pathname;
+                if (currentPath === linkPath) {
+                    document.querySelectorAll('.nav-item.active, .submenu a.active').forEach(i => i.classList.remove('active'));
+                    link.classList.add('active');
+                    const parentNavItem = link.closest('.nav-item');
+                    if (parentNavItem) parentNavItem.classList.add('active');
+                }
+            });
+        }
+
+        function initializeSidebarScripts() {
+            document.querySelectorAll('.nav-toggle').forEach(toggle => {
+                toggle.addEventListener('click', function(e) { e.preventDefault(); this.parentElement.classList.toggle('active'); });
+            });
+            const menuToggle = document.getElementById('menuToggle');
+            const sidebar = document.getElementById('sidebar');
+            if (menuToggle && sidebar) {
+                menuToggle.addEventListener('click', (e) => { e.stopPropagation(); sidebar.classList.toggle('active'); });
+            }
+            document.addEventListener('click', function(e) {
+                if (window.innerWidth <= 768 && sidebar?.classList.contains('active') && !sidebar.contains(e.target) && !menuToggle.contains(e.target)) {
+                    sidebar.classList.remove('active');
+                }
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            fetch('../sidebar.html')
+                .then(response => response.ok ? response.text() : Promise.reject('Failed to load sidebar'))
+                .then(data => {
+                    document.getElementById('sidebar-container').innerHTML = data;
+                    initializeSidebarScripts();
+                    setActiveLink();
+                })
+                .catch(error => console.error('خطأ في تحميل الشريط الجانبي:', error));
+        });
+    </script>
+</body>
+</html>

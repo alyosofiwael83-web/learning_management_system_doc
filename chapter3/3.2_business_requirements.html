@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3.2 متطلبات العمل - نظام إدارة التعلم</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- الكود الموحد للتنسيقات -->
+    <style>
+        :root { --primary: #2c3e50; --secondary: #3498db; --accent: #e74c3c; --success: #2ecc71; --light: #ecf0f1; --sidebar-width: 280px; --transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275  ); --shadow: 0 10px 30px rgba(0, 0, 0, 0.1); --radius: 12px; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #f9f9f9; color: #333; display: flex; min-height: 100vh; direction: rtl; }
+        .sidebar { width: var(--sidebar-width); background: linear-gradient(165deg, var(--primary) 0%, #1a2530 100%); color: white; height: 100vh; overflow-y: auto; box-shadow: var(--shadow); border-left: 1px solid rgba(255, 255, 255, 0.1); flex-shrink: 0; }
+        .sidebar-header { padding: 25px 20px; text-align: center; border-bottom: 1px solid rgba(255, 255, 255, 0.1); background: rgba(0, 0, 0, 0.2); }
+        .sidebar-header .logo { display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 10px; }
+        .sidebar-header .logo i { font-size: 2rem; color: var(--secondary); background: rgba(255, 255, 255, 0.1); padding: 10px; border-radius: 50%; }
+        .sidebar-header h1 { font-size: 1.4rem; font-weight: 600; margin: 0; }
+        .sidebar-header p { font-size: 0.85rem; opacity: 0.8; margin: 5px 0 0; }
+        .sidebar-nav { padding: 20px 0; }
+        .nav-item { margin-bottom: 5px; position: relative; }
+        .nav-item a { display: flex; align-items: center; padding: 15px 25px; color: rgba(255, 255, 255, 0.8); text-decoration: none; transition: var(--transition); border-right: 4px solid transparent; }
+        .nav-item a i { margin-left: 15px; font-size: 1.2rem; width: 24px; text-align: center; }
+        .nav-item a:hover, .nav-item.active > a { background: rgba(255, 255, 255, 0.1); color: white; border-right-color: var(--secondary); padding-right: 30px; }
+        .nav-item a:hover i, .nav-item.active > a i { color: var(--secondary); transform: scale(1.1); }
+        .submenu { max-height: 0; overflow: hidden; transition: max-height 0.5s ease; background: rgba(0, 0, 0, 0.2); }
+        .nav-item.active .submenu { max-height: 500px; }
+        .submenu a { padding: 12px 25px 12px 40px; font-size: 0.9rem; border-right: 3px solid transparent; display: block; color: rgba(255, 255, 255, 0.8); text-decoration: none; transition: var(--transition); }
+        .submenu a:hover, .submenu a.active { border-right-color: var(--accent) !important; background: rgba(255, 255, 255, 0.05); padding-right: 35px; color: white; }
+        .submenu a::before { content: "•"; margin-left: 10px; color: var(--secondary); }
+        .nav-toggle .toggle-icon { margin-right: auto; transition: var(--transition); }
+        .nav-item.active > .nav-toggle .toggle-icon { transform: rotate(-180deg); }
+        .mobile-menu-btn { display: none; position: fixed; top: 20px; right: 20px; background: var(--primary); color: white; border: none; border-radius: 8px; width: 45px; height: 45px; font-size: 1.2rem; cursor: pointer; z-index: 1100; transition: var(--transition); }
+        .mobile-menu-btn:hover { background: var(--secondary); transform: rotate(90deg); }
+        .main-content { flex-grow: 1; overflow-y: auto; height: 100vh; background-color: white; }
+        .content-page { max-width: 1000px; margin: 0 auto; padding: 60px 40px; }
+        .content-page h1 { color: var(--primary); font-size: 2.5rem; margin-bottom: 30px; text-align: center; position: relative; padding-bottom: 15px; }
+        .content-page h1::after { content: ""; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 100px; height: 4px; background: var(--secondary); border-radius: 2px; }
+        .content-page > p { margin-bottom: 40px; font-size: 1.1rem; line-height: 1.8; text-align: justify; color: #333; }
+        
+        /* --- أنماط بطاقات متطلبات العمل --- */
+        .requirements-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 25px; margin-top: 50px; }
+        .req-card { background: #fff; border-radius: var(--radius); border: 1px solid #eee; box-shadow: 0 4px 15px rgba(0,0,0,0.05); transition: var(--transition); }
+        .req-card:hover { transform: translateY(-5px) scale(1.02); box-shadow: var(--shadow); }
+        .req-header { display: flex; align-items: center; gap: 15px; padding: 20px; border-bottom: 1px solid #eee; }
+        .req-icon { font-size: 2rem; color: var(--secondary); width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; background: var(--light); border-radius: 50%; }
+        .req-title h2 { font-size: 1.3rem; margin: 0; color: var(--primary); }
+        .req-title span { font-size: 0.9rem; color: #777; font-family: monospace; }
+        .req-body { padding: 25px; }
+        .req-body p { font-size: 1rem; line-height: 1.7; color: #555; margin: 0; }
+        .req-body p strong { color: var(--primary); }
+
+        .pagination { display: flex; justify-content: space-between; margin-top: 50px; padding-top: 30px; border-top: 1px solid #eee; }
+        .btn { display: inline-flex; align-items: center; gap: 10px; padding: 12px 25px; border-radius: 50px; text-decoration: none; font-weight: 600; transition: var(--transition); box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .btn i { font-size: 1.1rem; }
+        .btn-next { background: var(--secondary); color: white; }
+        .btn-next:hover { background: #2980b9; transform: translateY(-3px) scale(1.05); box-shadow: 0 7px 20px rgba(52, 152, 219, 0.4); }
+        .btn-prev { background: var(--primary); color: white; }
+        .btn-prev:hover { background: #1a252f; transform: translateY(-3px) scale(1.05); box-shadow: 0 7px 20px rgba(44, 62, 80, 0.3); }
+        @media (max-width: 900px) { .requirements-grid { grid-template-columns: 1fr; } }
+        @media (max-width: 768px) { body { flex-direction: column; } .sidebar { position: fixed; top: 0; right: 0; z-index: 1000; transform: translateX(100%); } .sidebar.active { transform: translateX(0); } .main-content { padding-top: 60px; } .mobile-menu-btn { display: flex; align-items: center; justify-content: center; } .pagination { flex-direction: column; gap: 15px; align-items: stretch; text-align: center; } }
+    </style>
+</head>
+<body>
+    <div id="sidebar-container"></div>
+    <main class="main-content">
+        <section class="content-page">
+            <h1>3.2 متطلبات العمل (Business Requirements)</h1>
+            <p>متطلبات العمل هي الأهداف الاستراتيجية عالية المستوى التي يسعى المشروع لتحقيقها من منظور المؤسسة (الجامعة). إنها تجيب على سؤال "لماذا؟" - لماذا تستثمر الجامعة في هذا النظام؟ تمثل هذه المتطلبات القيمة الجوهرية التي سيقدمها المشروع وتعتبر الأساس الذي تُبنى عليه جميع المتطلبات الوظيفية والتقنية اللاحقة.</p>
+
+            <div class="requirements-grid">
+                <!-- المتطلب الأول -->
+                <div class="req-card">
+                    <div class="req-header">
+                        <div class="req-icon"><i class="fas fa-database"></i></div>
+                        <div class="req-title">
+                            <h2>مركزية إدارة البيانات الأكاديمية</h2>
+                            <span>BR-01</span>
+                        </div>
+                    </div>
+                    <div class="req-body">
+                        <p>يجب أن يوفر النظام <strong>مصدراً واحداً وموثوقاً للحقيقة (Single Source of Truth)</strong> لجميع البيانات الأكاديمية، بما في ذلك معلومات الطلاب، الدكاترة، المواد، والجداول الدراسية، مما يلغي تشتت البيانات ويضمن دقتها وتكاملها.</p>
+                    </div>
+                </div>
+
+                <!-- المتطلب الثاني -->
+                <div class="req-card">
+                    <div class="req-header">
+                        <div class="req-icon"><i class="fas fa-cogs"></i></div>
+                        <div class="req-title">
+                            <h2>أتمتة دورة التقييم الأكاديمي</h2>
+                            <span>BR-02</span>
+                        </div>
+                    </div>
+                    <div class="req-body">
+                        <p>يجب أن يقوم النظام بأتمتة دورة "التكليف - التسليم - التقييم - التغذية الراجعة" بشكل كامل، بهدف <strong>تقليل الوقت والجهد المبذول</strong> في العمليات الروتينية وتسريع وصول الملاحظات القيمة للطلاب.</p>
+                    </div>
+                </div>
+
+                <!-- المتطلب الثالث -->
+                <div class="req-card">
+                    <div class="req-header">
+                        <div class="req-icon"><i class="fas fa-comments"></i></div>
+                        <div class="req-title">
+                            <h2>تحسين كفاءة التواصل والتفاعل</h2>
+                            <span>BR-03</span>
+                        </div>
+                    </div>
+                    <div class="req-body">
+                        <p>يجب أن يوفر النظام قنوات تواصل رسمية وفعالة (مثل ساحات النقاش والإشعارات) لـ<strong>سد الفجوة التواصلية</strong> بين الطلاب، الدكاترة، والإدارة، وضمان تدفق المعلومات بسلاسة وشفافية.</p>
+                    </div>
+                </div>
+
+                <!-- المتطلب الرابع -->
+                <div class="req-card">
+                    <div class="req-header">
+                        <div class="req-icon"><i class="fas fa-chart-pie"></i></div>
+                        <div class="req-title">
+                            <h2>دعم اتخاذ القرار المبني على البيانات</h2>
+                            <span>BR-04</span>
+                        </div>
+                    </div>
+                    <div class="req-body">
+                        <p>يجب أن يكون النظام قادراً على <strong>توليد تقارير وإحصائيات دقيقة</strong> حول سير العملية التعليمية، مما يمكّن الإدارة من قياس الأداء، تحديد نقاط الضعف، واتخاذ قرارات استراتيجية مستنيرة.</p>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="pagination">
+                <a href="3.1_collecting_requirements.html" class="btn btn-prev"><i class="fas fa-arrow-right"></i> السابق: طرق جمع المتطلبات</a>
+                <a href="3.3_requirements_definition.html" class="btn btn-next">التالي: تعريف المتطلبات <i class="fas fa-arrow-left"></i></a>
+            </nav>
+        </section>
+    </main>
+
+    <!-- الكود الموحد والمحسن للجافاسكريبت -->
+    <script>
+        function setActiveLink() {
+            const currentPath = window.location.pathname;
+            document.querySelectorAll('.sidebar-nav a').forEach(link => {
+                const linkPath = new URL(link.href, window.location.origin).pathname;
+                if (currentPath.endsWith(linkPath.split('/').pop())) {
+                    document.querySelectorAll('.nav-item.active, .submenu a.active').forEach(i => i.classList.remove('active'));
+                    link.classList.add('active');
+                    const parentNavItem = link.closest('.nav-item');
+                    if (parentNavItem) {
+                        parentNavItem.classList.add('active');
+                    }
+                }
+            });
+        }
+
+        function initializeSidebarScripts() {
+            document.querySelectorAll('.nav-toggle').forEach(toggle => {
+                toggle.addEventListener('click', function(e) { e.preventDefault(); this.parentElement.classList.toggle('active'); });
+            });
+            const menuToggle = document.getElementById('menuToggle');
+            const sidebar = document.getElementById('sidebar');
+            if (menuToggle && sidebar) {
+                menuToggle.addEventListener('click', (e) => { e.stopPropagation(); sidebar.classList.toggle('active'); });
+            }
+            document.addEventListener('click', function(e) {
+                if (window.innerWidth <= 768 && sidebar?.classList.contains('active') && !sidebar.contains(e.target) && !menuToggle.contains(e.target)) {
+                    sidebar.classList.remove('active');
+                }
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            fetch('../sidebar.html')
+                .then(response => response.ok ? response.text() : Promise.reject('Failed to load sidebar'))
+                .then(data => {
+                    document.getElementById('sidebar-container').innerHTML = data;
+                    initializeSidebarScripts();
+                    setActiveLink();
+                })
+                .catch(error => console.error('خطأ في تحميل الشريط الجانبي:', error));
+        });
+    </script>
+</body>
+</html>

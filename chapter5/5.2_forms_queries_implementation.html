@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>5.2 تنفيذ النماذج والمنطق - نظام إدارة التعلم</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.28.0/themes/prism.min.css">
+
+    <style>
+        :root { --primary: #2c3e50; --secondary: #3498db; --accent: #e74c3c; --success: #2ecc71; --light: #ecf0f1; --sidebar-width: 280px; --transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275  ); --shadow: 0 10px 30px rgba(0, 0, 0, 0.1); --radius: 12px; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #f9f9f9; color: #333; display: flex; min-height: 100vh; direction: rtl; }
+        .sidebar { width: var(--sidebar-width); background: linear-gradient(165deg, var(--primary) 0%, #1a2530 100%); color: white; height: 100vh; overflow-y: auto; box-shadow: var(--shadow); border-left: 1px solid rgba(255, 255, 255, 0.1); flex-shrink: 0; }
+        .main-content { flex-grow: 1; overflow-y: auto; height: 100vh; background-color: white; }
+        .content-page { max-width: 1100px; margin: 0 auto; padding: 60px 40px; color: #333; }
+        .content-page h1 { color: var(--primary); font-size: 2.5rem; margin-bottom: 30px; text-align: center; position: relative; padding-bottom: 15px; display: flex; align-items: center; justify-content: center; gap: 15px; }
+        .content-page h1::after { content: ""; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 100px; height: 4px; background: var(--secondary); border-radius: 2px; }
+        .content-page > p { margin-bottom: 40px; font-size: 1.1rem; line-height: 1.8; text-align: justify; }
+        .content-page h2 { color: var(--primary); margin: 50px 0 25px; font-size: 1.8rem; border-bottom: 2px solid var(--light); padding-bottom: 10px; display: flex; align-items: center; gap: 15px; }
+        
+        /* --- تصميم البطاقات الفاخرة --- */
+        .feature-card {
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: var(--radius);
+            margin-bottom: 50px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+        .feature-card-header {
+            padding: 25px;
+            background-color: var(--primary);
+            color: white;
+        }
+        .feature-card-header h3 {
+            font-size: 1.6rem;
+            margin: 0 0 10px 0;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .feature-card-header p {
+            font-size: 1.05rem;
+            opacity: 0.9;
+            margin: 0;
+            line-height: 1.6;
+        }
+        .feature-card-body {
+            padding: 30px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            align-items: center;
+        }
+        .feature-card-body.full-width {
+            grid-template-columns: 1fr;
+        }
+        .feature-card-body .explanation {
+            line-height: 1.8;
+        }
+        .feature-card-body .explanation h4 {
+            color: var(--secondary);
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+        }
+        pre[class*="language-"] {
+            margin: 0;
+            border-radius: var(--radius);
+            border: 1px solid #ddd;
+            max-height: 350px;
+        }
+
+        /* --- تصميم الرسوم التوضيحية --- */
+        .diagram-box {
+            background: var(--light);
+            padding: 20px;
+            border-radius: var(--radius);
+            text-align: center;
+        }
+        .diagram-box h4 {
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+        .flow-diagram {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+        .flow-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+        .flow-item i {
+            font-size: 2rem;
+        }
+        .flow-item span {
+            font-weight: 600;
+        }
+        .arrow {
+            font-size: 2rem;
+            color: var(--secondary);
+        }
+
+        .pagination { display: flex; justify-content: space-between; margin-top: 50px; padding-top: 30px; border-top: 1px solid #eee; }
+        .btn { display: inline-flex; align-items: center; gap: 10px; padding: 12px 25px; border-radius: 50px; text-decoration: none; font-weight: 600; transition: var(--transition); box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .btn-prev { background: var(--primary); color: white; }
+        .btn-next { background: var(--secondary); color: white; }
+        @media (max-width: 992px) {
+            .feature-card-body { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div id="sidebar-container"></div>
+    <main class="main-content">
+        <section class="content-page">
+            <h1><i class="fas fa-cogs"></i> 5.2 تنفيذ النماذج والمنطق البرمجي</h1>
+            <p>هذا القسم هو "عقل" النظام، حيث نترجم تصاميم النماذج والاستعلامات إلى كود برمجي حقيقي. تم الاعتماد بشكل أساسي على إطار العمل Livewire لتوفير تجربة مستخدم تفاعلية وسريعة، مع استخدام قوة Eloquent ORM في Laravel لتنفيذ استعلامات فعالة وآمنة.</p>
+
+            <!-- الميزة الأولى: التحقق الفوري من الصحة -->
+            <div class="feature-card">
+                <div class="feature-card-header">
+                    <h3><i class="fas fa-check-double"></i> 1. التحقق الفوري من الصحة (Real-time Validation)</h3>
+                    <p>وداعاً لتجربة المستخدم المحبطة! بدلاً من انتظار المستخدم لملء النموذج بالكامل ثم إظهار الأخطاء، يقوم النظام بالتحقق من كل حقل فوراً بعد أن يتركه المستخدم، مما يوفر توجيهاً فورياً.</p>
+                </div>
+                <div class="feature-card-body">
+                    <div class="explanation">
+                        <h4>كيف يعمل؟</h4>
+                        <p>ببساطة، في كل مكون Livewire، نستخدم دالة `updated()` التي يتم استدعاؤها تلقائياً عند تغيير أي خاصية. داخل هذه الدالة، نقوم بتشغيل التحقق على هذا الحقل المحدد فقط.</p>
+                    </div>
+                    <pre><code class="language-php">
+// DoctorsPage.php
+
+protected function rules()
+{
+    return [
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|unique:users,email,' . $this->user_id,
+        'password' => 'nullable|string|min:8',
+    ];
+}
+
+public function updated($propertyName)
+{
+    // التحقق من الحقل الذي تم تغييره فقط
+    $this->validateOnly($propertyName);
+}
+                    </code></pre>
+                </div>
+            </div>
+
+            <!-- الميزة الثانية: المعاملات الآمنة -->
+            <div class="feature-card">
+                <div class="feature-card-header">
+                    <h3><i class="fas fa-shield-halved"></i> 2. ضمان سلامة البيانات (DB Transactions)</h3>
+                    <p>عند إضافة دكتور جديد، نحتاج إلى إنشاء سجل في جدول `users` وسجل آخر في جدول `doctors`. ماذا لو نجحت العملية الأولى وفشلت الثانية؟ لتجنب هذه الفوضى، تم استخدام المعاملات الآمنة.</p>
+                </div>
+                <div class="feature-card-body">
+                    <div class="diagram-box">
+                        <h4>رحلة البيانات الآمنة</h4>
+                        <div class="flow-diagram">
+                            <div class="flow-item"><i class="fas fa-play-circle"></i><span>بدء</span></div>
+                            <i class="fas fa-arrow-left arrow"></i>
+                            <div class="flow-item"><i class="fas fa-user-plus"></i><span>إنشاء User</span></div>
+                            <i class="fas fa-arrow-left arrow"></i>
+                            <div class="flow-item"><i class="fas fa-user-doctor"></i><span>إنشاء Doctor</span></div>
+                            <i class="fas fa-arrow-left arrow"></i>
+                            <div class="flow-item"><i class="fas fa-save"></i><span>حفظ الكل</span></div>
+                        </div>
+                        <p style="margin-top: 15px;">إذا فشلت أي خطوة، يتم التراجع عن كل الخطوات السابقة تلقائياً.</p>
+                    </div>
+                    <pre><code class="language-php">
+// DoctorsPage.php -> save()
+
+public function save()
+{
+    $this->validate();
+
+    // بدء المعاملة الآمنة
+    DB::transaction(function () {
+        // 1. إنشاء أو تحديث المستخدم
+        $user = User::updateOrCreate(
+            ['email' => $this->email],
+            ['name' => $this->name, 'role' => 'doctor']
+        );
+
+        // 2. إنشاء أو تحديث الدكتور
+        Doctor::updateOrCreate(
+            ['user_id' => $user->id],
+            ['name' => $this->name, 'email' => $this->email]
+        );
+    }); // نهاية المعاملة
+
+    // ...
+}
+                    </code></pre>
+                </div>
+            </div>
+
+            <!-- الميزة الثالثة: الاستعلامات الفعالة -->
+            <div class="feature-card">
+                <div class="feature-card-header">
+                    <h3><i class="fas fa-rocket"></i> 3. الاستعلامات الفعالة (Eager Loading)</h3>
+                    <p>لتجنب مشكلة "N+1 Query" التي تبطئ النظام، تم استخدام تقنية التحميل المسبق (Eager Loading) لجلب كل البيانات المطلوبة في أقل عدد ممكن من الاستعلامات.</p>
+                </div>
+                <div class="feature-card-body full-width">
+                    <div class="explanation">
+                        <h4>مثال عملي: عرض صفحة الدفعات</h4>
+                        <p>عند عرض جدول الدفعات، نحتاج أيضاً إلى عرض اسم التخصص واسم القسم لكل دفعة. بدلاً من إجراء استعلام منفصل لكل صف، نقوم بجلب كل شيء في استعلام واحد فعال.</p>
+                    </div>
+                    <pre><code class="language-php">
+// BatchesPage.php -> render()
+
+public function render()
+{
+    // استخدام with() لجلب علاقة التخصص وقسمه مسبقاً
+    $batches = Batch::with(['specialization.department'])
+        ->latest('created_at')
+        ->paginate(10);
+
+    return view('livewire.admin.batches-page', [
+        'batches' => $batches,
+    ]);
+}
+                    </code></pre>
+                </div>
+            </div>
+
+            <nav class="pagination">
+                <a href="5.1_database_implementation.html" class="btn btn-prev"><i class="fas fa-arrow-right"></i> السابق: تنفيذ قاعدة البيانات</a>
+                <a href="5.3_ui_implementation.html" class="btn btn-next">التالي: تنفيذ الواجهات <i class="fas fa-arrow-left"></i></a>
+            </nav>
+        </section>
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.28.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.28.0/components/prism-php.min.js"></script>
+     <!-- الكود الموحد للجافاسكريبت -->
+    <script>
+        function setActiveLink() {
+            const currentPath = window.location.pathname;
+            document.querySelectorAll('.sidebar-nav a').forEach(link => {
+                const linkPath = new URL(link.href, window.location.origin).pathname;
+                if (currentPath.endsWith(linkPath.split('/').pop())) {
+                    document.querySelectorAll('.nav-item.active, .submenu a.active').forEach(i => i.classList.remove('active'));
+                    link.classList.add('active');
+                    const parentNavItem = link.closest('.nav-item');
+                    if (parentNavItem) {
+                        parentNavItem.classList.add('active');
+                    }
+                }
+            });
+        }
+
+        function initializeSidebarScripts() {
+            document.querySelectorAll('.nav-toggle').forEach(toggle => {
+                toggle.addEventListener('click', function(e) { e.preventDefault(); this.parentElement.classList.toggle('active'); });
+            });
+            const menuToggle = document.getElementById('menuToggle');
+            const sidebar = document.getElementById('sidebar');
+            if (menuToggle && sidebar) {
+                menuToggle.addEventListener('click', (e) => { e.stopPropagation(); sidebar.classList.toggle('active'); });
+            }
+            document.addEventListener('click', function(e) {
+                if (window.innerWidth <= 768 && sidebar?.classList.contains('active') && !sidebar.contains(e.target) && !menuToggle.contains(e.target)) {
+                    sidebar.classList.remove('active');
+                }
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            fetch('../sidebar.html')
+                .then(response => response.ok ? response.text() : Promise.reject('Failed to load sidebar'))
+                .then(data => {
+                    document.getElementById('sidebar-container').innerHTML = data;
+                    initializeSidebarScripts();
+                    setActiveLink();
+                })
+                .catch(error => console.error('خطأ في تحميل الشريط الجانبي:', error));
+        });
+    </script>
+</body>
+</html>

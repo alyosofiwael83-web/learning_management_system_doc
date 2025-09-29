@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الفهرس - نظام إدارة التعلم</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --success: #2ecc71;
+            --warning: #f39c12;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --sidebar-width: 280px;
+            --header-height: 70px;
+            --transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --radius: 12px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--primary) 0%, #1a2530 100%);
+            color: white;
+            min-height: 100vh;
+            direction: rtl;
+        }
+
+        .sidebar {
+            width: var(--sidebar-width);
+            background: linear-gradient(165deg, var(--primary) 0%, #1a2530 100%);
+            color: white;
+            height: 100vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow);
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-header {
+            padding: 25px 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .sidebar-header .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        .sidebar-header .logo i {
+            font-size: 2rem;
+            color: var(--secondary);
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            border-radius: 50%;
+        }
+
+        .sidebar-header h1 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .sidebar-header p {
+            font-size: 0.85rem;
+            opacity: 0.8;
+            margin: 5px 0 0;
+        }
+
+        .sidebar-nav {
+            padding: 20px 0;
+        }
+
+        .nav-item {
+            margin-bottom: 5px;
+            position: relative;
+        }
+
+        .nav-item a {
+            display: flex;
+            align-items: center;
+            padding: 15px 25px;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: var(--transition);
+            border-right: 4px solid transparent;
+        }
+
+        .nav-item a i {
+            margin-left: 15px;
+            font-size: 1.2rem;
+            width: 24px;
+            text-align: center;
+        }
+
+        .nav-item a:hover, .nav-item.active a {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-right-color: var(--secondary);
+            padding-right: 30px;
+        }
+
+        .nav-item a:hover i, .nav-item.active a i {
+            color: var(--secondary);
+            transform: scale(1.1);
+        }
+
+        .submenu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .nav-item.active .submenu {
+            max-height: 500px;
+        }
+
+        .submenu a {
+            padding: 12px 25px 12px 40px;
+            font-size: 0.9rem;
+            border-right: 3px solid transparent;
+            display: block;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .submenu a:hover {
+            border-right-color: var(--accent);
+            background: rgba(255, 255, 255, 0.05);
+            padding-right: 35px;
+        }
+
+        .submenu a::before {
+            content: "•";
+            margin-left: 10px;
+            color: var(--secondary);
+        }
+
+        .nav-toggle .toggle-icon {
+            margin-right: auto;
+            transition: var(--transition);
+        }
+
+        .nav-item.active .nav-toggle .toggle-icon {
+            transform: rotate(-180deg);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            width: 45px;
+            height: 45px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            z-index: 1100;
+            transition: var(--transition);
+        }
+
+        .mobile-menu-btn:hover {
+            background: var(--secondary);
+            transform: rotate(90deg);
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                position: fixed;
+                top: 0;
+                right: 0;
+                z-index: 1000;
+                transform: translateX(100%);
+                transition: var(--transition);
+            }
+            
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            
+            .mobile-menu-btn {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+<!-- sidebar.html (كامل مع جميع المسارات المطلقة الصحيحة) -->
+<button class="mobile-menu-btn" id="menuToggle">
+    <i class="fas fa-bars"></i>
+</button>
+
+<aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+        <div class="logo">
+            <i class="fas fa-graduation-cap"></i>
+            <div>
+                <h1>جامعة الحضارة</h1>
+                <p>نظام إدارة التعلم</p>
+            </div>
+        </div>
+    </div>
+    
+    <nav class="sidebar-nav">
+        <div class="nav-item">
+            <a href="/learning_management_system_doc/index.html">
+                <i class="fas fa-home"></i>
+                <span>الصفحة الرئيسية</span>
+            </a>
+        </div>
+        
+        <div class="nav-item">
+            <a href="/learning_management_system_doc/introduction.html">
+                <i class="fas fa-book-open"></i>
+                <span>المقدمة</span>
+            </a>
+        </div>
+        
+        <div class="nav-item">
+            <a href="/learning_management_system_doc/acknowledgements.html">
+                <i class="fas fa-hands-helping"></i>
+                <span>الشكر والتقدير</span>
+            </a>
+        </div>
+        
+        <!-- الفصل الأول -->
+        <div class="nav-item">
+            <a href="#" class="nav-toggle">
+                <i class="fas fa-project-diagram"></i>
+                <span>الفصل الأول: الإطار العام</span>
+                <i class="fas fa-chevron-down toggle-icon"></i>
+            </a>
+            <div class="submenu">
+                <a href="/learning_management_system_doc/chapter1/1.1_definition.html">1.1 تعريف المشروع</a>
+                <a href="/learning_management_system_doc/chapter1/1.2_problem_statement.html">1.2 تحديد المشكلة</a>
+                <a href="/learning_management_system_doc/chapter1/1.3_objectives.html">1.3 أهداف المشروع</a>
+                <a href="/learning_management_system_doc/chapter1/1.4_importance.html">1.4 أهمية المشروع</a>
+                <a href="/learning_management_system_doc/chapter1/1.5_scope.html">1.5 نطاق وحدود المشروع</a>
+                <a href="/learning_management_system_doc/chapter1/1.6_tools.html">1.6 الأدوات المستخدمة</a>
+                <a href="/learning_management_system_doc/chapter1/1.7_methodology.html">1.7 منهجية التطوير</a>
+                <a href="/learning_management_system_doc/chapter1/1.8_gantt_chart.html">1.8 مخطط جانت</a>
+            </div>
+        </div>
+        
+        <!-- الفصل الثاني -->
+        <div class="nav-item">
+            <a href="#" class="nav-toggle">
+                <i class="fas fa-chart-bar"></i>
+                <span>الفصل الثاني: الدراسة والتحليل</span>
+                <i class="fas fa-chevron-down toggle-icon"></i>
+            </a>
+            <div class="submenu">
+                <a href="/learning_management_system_doc/chapter2/2.1_background.html">2.1 خلفية الدراسة</a>
+                <a href="/learning_management_system_doc/chapter2/2.2_literature_review.html">2.2 الدراسات السابقة</a>
+                <a href="/learning_management_system_doc/chapter2/2.3_existing_system.html">2.3 النظام الحالي</a>
+                <a href="/learning_management_system_doc/chapter2/2.4_feasibility_study.html">2.4 دراسة الجدوى</a>
+                <a href="/learning_management_system_doc/chapter2/2.5_project_start_request.html">2.5 طلب البدء بالمشروع</a>
+                <a href="/learning_management_system_doc/chapter2/2.6_risks_management.html">2.6 إدارة المخاطر</a>
+                <a href="/learning_management_system_doc/chapter2/2.7_work_organization.html">2.7 معايير تنظيم العمل</a>
+            </div>
+        </div>
+        
+        <!-- الفصل الثالث -->
+        <div class="nav-item">
+            <a href="#" class="nav-toggle">
+                <i class="fas fa-search"></i>
+                <span>الفصل الثالث: التحليل</span>
+                <i class="fas fa-chevron-down toggle-icon"></i>
+            </a>
+            <div class="submenu">
+                <a href="/learning_management_system_doc/chapter3/3.1_collecting_requirements.html">3.1 طرق جمع المتطلبات</a>
+                <a href="/learning_management_system_doc/chapter3/3.2_business_requirements.html">3.2 متطلبات العمل</a>
+                <a href="/learning_management_system_doc/chapter3/3.3_requirements_definition.html">3.3 تعريف المتطلبات</a>
+                <a href="/learning_management_system_doc/chapter3/3.4_requirements_determination.html">3.4 تحديد المتطلبات</a>
+                <a href="/learning_management_system_doc/chapter3/3.5_use_case.html">3.5 حالة الاستخدام</a>
+                <a href="/learning_management_system_doc/chapter3/3.6_context_diagram.html">3.6 المخطط البيئي</a>
+                <a href="/learning_management_system_doc/chapter3/3.7_dfd.html">3.7 مخطط تدفق البيانات</a>
+                <a href="/learning_management_system_doc/chapter3/3.8_erd.html">3.8 مخطط العلاقة</a>
+            </div>
+        </div>
+
+        <!-- الفصل الرابع -->
+        <div class="nav-item">
+            <a href="#" class="nav-toggle">
+                <i class="fas fa-palette"></i>
+                <span>الفصل الرابع: تصميم النظام</span>
+                <i class="fas fa-chevron-down toggle-icon"></i>
+            </a>
+            <div class="submenu">
+                <a href="/learning_management_system_doc/chapter4/4.1_database_design.html">4.1 تصميم قاعدة البيانات</a>
+                <a href="/learning_management_system_doc/chapter4/4.2_forms_queries_design.html">4.2 تصميم النماذج</a>
+                <a href="/learning_management_system_doc/chapter4/4.3_ui_design.html">4.3 تصميم الواجهات</a>
+            </div>
+        </div>
+
+        <!-- الفصل الخامس -->
+        <div class="nav-item">
+            <a href="#" class="nav-toggle">
+                <i class="fas fa-code"></i>
+                <span>الفصل الخامس: تنفيذ النظام</span>
+                <i class="fas fa-chevron-down toggle-icon"></i>
+            </a>
+            <div class="submenu">
+                <a href="/learning_management_system_doc/chapter5/5.1_database_implementation.html">5.1 تنفيذ قاعدة البيانات</a>
+                <a href="/learning_management_system_doc/chapter5/5.2_forms_queries_implementation.html">5.2 تنفيذ النماذج</a>
+                <a href="/learning_management_system_doc/chapter5/5.3_ui_implementation.html">5.3 تنفيذ الواجهات</a>
+                <a href="/learning_management_system_doc/chapter5/5.4_system_integration.html">5.4 تكامل النظام</a>
+            </div>
+        </div>
+
+        <!-- الفصل السادس -->
+        <div class="nav-item">
+            <a href="#" class="nav-toggle">
+                <i class="fas fa-vial"></i>
+                <span>الفصل السادس: الاختبار والصيانة</span>
+                <i class="fas fa-chevron-down toggle-icon"></i>
+            </a>
+            <div class="submenu">
+                <a href="/learning_management_system_doc/chapter6/6.1_testing_methods.html">6.1 أساليب الاختبار</a>
+                <a href="/learning_management_system_doc/chapter6/6.2_test_results.html">6.2 نتائج الاختبارات</a>
+                <a href="/learning_management_system_doc/chapter6/6.3_future_maintenance.html">6.3 خطة الصيانة</a>
+            </div>
+        </div>
+
+        <!-- الفصل السابع -->
+        <div class="nav-item">
+            <a href="#" class="nav-toggle">
+                <i class="fas fa-trophy"></i>
+                <span>الفصل السابع: النتائج والتوصيات</span>
+                <i class="fas fa-chevron-down toggle-icon"></i>
+            </a>
+            <div class="submenu">
+                <a href="/learning_management_system_doc/chapter7/7.1_final_results.html">7.1 النتائج النهائية</a>
+                <a href="/learning_management_system_doc/chapter7/7.2_recommendations.html">7.2 التوصيات</a>
+            </div>
+        </div>
+        
+        <div class="nav-item">
+            <a href="/learning_management_system_doc/references.html">
+                <i class="fas fa-book"></i>
+                <span>المراجع</span>
+            </a>
+        </div>
+    </nav>
+</aside>
+
+
+
+    <script>
+        // تفعيل القوائم المنسدلة
+        document.querySelectorAll('.nav-toggle').forEach(toggle => {
+            toggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                const parent = this.parentElement;
+                parent.classList.toggle('active');
+                
+                // إغلاق القوائم الأخرى
+                document.querySelectorAll('.nav-item').forEach(item => {
+                    if (item !== parent) {
+                        item.classList.remove('active');
+                    }
+                });
+            });
+        });
+
+        // زر القائمة للجوال
+        document.getElementById('menuToggle').addEventListener('click', function() {
+            document.getElementById('sidebar').classList.toggle('active');
+        });
+
+        // إغلاق القائمة عند النقر خارجها (للجوال)
+        document.addEventListener('click', function(e) {
+            const sidebar = document.getElementById('sidebar');
+            const menuToggle = document.getElementById('menuToggle');
+            
+            if (window.innerWidth <= 768 && sidebar.classList.contains('active') && 
+                !sidebar.contains(e.target) && e.target !== menuToggle) {
+                sidebar.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>

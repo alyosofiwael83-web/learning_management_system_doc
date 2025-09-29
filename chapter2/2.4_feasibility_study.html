@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2.4 دراسة الجدوى (مصحح بالدولار) - نظام إدارة التعلم</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- الكود الموحد للتنسيقات مع التصحيح النهائي للجدول -->
+    <style>
+        :root { --primary: #2c3e50; --secondary: #3498db; --accent: #e74c3c; --success: #2ecc71; --warning: #f39c12; --light: #ecf0f1; --sidebar-width: 280px; --transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275  ); --shadow: 0 10px 30px rgba(0, 0, 0, 0.1); --radius: 12px; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #f9f9f9; color: #333; display: flex; min-height: 100vh; direction: rtl; }
+        .sidebar { width: var(--sidebar-width); background: linear-gradient(165deg, var(--primary) 0%, #1a2530 100%); color: white; height: 100vh; overflow-y: auto; box-shadow: var(--shadow); border-left: 1px solid rgba(255, 255, 255, 0.1); flex-shrink: 0; }
+        .sidebar-header { padding: 25px 20px; text-align: center; border-bottom: 1px solid rgba(255, 255, 255, 0.1); background: rgba(0, 0, 0, 0.2); }
+        .sidebar-header .logo { display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 10px; }
+        .sidebar-header .logo i { font-size: 2rem; color: var(--secondary); background: rgba(255, 255, 255, 0.1); padding: 10px; border-radius: 50%; }
+        .sidebar-header h1 { font-size: 1.4rem; font-weight: 600; margin: 0; }
+        .sidebar-header p { font-size: 0.85rem; opacity: 0.8; margin: 5px 0 0; }
+        .sidebar-nav { padding: 20px 0; }
+        .nav-item { margin-bottom: 5px; position: relative; }
+        .nav-item a { display: flex; align-items: center; padding: 15px 25px; color: rgba(255, 255, 255, 0.8); text-decoration: none; transition: var(--transition); border-right: 4px solid transparent; }
+        .nav-item a i { margin-left: 15px; font-size: 1.2rem; width: 24px; text-align: center; }
+        .nav-item a:hover, .nav-item.active > a { background: rgba(255, 255, 255, 0.1); color: white; border-right-color: var(--secondary); padding-right: 30px; }
+        .nav-item a:hover i, .nav-item.active > a i { color: var(--secondary); transform: scale(1.1); }
+        .submenu { max-height: 0; overflow: hidden; transition: max-height 0.5s ease; background: rgba(0, 0, 0, 0.2); }
+        .nav-item.active .submenu { max-height: 500px; }
+        .submenu a { padding: 12px 25px 12px 40px; font-size: 0.9rem; border-right: 3px solid transparent; display: block; color: rgba(255, 255, 255, 0.8); text-decoration: none; transition: var(--transition); }
+        .submenu a:hover, .submenu a.active { border-right-color: var(--accent) !important; background: rgba(255, 255, 255, 0.05); padding-right: 35px; color: white; }
+        .submenu a::before { content: "•"; margin-left: 10px; color: var(--secondary); }
+        .nav-toggle .toggle-icon { margin-right: auto; transition: var(--transition); }
+        .nav-item.active > .nav-toggle .toggle-icon { transform: rotate(-180deg); }
+        .mobile-menu-btn { display: none; position: fixed; top: 20px; right: 20px; background: var(--primary); color: white; border: none; border-radius: 8px; width: 45px; height: 45px; font-size: 1.2rem; cursor: pointer; z-index: 1100; transition: var(--transition); }
+        .mobile-menu-btn:hover { background: var(--secondary); transform: rotate(90deg); }
+        .main-content { flex-grow: 1; overflow-y: auto; height: 100vh; background-color: white; }
+        .content-page { max-width: 1000px; margin: 0 auto; padding: 60px 40px; }
+        .content-page h1 { color: var(--primary); font-size: 2.5rem; margin-bottom: 30px; text-align: center; position: relative; padding-bottom: 15px; }
+        .content-page h1::after { content: ""; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 100px; height: 4px; background: var(--secondary); border-radius: 2px; }
+        .content-page > p { margin-bottom: 40px; font-size: 1.1rem; line-height: 1.8; text-align: justify; color: #333; }
+        .feasibility-studies { display: grid; grid-template-columns: 1fr; gap: 30px; }
+        .study-card { background: #fff; border-radius: var(--radius); box-shadow: 0 5px 20px rgba(0,0,0,0.07); overflow: hidden; }
+        .study-header { display: flex; align-items: center; gap: 15px; padding: 20px; color: white; }
+        .study-header i { font-size: 1.8rem; }
+        .study-header h2 { margin: 0; font-size: 1.4rem; }
+        .study-header.technical { background: var(--primary); }
+        .study-header.economic { background: var(--success); }
+        .study-header.operational { background: var(--warning); }
+        .study-body { padding: 25px; }
+        .study-body > p { font-size: 1.05rem; line-height: 1.7; color: #555; margin-bottom: 20px; }
+        .study-body h4 { font-size: 1.1rem; color: var(--primary); margin: 20px 0 10px; border-right: 3px solid var(--secondary); padding-right: 10px; }
+        .study-conclusion { display: flex; align-items: center; gap: 10px; margin-top: 25px; padding: 15px; border-radius: var(--radius); }
+        .study-conclusion i { font-size: 1.3rem; }
+        .study-conclusion p { margin: 0; font-weight: 600; }
+        .technical-conclusion { background: #eaf5ff; color: #2980b9; }
+        .economic-conclusion { background: #eafaf1; color: #27ae60; }
+        .operational-conclusion { background: #fff9e6; color: #f39c12; }
+        .pagination { display: flex; justify-content: space-between; margin-top: 50px; padding-top: 30px; border-top: 1px solid #eee; }
+        .btn { display: inline-flex; align-items: center; gap: 10px; padding: 12px 25px; border-radius: 50px; text-decoration: none; font-weight: 600; transition: var(--transition); box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .btn i { font-size: 1.1rem; }
+        .btn-next { background: var(--secondary); color: white; }
+        .btn-next:hover { background: #2980b9; transform: translateY(-3px) scale(1.05); box-shadow: 0 7px 20px rgba(52, 152, 219, 0.4); }
+        .btn-prev { background: var(--primary); color: white; }
+        .btn-prev:hover { background: #1a252f; transform: translateY(-3px) scale(1.05); box-shadow: 0 7px 20px rgba(44, 62, 80, 0.3); }
+
+        /* --- تنسيقات جدول التكاليف (مع التصحيح النهائي) --- */
+        .costs-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.95rem; }
+        .costs-table th, .costs-table td { padding: 12px 15px; border: 1px solid #ddd; text-align: right; }
+        .costs-table thead th { background-color: var(--primary); color: white; }
+        .costs-table tbody tr:nth-child(even) { background-color: #f9f9f9; }
+        .costs-table tfoot td { font-weight: bold; background-color: var(--light); }
+        .costs-table td { color: #333 !important; }
+
+        @media (max-width: 768px) { body { flex-direction: column; } .sidebar { position: fixed; top: 0; right: 0; z-index: 1000; transform: translateX(100%); } .sidebar.active { transform: translateX(0); } .main-content { padding-top: 60px; } .mobile-menu-btn { display: flex; align-items: center; justify-content: center; } .pagination { flex-direction: column; gap: 15px; align-items: stretch; text-align: center; } }
+    </style>
+</head>
+<body>
+    <div id="sidebar-container"></div>
+    <main class="main-content">
+        <section class="content-page">
+            <h1>2.4 دراسة الجدوى</h1>
+            <p>قبل الشروع في المراحل المتقدمة من تطوير "منصة إدارة التعليم الجامعي"، تم إجراء دراسة جدوى شاملة لتقييم قابلية تنفيذ المشروع من مختلف الجوانب. تهدف هذه الدراسة إلى التأكد من أن المشروع لا يمثل حلاً فعالاً للمشكلة المطروحة فحسب، بل هو أيضاً واقعي وقابل للتطبيق ضمن الموارد والظروف المتاحة.</p>
+
+            <div class="feasibility-studies">
+                <div class="study-card">
+                    <div class="study-header technical"><i class="fas fa-cogs"></i><h2>2.4.1 الجدوى التقنية</h2></div>
+                    <div class="study-body">
+                        <p><strong>السؤال الرئيسي:</strong> "هل نمتلك القدرات التقنية اللازمة لبناء وتشغيل هذا النظام بنجاح؟"</p>
+                        <h4>توفر التقنيات:</h4>
+                        <p>تم بناء النظام بالاعتماد على تقنيات مفتوحة المصدر ومجربة مثل <strong>PHP, Laravel, Livewire, MySQL</strong>، وكلها متاحة مجاناً ومدعومة بمجتمعات ضخمة.</p>
+                        <h4>الخبرة الفنية:</h4>
+                        <p>يمتلك فريق التطوير الخبرة الكافية للتعامل مع هذه التقنيات، ويتضح ذلك من خلال الكود المكتوب بالفعل والذي يظهر فهماً عميقاً للمفاهيم المتقدمة.</p>
+                        <div class="study-conclusion technical-conclusion"><i class="fas fa-check-circle"></i><p><strong>الخلاصة التقنية:</strong> المشروع ممكن وقابل للتنفيذ من الناحية التقنية.</p></div>
+                    </div>
+                </div>
+                <div class="study-card">
+                    <div class="study-header economic"><i class="fas fa-chart-line"></i><h2>2.4.2 الجدوى الاقتصادية</h2></div>
+                    <div class="study-body">
+                        <p><strong>التقييم:</strong> مقارنة التكاليف بالفوائد المتوقعة.</p>
+                        <h4>تحليل التكاليف (Costs):</h4>
+                        <p>التكلفة الرئيسية للمشروع هي تكلفة غير ملموسة تتمثل في الوقت والجهد المبذول من فريق العمل. أما التكاليف المادية، فهي منخفضة نسبياً وتتركز في تكاليف التشغيل السنوية. الجدول التالي يوضح التكاليف التقديرية بالدولار الأمريكي:</p>
+                        
+                        <table class="costs-table">
+                            <thead>
+                                <tr>
+                                    <th>البند</th>
+                                    <th>الوصف</th>
+                                    <th>التكلفة التقديرية (دولار أمريكي/سنوياً)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>استضافة الويب (Web Hosting)</td>
+                                    <td>خادم افتراضي (VPS) بمواصفات متوسطة.</td>
+                                    <td>$120</td>
+                                </tr>
+                                <tr>
+                                    <td>اسم النطاق (Domain Name)</td>
+                                    <td>حجز اسم نطاق .edu.ye أو .com.</td>
+                                    <td>$15</td>
+                                </tr>
+                                <tr>
+                                    <td>شهادة الأمان (SSL Certificate)</td>
+                                    <td>لتشفير البيانات (يمكن استخدام شهادة Let's Encrypt المجانية).</td>
+                                    <td>$0</td>
+                                </tr>
+                                 <tr>
+                                    <td>تكاليف الصيانة والتطوير</td>
+                                    <td>جهد تقديري لفريق تقنية المعلومات بالجامعة.</td>
+                                    <td>(تكلفة غير مباشرة)</td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="2">الإجمالي التقديري للتكاليف المادية السنوية</td>
+                                    <td>$135</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+
+                        <h4>تحليل الفوائد (Benefits):</h4>
+                        <p>الفوائد المتوقعة تفوق التكاليف بكثير، وهي فوائد استراتيجية وتشغيلية هامة مثل توفير الوقت والجهد، تقليل التكاليف على المدى الطويل (مثل تكاليف الطباعة والأوراق)، تحسين جودة التعليم، ومركزية البيانات لدعم اتخاذ القرار.</p>
+                        <div class="study-conclusion economic-conclusion"><i class="fas fa-check-circle"></i><p><strong>الخلاصة الاقتصادية:</strong> المشروع مجدٍ ومبرر اقتصادياً، حيث أن تكاليفه المادية منخفضة جداً مقارنة بالفوائد الاستراتيجية الهائلة التي سيقدمها للجامعة.</p></div>
+                    </div>
+                </div>
+                <div class="study-card">
+                    <div class="study-header operational"><i class="fas fa-users"></i><h2>2.4.3 الجدوى التشغيلية</h2></div>
+                    <div class="study-body">
+                        <p><strong>التقييم:</strong> مدى قبول النظام من المستخدمين وتوافقه مع بيئة العمل.</p>
+                        <h4>سهولة الاستخدام:</h4>
+                        <p>تم تصميم واجهات بسيطة وبديهية لكل دور، مما يقلل من التعقيد ويسرّع من عملية تعلم النظام ويزيد من رضا المستخدم.</p>
+                        <h4>ملاءمة بيئة العمل:</h4>
+                        <p>النظام يقوم بأتمتة وتحسين الإجراءات الحالية بدلاً من فرض طرق عمل جديدة، مما يسهل على المستخدمين التكيف معه.</p>
+                        <div class="study-conclusion operational-conclusion"><i class="fas fa-check-circle"></i><p><strong>الخلاصة التشغيلية:</strong> المشروع قابل للتطبيق ومن المتوقع أن يلقى قبولاً عالياً.</p></div>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="pagination">
+                <a href="2.3_existing_system.html" class="btn btn-prev"><i class="fas fa-arrow-right"></i> السابق: النظام الحالي</a>
+                <a href="2.5_project_start_request.html" class="btn btn-next">التالي: طلب البدء بالمشروع <i class="fas fa-arrow-left"></i></a>
+            </nav>
+        </section>
+    </main>
+
+    <!-- الكود الموحد والمحسن للجافاسكريبت -->
+    <script>
+        function setActiveLink() {
+            const currentPath = window.location.pathname;
+            document.querySelectorAll('.sidebar-nav a').forEach(link => {
+                const linkPath = new URL(link.href, window.location.origin).pathname;
+                if (currentPath.endsWith(linkPath.split('/').pop())) {
+                    document.querySelectorAll('.nav-item.active, .submenu a.active').forEach(i => i.classList.remove('active'));
+                    link.classList.add('active');
+                    const parentNavItem = link.closest('.nav-item');
+                    if (parentNavItem) {
+                        parentNavItem.classList.add('active');
+                    }
+                }
+            });
+        }
+
+        function initializeSidebarScripts() {
+            document.querySelectorAll('.nav-toggle').forEach(toggle => {
+                toggle.addEventListener('click', function(e) { e.preventDefault(); this.parentElement.classList.toggle('active'); });
+            });
+            const menuToggle = document.getElementById('menuToggle');
+            const sidebar = document.getElementById('sidebar');
+            if (menuToggle && sidebar) {
+                menuToggle.addEventListener('click', (e) => { e.stopPropagation(); sidebar.classList.toggle('active'); });
+            }
+            document.addEventListener('click', function(e) {
+                if (window.innerWidth <= 768 && sidebar?.classList.contains('active') && !sidebar.contains(e.target) && !menuToggle.contains(e.target)) {
+                    sidebar.classList.remove('active');
+                }
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            fetch('../sidebar.html')
+                .then(response => response.ok ? response.text() : Promise.reject('Failed to load sidebar'))
+                .then(data => {
+                    document.getElementById('sidebar-container').innerHTML = data;
+                    initializeSidebarScripts();
+                    setActiveLink();
+                })
+                .catch(error => console.error('خطأ في تحميل الشريط الجانبي:', error));
+        });
+    </script>
+</body>
+</html>

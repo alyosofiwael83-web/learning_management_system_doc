@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3.4 تحديد المتطلبات (النسخة الصحيحة) - نظام إدارة التعلم</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- الكود الموحد للتنسيقات -->
+    <style>
+        :root { --primary: #2c3e50; --secondary: #3498db; --accent: #e74c3c; --success: #2ecc71; --light: #ecf0f1; --sidebar-width: 280px; --transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275  ); --shadow: 0 10px 30px rgba(0, 0, 0, 0.1); --radius: 12px; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #f9f9f9; color: #333; display: flex; min-height: 100vh; direction: rtl; }
+        .sidebar { width: var(--sidebar-width); background: linear-gradient(165deg, var(--primary) 0%, #1a2530 100%); color: white; height: 100vh; overflow-y: auto; box-shadow: var(--shadow); border-left: 1px solid rgba(255, 255, 255, 0.1); flex-shrink: 0; }
+        .sidebar-header { padding: 25px 20px; text-align: center; border-bottom: 1px solid rgba(255, 255, 255, 0.1); background: rgba(0, 0, 0, 0.2); }
+        .sidebar-header .logo { display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 10px; }
+        .sidebar-header .logo i { font-size: 2rem; color: var(--secondary); background: rgba(255, 255, 255, 0.1); padding: 10px; border-radius: 50%; }
+        .sidebar-header h1 { font-size: 1.4rem; font-weight: 600; margin: 0; }
+        .sidebar-header p { font-size: 0.85rem; opacity: 0.8; margin: 5px 0 0; }
+        .sidebar-nav { padding: 20px 0; }
+        .nav-item { margin-bottom: 5px; position: relative; }
+        .nav-item a { display: flex; align-items: center; padding: 15px 25px; color: rgba(255, 255, 255, 0.8); text-decoration: none; transition: var(--transition); border-right: 4px solid transparent; }
+        .nav-item a i { margin-left: 15px; font-size: 1.2rem; width: 24px; text-align: center; }
+        .nav-item a:hover, .nav-item.active > a { background: rgba(255, 255, 255, 0.1); color: white; border-right-color: var(--secondary); padding-right: 30px; }
+        .nav-item a:hover i, .nav-item.active > a i { color: var(--secondary); transform: scale(1.1); }
+        .submenu { max-height: 0; overflow: hidden; transition: max-height 0.5s ease; background: rgba(0, 0, 0, 0.2); }
+        .nav-item.active .submenu { max-height: 500px; }
+        .submenu a { padding: 12px 25px 12px 40px; font-size: 0.9rem; border-right: 3px solid transparent; display: block; color: rgba(255, 255, 255, 0.8); text-decoration: none; transition: var(--transition); }
+        .submenu a:hover, .submenu a.active { border-right-color: var(--accent) !important; background: rgba(255, 255, 255, 0.05); padding-right: 35px; color: white; }
+        .submenu a::before { content: "•"; margin-left: 10px; color: var(--secondary); }
+        .nav-toggle .toggle-icon { margin-right: auto; transition: var(--transition); }
+        .nav-item.active > .nav-toggle .toggle-icon { transform: rotate(-180deg); }
+        .mobile-menu-btn { display: none; position: fixed; top: 20px; right: 20px; background: var(--primary); color: white; border: none; border-radius: 8px; width: 45px; height: 45px; font-size: 1.2rem; cursor: pointer; z-index: 1100; transition: var(--transition); }
+        .mobile-menu-btn:hover { background: var(--secondary); transform: rotate(90deg); }
+        .main-content { flex-grow: 1; overflow-y: auto; height: 100vh; background-color: white; }
+        .content-page { max-width: 1000px; margin: 0 auto; padding: 60px 40px; }
+        .content-page h1 { color: var(--primary); font-size: 2.5rem; margin-bottom: 30px; text-align: center; position: relative; padding-bottom: 15px; }
+        .content-page h1::after { content: ""; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 100px; height: 4px; background: var(--secondary); border-radius: 2px; }
+        .content-page > p { margin-bottom: 40px; font-size: 1.1rem; line-height: 1.8; text-align: justify; color: #333; }
+        .content-page h2 { color: var(--primary); margin: 50px 0 25px; font-size: 1.8rem; border-bottom: 2px solid var(--light); padding-bottom: 10px; }
+
+        /* --- أنماط مصفوفة الأولويات --- */
+        .moscow-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; margin-top: 40px; }
+        .moscow-card { border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
+        .moscow-header { padding: 20px; color: white; display: flex; align-items: center; gap: 15px; }
+        .moscow-header i { font-size: 1.8rem; }
+        .moscow-header h3 { margin: 0; font-size: 1.4rem; }
+        .moscow-card.must-have .moscow-header { background: var(--accent); }
+        .moscow-card.should-have .moscow-header { background: var(--secondary); }
+        .moscow-card.could-have .moscow-header { background: var(--success); }
+        .moscow-card.wont-have .moscow-header { background: var(--primary); }
+        .moscow-body { padding: 25px; background: white; }
+        .moscow-body ul { list-style: none; padding: 0; }
+        .moscow-body li { position: relative; padding-right: 25px; margin-bottom: 12px; font-size: 1rem; line-height: 1.6; color: #333; }
+        .moscow-body li::before { position: absolute; right: 0; top: 5px; font-family: "Font Awesome 6 Free"; font-weight: 900; }
+        .moscow-card.must-have li::before { content: '\f00c'; color: var(--accent); } /* check */
+        .moscow-card.should-have li::before { content: '\f00c'; color: var(--secondary); } /* check */
+        .moscow-card.could-have li::before { content: '\f00c'; color: var(--success); } /* check */
+        .moscow-card.wont-have li::before { content: '\f05e'; color: var(--primary); } /* ban */
+
+        .pagination { display: flex; justify-content: space-between; margin-top: 50px; padding-top: 30px; border-top: 1px solid #eee; }
+        .btn { display: inline-flex; align-items: center; gap: 10px; padding: 12px 25px; border-radius: 50px; text-decoration: none; font-weight: 600; transition: var(--transition); box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .btn i { font-size: 1.1rem; }
+        .btn-next { background: var(--secondary); color: white; }
+        .btn-next:hover { background: #2980b9; transform: translateY(-3px) scale(1.05); box-shadow: 0 7px 20px rgba(52, 152, 219, 0.4); }
+        .btn-prev { background: var(--primary); color: white; }
+        .btn-prev:hover { background: #1a252f; transform: translateY(-3px) scale(1.05); box-shadow: 0 7px 20px rgba(44, 62, 80, 0.3); }
+        @media (max-width: 768px) { body { flex-direction: column; } .sidebar { position: fixed; top: 0; right: 0; z-index: 1000; transform: translateX(100%); } .sidebar.active { transform: translateX(0); } .main-content { padding-top: 60px; } .mobile-menu-btn { display: flex; align-items: center; justify-content: center; } .pagination { flex-direction: column; gap: 15px; align-items: stretch; text-align: center; } }
+    </style>
+</head>
+<body>
+    <div id="sidebar-container"></div>
+    <main class="main-content">
+        <section class="content-page">
+            <h1>3.4 تحديد المتطلبات وتصنيفها</h1>
+            <p>بعد جمع المتطلبات من مختلف المصادر (المقابلات، الاستبيانات، تحليل الأنظمة المشابهة)، تأتي المرحلة الحاسمة وهي تحديد هذه المتطلبات وتصنيفها حسب أولويتها. هذا التصنيف يضمن تركيز جهود التطوير على الوظائف الأكثر أهمية للنظام والمستخدمين، وتأجيل الميزات الأقل إلحاحاً إلى مراحل لاحقة.</p>
+            
+            <h2>منهجية MoSCoW لتحديد الأولويات</h2>
+            <p>لتحقيق هذا الهدف، تم اعتماد منهجية <strong>MoSCoW</strong>، وهي تقنية شائعة في تحليل الأعمال وإدارة المشاريع لترتيب المتطلبات ضمن أربع فئات رئيسية:</p>
+
+            <div class="moscow-grid">
+                <!-- Must Have -->
+                <div class="moscow-card must-have">
+                    <div class="moscow-header">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <h3>Must Have (يجب توفرها)</h3>
+                    </div>
+                    <div class="moscow-body">
+                        <p>متطلبات أساسية لا يمكن إطلاق النظام بدونها. هي جوهر المشروع.</p>
+                        <ul>
+                            <li>نظام تسجيل دخول آمن للمستخدمين.</li>
+                            <li>إدارة كاملة للمستخدمين والمواد الدراسية.</li>
+                            <li>رفع المحاضرات والتكليفات من قبل الدكتور.</li>
+                            <li>تسليم الطالب للتكليفات.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Should Have -->
+                <div class="moscow-card should-have">
+                    <div class="moscow-header">
+                        <i class="fas fa-check-double"></i>
+                        <h3>Should Have (ينبغي توفرها)</h3>
+                    </div>
+                    <div class="moscow-body">
+                        <p>متطلبات هامة جداً، ولكن يمكن إطلاق نسخة أولية من النظام بدونها مؤقتاً.</p>
+                        <ul>
+                            <li>نظام إشعارات فوري.</li>
+                            <li>ساحات نقاش تفاعلية لكل مادة.</li>
+                            <li>إدارة مشاريع التخرج.</li>
+                            <li>تقارير إحصائية أساسية للمدير.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Could Have -->
+                <div class="moscow-card could-have">
+                    <div class="moscow-header">
+                        <i class="fas fa-plus-circle"></i>
+                        <h3>Could Have (يمكن توفرها)</h3>
+                    </div>
+                    <div class="moscow-body">
+                        <p>متطلبات مرغوبة ولكنها أقل أهمية، تعتبر تحسينات يمكن إضافتها إذا سمح الوقت.</p>
+                        <ul>
+                            <li>تقويم يعرض المواعيد الهامة.</li>
+                            <li>تخصيص الملف الشخصي للمستخدم.</li>
+                            <li>رسوم بيانية تفاعلية في التقارير.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Won't Have -->
+                <div class="moscow-card wont-have">
+                    <div class="moscow-header">
+                        <i class="fas fa-ban"></i>
+                        <h3>Won't Have (لن تتوفر الآن)</h3>
+                    </div>
+                    <div class="moscow-body">
+                        <p>متطلبات تم الاتفاق على أنها خارج نطاق المشروع في مرحلته الحالية.</p>
+                        <ul>
+                            <li>تطبيق خاص بالهواتف الذكية.</li>
+                            <li>نظام اختبارات إلكترونية مباشرة.</li>
+                            <li>التكامل مع أنظمة الجامعة الأخرى.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="pagination">
+                <a href="3.3_requirements_definition.html" class="btn btn-prev"><i class="fas fa-arrow-right"></i> السابق: تعريف المتطلبات</a>
+                <a href="3.5_use_case.html" class="btn btn-next">التالي: حالة الاستخدام <i class="fas fa-arrow-left"></i></a>
+            </nav>
+        </section>
+    </main>
+
+    <!-- الكود الموحد والمحسن للجافاسكريبت -->
+    <script>
+        function setActiveLink() {
+            const currentPath = window.location.pathname;
+            document.querySelectorAll('.sidebar-nav a').forEach(link => {
+                const linkPath = new URL(link.href, window.location.origin).pathname;
+                if (currentPath.endsWith(linkPath.split('/').pop())) {
+                    document.querySelectorAll('.nav-item.active, .submenu a.active').forEach(i => i.classList.remove('active'));
+                    link.classList.add('active');
+                    const parentNavItem = link.closest('.nav-item');
+                    if (parentNavItem) {
+                        parentNavItem.classList.add('active');
+                    }
+                }
+            });
+        }
+
+        function initializeSidebarScripts() {
+            document.querySelectorAll('.nav-toggle').forEach(toggle => {
+                toggle.addEventListener('click', function(e) { e.preventDefault(); this.parentElement.classList.toggle('active'); });
+            });
+            const menuToggle = document.getElementById('menuToggle');
+            const sidebar = document.getElementById('sidebar');
+            if (menuToggle && sidebar) {
+                menuToggle.addEventListener('click', (e) => { e.stopPropagation(); sidebar.classList.toggle('active'); });
+            }
+            document.addEventListener('click', function(e) {
+                if (window.innerWidth <= 768 && sidebar?.classList.contains('active') && !sidebar.contains(e.target) && !menuToggle.contains(e.target)) {
+                    sidebar.classList.remove('active');
+                }
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            fetch('../sidebar.html')
+                .then(response => response.ok ? response.text() : Promise.reject('Failed to load sidebar'))
+                .then(data => {
+                    document.getElementById('sidebar-container').innerHTML = data;
+                    initializeSidebarScripts();
+                    setActiveLink();
+                })
+                .catch(error => console.error('خطأ في تحميل الشريط الجانبي:', error));
+        });
+    </script>
+</body>
+</html>

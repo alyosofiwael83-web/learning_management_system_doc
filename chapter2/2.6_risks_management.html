@@ -1,0 +1,197 @@
+<!-- chapter2/2.6_risks_management.html (جاهز ومضمون الوضوح) -->
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2.6 إدارة المخاطر - نظام إدارة التعلم</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- الكود الموحد للتنسيقات -->
+    <style>
+      /* الكود الموحد للتنسيقات مع التصحيح الجذري للون الخط */
+:root { --primary: #2c3e50; --secondary: #3498db; --accent: #e74c3c; --success: #2ecc71; --warning: #f39c12; --danger: #c0392b; --light: #ecf0f1; --sidebar-width: 280px; --transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); --shadow: 0 10px 30px rgba(0, 0, 0, 0.1); --radius: 12px; }
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+body { background-color: #f9f9f9; color: #333; display: flex; min-height: 100vh; direction: rtl; }
+.sidebar { width: var(--sidebar-width); background: linear-gradient(165deg, var(--primary) 0%, #1a2530 100%); color: white; height: 100vh; overflow-y: auto; box-shadow: var(--shadow); border-left: 1px solid rgba(255, 255, 255, 0.1); flex-shrink: 0; }
+.sidebar-header { padding: 25px 20px; text-align: center; border-bottom: 1px solid rgba(255, 255, 255, 0.1); background: rgba(0, 0, 0, 0.2); }
+.sidebar-header .logo { display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 10px; }
+.sidebar-header .logo i { font-size: 2rem; color: var(--secondary); background: rgba(255, 255, 255, 0.1); padding: 10px; border-radius: 50%; }
+.sidebar-header h1 { font-size: 1.4rem; font-weight: 600; margin: 0; color: white; }
+.sidebar-header p { font-size: 0.85rem; opacity: 0.8; margin: 5px 0 0; color: white; }
+.sidebar-nav { padding: 20px 0; }
+.nav-item { margin-bottom: 5px; position: relative; }
+.nav-item a { display: flex; align-items: center; padding: 15px 25px; color: rgba(255, 255, 255, 0.8); text-decoration: none; transition: var(--transition); border-right: 4px solid transparent; }
+.nav-item a i { margin-left: 15px; font-size: 1.2rem; width: 24px; text-align: center; }
+.nav-item a:hover, .nav-item.active > a { background: rgba(255, 255, 255, 0.1); color: white; border-right-color: var(--secondary); padding-right: 30px; }
+.nav-item a:hover i, .nav-item.active > a i { color: var(--secondary); transform: scale(1.1); }
+.submenu { max-height: 0; overflow: hidden; transition: max-height 0.5s ease; background: rgba(0, 0, 0, 0.2); }
+.nav-item.active .submenu { max-height: 500px; }
+.submenu a { padding: 12px 25px 12px 40px; font-size: 0.9rem; border-right: 3px solid transparent; display: block; color: rgba(255, 255, 255, 0.8); text-decoration: none; transition: var(--transition); }
+.submenu a:hover, .submenu a.active { border-right-color: var(--accent) !important; background: rgba(255, 255, 255, 0.05); padding-right: 35px; color: white; }
+.submenu a::before { content: "•"; margin-left: 10px; color: var(--secondary); }
+.nav-toggle .toggle-icon { margin-right: auto; transition: var(--transition); }
+.nav-item.active > .nav-toggle .toggle-icon { transform: rotate(-180deg); }
+.mobile-menu-btn { display: none; position: fixed; top: 20px; right: 20px; background: var(--primary); color: white; border: none; border-radius: 8px; width: 45px; height: 45px; font-size: 1.2rem; cursor: pointer; z-index: 1100; transition: var(--transition); }
+.mobile-menu-btn:hover { background: var(--secondary); transform: rotate(90deg); }
+.main-content { flex-grow: 1; overflow-y: auto; height: 100vh; background-color: white; }
+.content-page { max-width: 1100px; margin: 0 auto; padding: 60px 40px; color: #333; /* <<< الحل الجذري الأول */}
+.content-page h1 { color: var(--primary); font-size: 2.5rem; margin-bottom: 30px; text-align: center; position: relative; padding-bottom: 15px; }
+.content-page h1::after { content: ""; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 100px; height: 4px; background: var(--secondary); border-radius: 2px; }
+.content-page > p { margin-bottom: 40px; font-size: 1.1rem; line-height: 1.8; text-align: justify; color: #333; }
+.content-page h2 { color: var(--primary); margin: 50px 0 25px; font-size: 1.8rem; border-bottom: 2px solid var(--light); padding-bottom: 10px; }
+
+/* --- أنماط صفحة إدارة المخاطر --- */
+.risks-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; margin-bottom: 50px; }
+.risk-category { background: #fff; border: 1px solid #eee; border-radius: var(--radius); padding: 25px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+.risk-category h3 { display: flex; align-items: center; gap: 10px; font-size: 1.3rem; color: var(--primary); margin-bottom: 20px; }
+.risk-category ul { list-style: none; padding-right: 10px; }
+.risk-category li { margin-bottom: 10px; font-size: 1rem; color: #555; }
+.risk-category li::before { content: '•'; color: var(--secondary); font-weight: bold; display: inline-block; width: 1em; margin-left: -1em; }
+
+.risk-matrix-container { overflow-x: auto; }
+.risk-matrix { width: 100%; border-collapse: collapse; margin-top: 20px; color: #333; /* <<< الحل الجذري الثاني */}
+.risk-matrix th, .risk-matrix td { padding: 15px; text-align: right; border: 1px solid #ddd; }
+.risk-matrix thead { background-color: var(--primary); color: white; }
+.risk-matrix tbody tr:nth-child(even) { background-color: #f9f9f9; }
+.risk-matrix tbody tr:hover { background-color: #f1f1f1; }
+.risk-level { padding: 5px 10px; border-radius: 20px; color: white; font-weight: bold; font-size: 0.9rem; }
+.risk-level.high { background-color: var(--danger); }
+.risk-level.medium { background-color: var(--warning); }
+.risk-level.low { background-color: var(--success); }
+
+.summary-box { margin-top: 40px; padding: 25px; background: var(--light); border-right: 5px solid var(--secondary); border-radius: var(--radius); }
+.summary-box p { margin: 0; font-size: 1.1rem; line-height: 1.7; color: #333; }
+
+.pagination { display: flex; justify-content: space-between; margin-top: 50px; padding-top: 30px; border-top: 1px solid #eee; }
+.btn { display: inline-flex; align-items: center; gap: 10px; padding: 12px 25px; border-radius: 50px; text-decoration: none; font-weight: 600; transition: var(--transition); box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+.btn i { font-size: 1.1rem; }
+.btn-next { background: var(--secondary); color: white; }
+.btn-next:hover { background: #2980b9; transform: translateY(-3px) scale(1.05); box-shadow: 0 7px 20px rgba(52, 152, 219, 0.4); }
+.btn-prev { background: var(--primary); color: white; }
+.btn-prev:hover { background: #1a252f; transform: translateY(-3px) scale(1.05); box-shadow: 0 7px 20px rgba(44, 62, 80, 0.3); }
+@media (max-width: 768px) { body { flex-direction: column; } .sidebar { position: fixed; top: 0; right: 0; z-index: 1000; transform: translateX(100%); } .sidebar.active { transform: translateX(0); } .main-content { padding-top: 60px; } .mobile-menu-btn { display: flex; align-items: center; justify-content: center; } .pagination { flex-direction: column; gap: 15px; align-items: stretch; text-align: center; } }
+
+    </style>
+</head>
+<body>
+    <div id="sidebar-container"></div>
+    <main class="main-content">
+        <section class="content-page">
+            <h1>2.6 إدارة المخاطر (Risk Management)</h1>
+            <p>إن نجاح أي مشروع لا يعتمد فقط على جودة التخطيط والتنفيذ، بل أيضاً على القدرة على استشراف العقبات المحتملة والاستعداد لها مسبقاً. يهدف هذا القسم إلى تحديد المخاطر المحتملة، تحليلها، ووضع خطط استجابة استباقية للحد من تأثيرها.</p>
+
+            <h2>1. تحديد المخاطر (Risk Identification)</h2>
+            <div class="risks-container">
+                <div class="risk-category">
+                    <h3><i class="fas fa-laptop-code"></i> المخاطر التقنية</h3>
+                    <ul>
+                        <li><strong>R1:</strong> ظهور ثغرة أمنية غير مكتشفة.</li>
+                        <li><strong>R2:</strong> مشاكل في أداء النظام عند زيادة عدد المستخدمين.</li>
+                        <li><strong>R3:</strong> صعوبة في دمج ميزات مستقبلية مع البنية الحالية.</li>
+                        <li><strong>R4:</strong> فقدان البيانات نتيجة لعطل في قاعدة البيانات أو الخادم.</li>
+                    </ul>
+                </div>
+                <div class="risk-category">
+                    <h3><i class="fas fa-users"></i> المخاطر التشغيلية</h3>
+                    <ul>
+                        <li><strong>R5:</strong> مقاومة المستخدمين لتبني النظام الجديد.</li>
+                        <li><strong>R6:</strong> إدخال بيانات غير صحيحة من قبل المستخدمين.</li>
+                        <li><strong>R7:</strong> عدم توفر بنية تحتية مناسبة لدى بعض المستخدمين.</li>
+                    </ul>
+                </div>
+                <div class="risk-category">
+                    <h3><i class="fas fa-tasks"></i> مخاطر إدارة المشروع</h3>
+                    <ul>
+                        <li><strong>R8:</strong> تأخر في تسليم إحدى مراحل المشروع.</li>
+                        <li><strong>R9:</strong> "زحف النطاق" (Scope Creep) بإضافة ميزات جديدة.</li>
+                        <li><strong>R10:</strong> فقدان نسخة من الكود المصدري.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h2>2. تحليل المخاطر وخطة الاستجابة (Risk Analysis & Response)</h2>
+            <p>لتحليل المخاطر، تم استخدام مصفوفة تقيّم كل خطر بناءً على <strong>احتمالية حدوثه</strong> و<strong>درجة تأثيره</strong>، وبناءً عليها يتم تحديد مستوى الخطورة ووضع خطة الاستجابة المناسبة.</p>
+            
+            <div class="risk-matrix-container">
+                <table class="risk-matrix">
+                    <thead>
+                        <tr>
+                            <th>الرمز</th>
+                            <th>الخطر</th>
+                            <th>الاحتمالية</th>
+                            <th>التأثير</th>
+                            <th>مستوى الخطورة</th>
+                            <th>خطة الاستجابة</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>R1</td><td>ظهور ثغرة أمنية</td><td>منخفضة</td><td>عالي</td><td><span class="risk-level medium">متوسط</span></td><td>اتباع أفضل ممارسات الأمان في Laravel، مراجعة الكود، وتحديث المكتبات.</td></tr>
+                        <tr><td>R2</td><td>مشاكل في أداء النظام</td><td>متوسطة</td><td>متوسط</td><td><span class="risk-level medium">متوسط</span></td><td>تحسين الاستعلامات (Query Optimization)، استخدام التخزين المؤقت (Caching)، واختبار الأداء.</td></tr>
+                        <tr><td>R3</td><td>صعوبة في التوسع المستقبلي</td><td>منخفضة</td><td>متوسط</td><td><span class="risk-level low">منخفض</span></td><td>بناء الكود بشكل معياري (Modular) واتباع مبادئ SOLID لضمان مرونة الكود.</td></tr>
+                        <tr><td>R4</td><td>فقدان البيانات</td><td>منخفضة</td><td>عالي</td><td><span class="risk-level medium">متوسط</span></td><td>إعداد نظام نسخ احتياطي آلي ودوري لقاعدة البيانات وتخزينه في مكان آمن.</td></tr>
+                        <tr><td>R5</td><td>مقاومة المستخدمين للتغيير</td><td>متوسطة</td><td>عالي</td><td><span class="risk-level high">عالي</span></td><td>عقد ورش عمل تدريبية، إنشاء أدلة استخدام، وإبراز الفوائد المباشرة للنظام.</td></tr>
+                        <tr><td>R6</td><td>إدخال بيانات غير صحيحة</td><td>عالية</td><td>متوسط</td><td><span class="risk-level high">عالي</span></td><td>تطبيق قواعد تحقق صارمة (Validation Rules) في جميع نماذج الإدخال.</td></tr>
+                        <tr><td>R7</td><td>ضعف البنية التحتية للمستخدم</td><td>متوسطة</td><td>منخفض</td><td><span class="risk-level low">منخفض</span></td><td>تصميم النظام ليكون خفيفاً وسريع التحميل ليعمل بكفاءة مع اتصالات الإنترنت البطيئة.</td></tr>
+                        <tr><td>R8</td><td>تأخر في تسليم المشروع</td><td>متوسطة</td><td>متوسط</td><td><span class="risk-level medium">متوسط</span></td><td>تقسيم المشروع لمراحل صغيرة (حسب خارطة الطريق)، ومراجعة التقدم بشكل دوري.</td></tr>
+                        <tr><td>R9</td><td>زحف نطاق المشروع</td><td>عالية</td><td>متوسط</td><td><span class="risk-level high">عالي</span></td><td>الالتزام بخارطة الطريق، وتوثيق أي طلبات تغيير لمناقشتها وتأجيلها لمراحل مستقبلية.</td></tr>
+                        <tr><td>R10</td><td>فقدان الكود المصدري</td><td>منخفضة</td><td>عالي</td><td><span class="risk-level medium">متوسط</span></td><td>استخدام نظام (Git) ورفع الكود يومياً إلى مستودع سحابي خاص (Private Repository).</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="summary-box">
+                <p><strong>الخلاصة:</strong> من خلال عملية إدارة المخاطر هذه، تم تحديد التحديات المحتملة ووضع استراتيجيات واضحة للتعامل معها، مما يزيد من قوة المشروع ويرفع من احتمالية نجاحه في تحقيق أهدافه.</p>
+            </div>
+
+            <nav class="pagination">
+                <a href="2.5_project_start_request.html" class="btn btn-prev"><i class="fas fa-arrow-right"></i> السابق: طلب البدء بالمشروع</a>
+                <a href="2.7_work_organization.html" class="btn btn-next">التالي: معايير تنظيم العمل <i class="fas fa-arrow-left"></i></a>
+            </nav>
+        </section>
+    </main>
+
+    <!-- الكود الموحد والمحسن للجافاسكريبت -->
+    <script>
+        function setActiveLink() {
+            const currentPath = window.location.pathname;
+            document.querySelectorAll('.sidebar-nav a').forEach(link => {
+                const linkPath = new URL(link.href, window.location.origin).pathname;
+                if (currentPath === linkPath) {
+                    document.querySelectorAll('.nav-item.active, .submenu a.active').forEach(i => i.classList.remove('active'));
+                    link.classList.add('active');
+                    const parentNavItem = link.closest('.nav-item');
+                    if (parentNavItem) parentNavItem.classList.add('active');
+                }
+            });
+        }
+
+        function initializeSidebarScripts() {
+            document.querySelectorAll('.nav-toggle').forEach(toggle => {
+                toggle.addEventListener('click', function(e) { e.preventDefault(); this.parentElement.classList.toggle('active'); });
+            });
+            const menuToggle = document.getElementById('menuToggle');
+            const sidebar = document.getElementById('sidebar');
+            if (menuToggle && sidebar) {
+                menuToggle.addEventListener('click', (e) => { e.stopPropagation(); sidebar.classList.toggle('active'); });
+            }
+            document.addEventListener('click', function(e) {
+                if (window.innerWidth <= 768 && sidebar?.classList.contains('active') && !sidebar.contains(e.target) && !menuToggle.contains(e.target)) {
+                    sidebar.classList.remove('active');
+                }
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            fetch('../sidebar.html')
+                .then(response => response.ok ? response.text() : Promise.reject('Failed to load sidebar'))
+                .then(data => {
+                    document.getElementById('sidebar-container').innerHTML = data;
+                    initializeSidebarScripts();
+                    setActiveLink();
+                })
+                .catch(error => console.error('خطأ في تحميل الشريط الجانبي:', error));
+        });
+    </script>
+</body>
+</html>

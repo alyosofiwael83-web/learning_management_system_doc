@@ -1,0 +1,332 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>المنصة الجامعية الإلكترونية</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #2c3e50; /* كحلي غامق */
+            --secondary: #3498db; /* أزرق سماوي */
+            --accent: #e74c3c; /* أحمر */
+            --light: #ecf0f1; /* أبيض مائل للرمادي */
+            --gold: #d4af37; /* ذهبي */
+            --card-bg: #283747; /* لون البطاقات الجديد */
+            --text-light: #f0f3f4; /* لون النص الأبيض الفاتح */
+            --sidebar-width: 280px;
+            --transition: all 0.3s ease;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.1 );
+            --radius: 12px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #606c88 0%, #3f4c6b 100%);
+            color: var(--text-light);
+            display: flex;
+            min-height: 100vh;
+            direction: rtl;
+        }
+
+        /* --- أنماط الشريط الجانبي (بدون تغيير) --- */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: linear-gradient(165deg, var(--primary) 0%, #1a2530 100%);
+            color: white;
+            height: 100vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow);
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
+            flex-shrink: 0;
+        }
+        .sidebar-header { padding: 25px 20px; text-align: center; border-bottom: 1px solid rgba(255, 255, 255, 0.1); background: rgba(0, 0, 0, 0.2); }
+        .sidebar-header .logo { display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 10px; }
+        .sidebar-header .logo i { font-size: 2rem; color: var(--secondary); background: rgba(255, 255, 255, 0.1); padding: 10px; border-radius: 50%; }
+        .sidebar-header h1 { font-size: 1.4rem; font-weight: 600; margin: 0; }
+        .sidebar-header p { font-size: 0.85rem; opacity: 0.8; margin: 5px 0 0; }
+        .sidebar-nav { padding: 20px 0; }
+        .nav-item { margin-bottom: 5px; position: relative; }
+        .nav-item a { display: flex; align-items: center; padding: 15px 25px; color: rgba(255, 255, 255, 0.8); text-decoration: none; transition: var(--transition); border-right: 4px solid transparent; }
+        .nav-item a i { margin-left: 15px; font-size: 1.2rem; width: 24px; text-align: center; }
+        .nav-item a:hover, .nav-item.active a { background: rgba(255, 255, 255, 0.1); color: white; border-right-color: var(--secondary); padding-right: 30px; }
+        .nav-item a:hover i, .nav-item.active a i { color: var(--secondary); transform: scale(1.1); }
+        .submenu { max-height: 0; overflow: hidden; transition: max-height 0.5s ease; background: rgba(0, 0, 0, 0.2); }
+        .nav-item.active .submenu { max-height: 500px; }
+        .submenu a { padding: 12px 25px 12px 40px; font-size: 0.9rem; border-right: 3px solid transparent; display: block; color: rgba(255, 255, 255, 0.8); text-decoration: none; transition: var(--transition); }
+        .submenu a:hover { border-right-color: var(--accent); background: rgba(255, 255, 255, 0.05); padding-right: 35px; }
+        .submenu a::before { content: "•"; margin-left: 10px; color: var(--secondary); }
+        .nav-toggle .toggle-icon { margin-right: auto; transition: var(--transition); }
+        .nav-item.active .nav-toggle .toggle-icon { transform: rotate(-180deg); }
+        .mobile-menu-btn { display: none; position: fixed; top: 20px; right: 20px; background: var(--primary); color: white; border: none; border-radius: 8px; width: 45px; height: 45px; font-size: 1.2rem; cursor: pointer; z-index: 1100; transition: var(--transition); }
+        .mobile-menu-btn:hover { background: var(--secondary); transform: rotate(90deg); }
+
+        /* --- أنماط المحتوى الرئيسي --- */
+        .main-content { flex-grow: 1; padding: 20px; overflow-y: auto; height: 100vh; }
+        .hero-section { background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); color: white; padding: 60px 50px; border-radius: var(--radius); margin-bottom: 50px; box-shadow: var(--shadow); text-align: center; border: 1px solid rgba(255, 255, 255, 0.2); }
+        .project-logo { width: 120px; height: 120px; border-radius: 50%; margin: 0 auto 20px; background: rgba(255, 255, 255, 0.9); padding: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        .hero-section h1 { font-size: 2.8rem; margin-bottom: 15px; font-weight: 700; }
+        .hero-section .subtitle { font-size: 1.3rem; margin-bottom: 25px; opacity: 0.9; }
+        .hero-section .abstract { font-size: 1.1rem; max-width: 800px; margin: 0 auto 30px; line-height: 1.8; }
+        .action-buttons { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
+        .btn { display: inline-flex; align-items: center; gap: 10px; padding: 15px 30px; border-radius: 30px; text-decoration: none; font-weight: 600; transition: var(--transition); }
+        .btn-primary { background: var(--secondary); color: white; }
+        .btn-primary:hover { background: #2980b9; transform: translateY(-3px); box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4); }
+        .btn-secondary { background: rgba(255, 255, 255, 0.2); color: white; border: 2px solid white; }
+        .btn-secondary:hover { background: white; color: var(--primary); }
+        .section-title { font-size: 2.2rem; color: #FFFFFF; text-align: center; margin: 60px 0 40px; position: relative; text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4); }
+        .section-title::after { content: ""; display: block; width: 100px; height: 4px; background: var(--secondary); margin: 15px auto; border-radius: 2px; }
+        
+        /* --- تعديلات البطاقات --- */
+        .objectives-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 30px; margin-bottom: 60px; }
+        .objective-card { background: var(--card-bg); color: var(--text-light); border-radius: var(--radius); padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); transition: var(--transition); text-align: center; border-top: 4px solid var(--secondary); }
+        .objective-card:hover { transform: translateY(-10px); box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3); }
+        .objective-card i { font-size: 3rem; color: var(--secondary); margin-bottom: 20px; }
+        .objective-card h3 { font-size: 1.4rem; margin-bottom: 15px; color: var(--text-light); }
+        .objective-card p { color: rgba(255, 255, 255, 0.8); line-height: 1.6; }
+
+        .team-section { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-bottom: 60px; }
+        .team-card { background: var(--card-bg); color: var(--text-light); border-radius: var(--radius); padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); text-align: center; transition: var(--transition); border-top: 4px solid var(--secondary); }
+        .team-card:hover { transform: translateY(-10px); box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3); }
+        .team-card .profile-img { width: 130px; height: 130px; border-radius: 50%; object-fit: cover; margin-bottom: 20px; border: 5px solid rgba(255,255,255,0.1); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .team-card h3 { font-size: 1.5rem; color: var(--text-light); margin-bottom: 8px; }
+        .team-card .role { font-size: 1rem; color: var(--secondary); font-weight: 600; margin-bottom: 15px; }
+        .team-card .details { color: rgba(255, 255, 255, 0.8); line-height: 1.6; font-size: 0.95rem; }
+        .team-card .phone { margin-top: 15px; font-size: 1.1rem; font-weight: bold; color: var(--text-light); direction: ltr; }
+        .team-card .phone i { margin-right: 8px; color: var(--secondary); }
+
+        .tech-section { background: var(--card-bg); color: var(--text-light); border-radius: var(--radius); padding: 50px 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); text-align: center; margin-bottom: 50px; }
+        .tech-section .section-title { color: var(--text-light); text-shadow: none; }
+        .tech-logos { display: flex; justify-content: center; gap: 50px; flex-wrap: wrap; margin-top: 30px; }
+        .tech-item { display: flex; flex-direction: column; align-items: center; gap: 15px; transition: var(--transition); }
+        .tech-item:hover { transform: translateY(-5px); }
+        .tech-icon { width: 100px; height: 100px; background: rgba(0,0,0,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; color: var(--text-light); transition: var(--transition); }
+        .tech-item:hover .tech-icon { background: var(--secondary); color: white; }
+        .tech-name { font-weight: 600; color: var(--text-light); font-size: 1.1rem; }
+
+        .conclusion-section { background: var(--card-bg); color: var(--text-light); border-radius: var(--radius); padding: 50px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); text-align: center; margin-top: 50px; }
+        .conclusion-section .section-title { color: var(--text-light); text-shadow: none; }
+        .conclusion-section p { font-size: 1.2rem; line-height: 1.8; color: rgba(255, 255, 255, 0.9); max-width: 900px; margin: 0 auto 20px; }
+        .conclusion-section .heart { color: var(--accent); font-size: 1.5rem; }
+        .conclusion-section .yemen-flag { font-size: 1.5rem; }
+
+        /* --- قسم المشرف الأكاديمي (تصميم جديد ومحسن) --- */
+        .supervisor-section {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+            margin-bottom: 60px;
+            padding: 50px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            border-top: 5px solid var(--gold);
+        }
+        .supervisor-section .profile-img {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 25px;
+            border: 7px solid rgba(255,255,255,0.1);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+        }
+        .supervisor-section:hover .profile-img {
+            transform: scale(1.05);
+        }
+        .supervisor-section h3 {
+            font-size: 2rem;
+            color: var(--text-light);
+            margin-bottom: 5px;
+            font-weight: 700;
+        }
+        .supervisor-section .role {
+            font-size: 1.2rem;
+            color: var(--gold);
+            font-weight: 700;
+            margin-bottom: 30px;
+            letter-spacing: 1px;
+        }
+        .supervisor-section .bio-text {
+            max-width: 850px;
+            margin: 0 auto;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 2;
+            font-size: 1.15rem;
+        }
+        .supervisor-section .bio-text p {
+            margin-bottom: 20px;
+        }
+        .supervisor-section .bio-text .quote {
+            font-style: italic;
+            color: var(--text-light);
+            font-weight: 600;
+            border-top: 2px solid rgba(255,255,255,0.15);
+            border-bottom: 2px solid rgba(255,255,255,0.15);
+            padding: 20px 10px;
+            margin-top: 25px;
+            font-size: 1.2rem;
+            position: relative;
+        }
+        .supervisor-section .bio-text .quote::before {
+            content: '\f10d';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            color: var(--gold);
+            font-size: 1.5rem;
+            position: absolute;
+            top: 15px;
+            right: 0;
+        }
+        .supervisor-section .bio-text .quote::after {
+            content: '\f10e';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            color: var(--gold);
+            font-size: 1.5rem;
+            position: absolute;
+            bottom: 15px;
+            left: 0;
+        }
+
+        @media (max-width: 768px) {
+            body { flex-direction: column; }
+            .sidebar { position: fixed; top: 0; right: 0; z-index: 1000; transform: translateX(100%); transition: var(--transition); }
+            .sidebar.active { transform: translateX(0); }
+            .main-content { padding-top: 80px; }
+            .hero-section { padding: 50px 20px; }
+            .hero-section h1 { font-size: 2.2rem; }
+            .action-buttons { flex-direction: column; align-items: center; }
+            .objectives-grid, .team-section { grid-template-columns: 1fr; }
+            .tech-logos { gap: 30px; }
+            .supervisor-section { padding: 30px 20px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- حاوية لتحميل الشريط الجانبي -->
+    <div id="sidebar-container"></div>
+
+    <!-- المحتوى الرئيسي للصفحة -->
+    <main class="main-content">
+        <!-- القسم العلوي -->
+        <section class="hero-section">
+            <img src="logo.png" alt="شعار المنصة الجامعية" class="project-logo">
+            <h1>المنصة الجامعية الإلكترونية</h1>
+            <p class="subtitle">مشروع تخرج مقدم كمتطلب للحصول على درجة البكالوريوس في تقنية المعلومات</p>
+            <p class="abstract">في عصر تتسابق فيه المؤسسات الأكاديمية نحو التميز الرقمي، يبرز هذا المشروع كمنارة تقنية تهدف إلى صياغة مستقبل التعليم في الجامعة.</p>
+            <div class="action-buttons">
+                <a href="introduction.html" class="btn btn-primary"><i class="fas fa-play-circle"></i> ابدأ القراءة</a>
+                <a href="introduction.html" class="btn btn-secondary"><i class="fas fa-list"></i> تصفح الفهرس</a>
+            </div>
+        </section>
+        
+        <!-- قسم الأهداف الرئيسية -->
+        <h2 class="section-title">الأهداف الرئيسية</h2>
+        <div class="objectives-grid">
+            <div class="objective-card"><i class="fas fa-universal-access"></i><h3>تسهيل الوصول</h3><p>توفير مستودع رقمي مركزي للمحاضرات والمواد التعليمية يمكن الوصول إليه في أي وقت ومن أي مكان.</p></div>
+            <div class="objective-card"><i class="fas fa-comments"></i><h3>تعزيز التواصل</h3><p>إنشاء قنوات تواصل فعالة بين الطلاب، والدكاترة، والإدارة عبر ساحات النقاش والإشعارات.</p></div>
+            <div class="objective-card"><i class="fas fa-tasks"></i><h3>أتمتة التقييم</h3><p>تسريع عملية تسليم التكليفات وتقييمها لضمان وصول الملاحظات للطلاب بشكل فوري.</p></div>
+        </div>
+
+        <!-- قسم فريق العمل -->
+        <h2 class="section-title">فريق العمل</h2>
+        <div class="team-section">
+            <div class="team-card"><img src="wael.jpg" alt="صورة المهندس وائل اليوسفي" class="profile-img"><h3>المهندس وائل عبدالباسط اليوسفي</h3><p class="role">مطور ومحلل أنظمة</p><p class="details">مطور برمجيات وأنظمة ومواقع ويب، متخصص في قواعد البيانات وتحليل الأنظمة.</p><p class="phone"><i class="fas fa-phone-alt"></i> 772 231 038</p></div>
+            <div class="team-card"><img src="akram.jpg" alt="صورة المهندس أكرم اليوسفي" class="profile-img"><h3>المهندس أكرم عبدالكريم اليوسفي</h3><p class="role">مطور ومحلل أنظمة</p><p class="details">مطور برمجيات وأنظمة ومواقع ويب، متخصص في قواعد البيانات وتحليل الأنظمة.</p><p class="phone"><i class="fas fa-phone-alt"></i> 775 315 121</p></div>
+        </div>
+
+        <!-- قسم المشرف الأكاديمي -->
+        <h2 class="section-title">بوصلة المشروع ومرشده العلمي</h2>
+        <section class="supervisor-section">
+            <img src="munir.jpg" alt="صورة البروفيسور منير المخلافي" class="profile-img">
+            <h3>البروفيسور/ منير عبد الله المخلافي</h3>
+            <p class="role">المشرف الأكاديمي</p>
+            <div class="bio-text">
+                <p>وراء كل عمل عظيم، تقف بوصلة توجه المسار وتُنير الدرب. وفي رحلة مشروعنا هذا، كان لنا الشرف والفخر بأن تكون بوصلتنا هي قامة علمية شامخة، وعقلية قيادية فذة، البروفيسور منير المخلافي. مسيرته، التي تُوّجت بالدكتوراه من جامعة بوترا الماليزية المرموقة، لم تكن مجرد تحصيل للمعرفة، بل كانت رحلة لصناعة الأثر في صروح اليمن الأكاديمية.</p>
+                <p>من خلال قيادته لعمادة كليات الحاسوب في جامعات عدة، ومساهماته الاستراتيجية في اللجان الوطنية، لم يكن البروفيسور منير مجرد أكاديمي، بل كان مهندساً يخطط لمستقبل التعليم التقني في وطنه.</p>
+                <p class="quote">إن إشرافه على هذا المشروع لم يكن مجرد توجيهات علمية، بل كان درساً في الشغف، والإتقان، والتواضع. لقد منحنا من وقته ما هو أثمن من الساعات، ومن علمه ما هو أعمق من السطور. فله منا كل الامتنان والتقدير، ولهذا العمل بصمته التي لا تُمحى.</p>
+            </div>
+        </section>
+        
+        <!-- قسم التقنيات المستخدمة -->
+        <section class="tech-section">
+            <h2 class="section-title">التقنيات المستخدمة</h2>
+            <div class="tech-logos">
+                <div class="tech-item"><div class="tech-icon"><i class="fab fa-laravel"></i></div><span class="tech-name">Laravel</span></div>
+                <div class="tech-item"><div class="tech-icon"><i class="fas fa-bolt"></i></div><span class="tech-name">Livewire</span></div>
+                <div class="tech-item"><div class="tech-icon"><i class="fas fa-database"></i></div><span class="tech-name">MySQL</span></div>
+                <div class="tech-item"><div class="tech-icon"><i class="fab fa-js"></i></div><span class="tech-name">JavaScript</span></div>
+            </div>
+        </section>
+
+        <!-- قسم الخلاصة -->
+        <section class="conclusion-section">
+            <h2 class="section-title">خلاصة المشروع</h2>
+            <p>تم عمل هذا المشروع بكل حب <span class="heart">❤️</span> وروح تحب اليمن <span class="yemen-flag">🇾🇪</span>، بهدف تسهيل حياتنا وحياة كل الطلاب في الجامعة، وتيسير مهام المندوب.</p>
+            <p>إن اليمن تلد أجيالاً قادمة بكل ما هو جديد وخير لليمن. أبناؤها في تقدم وفي خير، وسوف يكون في السنوات القادمة المزيد من التقدم والنجاح بإذن الله.</p>
+        </section>
+    </main>
+
+    <script>
+        // السكربت يبقى كما هو بدون تغيير
+        function initializeSidebarScripts() {
+            document.querySelectorAll('.nav-toggle').forEach(toggle => {
+                toggle.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const parent = this.parentElement;
+                    parent.classList.toggle('active');
+                    document.querySelectorAll('.nav-item').forEach(item => {
+                        if (item !== parent) item.classList.remove('active');
+                    });
+                });
+            });
+
+            const menuToggle = document.getElementById('menuToggle');
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.querySelector('.main-content');
+
+            if (menuToggle && sidebar) {
+                menuToggle.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    sidebar.classList.toggle('active');
+                });
+            }
+            
+            document.addEventListener('click', function(e) {
+                if (window.innerWidth <= 768 && sidebar && sidebar.classList.contains('active')) {
+                    if (!sidebar.contains(e.target) && e.target !== menuToggle) {
+                        sidebar.classList.remove('active');
+                    }
+                }
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            fetch('sidebar.html')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok ' + response.statusText);
+                    }
+                    return response.text();
+                })
+                .then(data => {
+                    document.getElementById('sidebar-container').innerHTML = data;
+                    initializeSidebarScripts();
+                })
+                .catch(error => console.error('خطأ في تحميل الشريط الجانبي:', error));
+        });
+    </script>
+</body>
+</html>

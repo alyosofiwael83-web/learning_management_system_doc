@@ -1,0 +1,204 @@
+<!-- chapter1/1.2_problem_statement.html -->
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1.2 تحديد المشكلة - نظام إدارة التعلم</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- نفس ملف الأنماط الموحد لضمان تناسق المظهر -->
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --sidebar-width: 280px;
+            --transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275 );
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --radius: 12px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+
+        body {
+            background-color: #f9f9f9;
+            color: #333;
+            display: flex;
+            min-height: 100vh;
+            direction: rtl;
+        }
+
+        /* --- أنماط الشريط الجانبي (مطابقة للصفحات الأخرى) --- */
+        .sidebar { width: var(--sidebar-width); background: linear-gradient(165deg, var(--primary) 0%, #1a2530 100%); color: white; height: 100vh; overflow-y: auto; box-shadow: var(--shadow); border-left: 1px solid rgba(255, 255, 255, 0.1); flex-shrink: 0; }
+        .sidebar-header { padding: 25px 20px; text-align: center; border-bottom: 1px solid rgba(255, 255, 255, 0.1); background: rgba(0, 0, 0, 0.2); }
+        .sidebar-header .logo { display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 10px; }
+        .sidebar-header .logo i { font-size: 2rem; color: var(--secondary); background: rgba(255, 255, 255, 0.1); padding: 10px; border-radius: 50%; }
+        .sidebar-header h1 { font-size: 1.4rem; font-weight: 600; margin: 0; }
+        .sidebar-header p { font-size: 0.85rem; opacity: 0.8; margin: 5px 0 0; }
+        .sidebar-nav { padding: 20px 0; }
+        .nav-item { margin-bottom: 5px; position: relative; }
+        .nav-item a { display: flex; align-items: center; padding: 15px 25px; color: rgba(255, 255, 255, 0.8); text-decoration: none; transition: var(--transition); border-right: 4px solid transparent; }
+        .nav-item a i { margin-left: 15px; font-size: 1.2rem; width: 24px; text-align: center; }
+        .nav-item a:hover, .nav-item.active > a { background: rgba(255, 255, 255, 0.1); color: white; border-right-color: var(--secondary); padding-right: 30px; }
+        .nav-item a:hover i, .nav-item.active > a i { color: var(--secondary); transform: scale(1.1); }
+        .submenu { max-height: 0; overflow: hidden; transition: max-height 0.5s ease; background: rgba(0, 0, 0, 0.2); }
+        .nav-item.active .submenu { max-height: 500px; }
+        .submenu a { padding: 12px 25px 12px 40px; font-size: 0.9rem; border-right: 3px solid transparent; display: block; color: rgba(255, 255, 255, 0.8); text-decoration: none; transition: var(--transition); }
+        .submenu a:hover, .submenu a.active { border-right-color: var(--accent) !important; background: rgba(255, 255, 255, 0.05); padding-right: 35px; color: white; }
+        .submenu a::before { content: "•"; margin-left: 10px; color: var(--secondary); }
+        .nav-toggle .toggle-icon { margin-right: auto; transition: var(--transition); }
+        .nav-item.active > .nav-toggle .toggle-icon { transform: rotate(-180deg); }
+        .mobile-menu-btn { display: none; position: fixed; top: 20px; right: 20px; background: var(--primary); color: white; border: none; border-radius: 8px; width: 45px; height: 45px; font-size: 1.2rem; cursor: pointer; z-index: 1100; transition: var(--transition); }
+        .mobile-menu-btn:hover { background: var(--secondary); transform: rotate(90deg); }
+
+        /* --- أنماط المحتوى الرئيسي للصفحة الداخلية --- */
+        .main-content { flex-grow: 1; overflow-y: auto; height: 100vh; background-color: white; }
+        .content-page { max-width: 1000px; margin: 0 auto; padding: 60px 40px; }
+        .content-page h1 { color: var(--primary); font-size: 2.5rem; margin-bottom: 30px; text-align: center; position: relative; padding-bottom: 15px; }
+        .content-page h1::after { content: ""; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 100px; height: 4px; background: var(--secondary); border-radius: 2px; }
+        .content-page p { margin-bottom: 20px; font-size: 1.1rem; line-height: 1.8; text-align: justify; color: #333; }
+        
+        /* --- أنماط بطاقات التحديات --- */
+        .challenges-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin: 40px 0; }
+        .challenge-card { background: #f9f9f9; border-radius: var(--radius); padding: 25px; text-align: center; border-top: 4px solid var(--secondary); box-shadow: 0 4px 10px rgba(0,0,0,0.05); transition: var(--transition); }
+        .challenge-card:hover { transform: translateY(-10px); box-shadow: var(--shadow); }
+        .challenge-icon { font-size: 2.5rem; color: var(--secondary); margin-bottom: 20px; }
+        .challenge-card h3 { font-size: 1.2rem; color: var(--primary); margin-bottom: 10px; }
+        .challenge-card p { font-size: 0.95rem; line-height: 1.6; text-align: center; }
+
+        /* --- أنماط صندوق الحل --- */
+        .solution-box { display: flex; align-items: center; gap: 25px; background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; padding: 30px; border-radius: var(--radius); margin-top: 50px; box-shadow: 0 10px 25px rgba(52, 152, 219, 0.3); }
+        .solution-icon { font-size: 3rem; }
+        .solution-text h3 { font-size: 1.5rem; margin-bottom: 10px; }
+        .solution-text p { color: rgba(255, 255, 255, 0.9); font-size: 1.05rem; margin-bottom: 0; }
+
+        /* --- أنماط أزرار التنقل المحسنة --- */
+        .pagination { display: flex; justify-content: space-between; margin-top: 50px; padding-top: 30px; border-top: 1px solid #eee; }
+        .btn { display: inline-flex; align-items: center; gap: 10px; padding: 12px 25px; border-radius: 50px; text-decoration: none; font-weight: 600; transition: var(--transition); box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .btn i { font-size: 1.1rem; }
+        .btn-next { background: var(--secondary); color: white; }
+        .btn-next:hover { background: #2980b9; transform: translateY(-3px) scale(1.05); box-shadow: 0 7px 20px rgba(52, 152, 219, 0.4); }
+        .btn-prev { background: var(--primary); color: white; }
+        .btn-prev:hover { background: #1a252f; transform: translateY(-3px) scale(1.05); box-shadow: 0 7px 20px rgba(44, 62, 80, 0.3); }
+
+        /* تعديلات للشاشات الصغيرة */
+        @media (max-width: 768px) {
+            body { flex-direction: column; }
+            .sidebar { position: fixed; top: 0; right: 0; z-index: 1000; transform: translateX(100%); }
+            .sidebar.active { transform: translateX(0); }
+            .main-content { padding-top: 60px; }
+            .mobile-menu-btn { display: flex; align-items: center; justify-content: center; }
+            .content-page { padding: 40px 20px; }
+            .pagination { flex-direction: column; gap: 15px; align-items: stretch; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+    <!-- حاوية لتحميل الشريط الجانبي -->
+    <div id="sidebar-container"></div>
+
+    <!-- المحتوى الرئيسي للصفحة -->
+    <main class="main-content">
+        <section class="content-page">
+            <h1>1.2 تحديد المشكلة</h1>
+            <p>على الرغم من التطور التقني الهائل، لا تزال العديد من المؤسسات الأكاديمية، ومنها جامعة الحضارة، تعتمد بشكل جزئي أو كلي على إجراءات تقليدية أو أنظمة معلوماتية مجزأة وغير متكاملة في إدارة عملياتها اليومية. هذا الواقع التشغيلي ينتج عنه مجموعة من التحديات الجوهرية التي تؤثر سلباً على كفاءة المنظومة التعليمية وجودتها، وأبرز هذه التحديات هي:</p>
+
+            <div class="challenges-grid">
+                <div class="challenge-card">
+                    <div class="challenge-icon"><i class="fas fa-sitemap"></i></div>
+                    <h3>فجوة التواصل وانعزال البيانات</h3>
+                    <p>غياب منصة موحدة يخلق جزراً منعزلة من البيانات، مما يجعل الوصول لمعلومة شاملة ودقيقة مهمة معقدة ويستغرق وقتاً طويلاً.</p>
+                </div>
+                <div class="challenge-card">
+                    <div class="challenge-icon"><i class="fas fa-hourglass-half"></i></div>
+                    <h3>بطء دورة العملية التعليمية</h3>
+                    <p>دورة "التكليف - التسليم - التقييم" بطيئة وغير فعالة، مما يؤخر وصول الملاحظات القيمة للطالب ويضعف من أثرها التعليمي.</p>
+                </div>
+                <div class="challenge-card">
+                    <div class="challenge-icon"><i class="fas fa-chart-line-down"></i></div>
+                    <h3>ضعف متابعة الأداء الأكاديمي</h3>
+                    <p>صعوبة تكوين صورة واضحة ومستمرة عن الأداء الأكاديمي، مما يفوت فرصة التدخل المبكر لمعالجة أي تعثر دراسي.</p>
+                </div>
+                <div class="challenge-card">
+                    <div class="challenge-icon"><i class="fas fa-recycle"></i></div>
+                    <h3>هدر الموارد والجهود</h3>
+                    <p>تُستنزف طاقات الكادر الأكاديمي والإداري في مهام روتينية متكررة يمكن أتمتتها بسهولة لتوجيه هذه الطاقات نحو مهام أكثر إبداعاً.</p>
+                </div>
+                <div class="challenge-card">
+                    <div class="challenge-icon"><i class="fas fa-puzzle-piece"></i></div>
+                    <h3>تجربة طالب غير متكاملة</h3>
+                    <p>يشعر الطالب بالتشتت بين الأنظمة المختلفة والقنوات المتعددة، مما يقلل من مستوى رضاه وانتمائه للمؤسسة التعليمية.</p>
+                </div>
+            </div>
+
+            <div class="solution-box">
+                <div class="solution-icon"><i class="fas fa-lightbulb"></i></div>
+                <div class="solution-text">
+                    <h3>الحل المقترح</h3>
+                    <p>يتمثل الحل في إنشاء "نظام إدارة تعلم" متكامل يعمل كمنصة رقمية موحدة تعالج هذه التحديات من جذورها، عبر قاعدة بيانات مركزية، وأتمتة للإجراءات، وقنوات تواصل فورية، مما يمهد الطريق نحو بيئة تعليمية أكثر كفاءة، وشفافية، وتفاعلية.</p>
+                </div>
+            </div>
+            
+            <nav class="pagination">
+                <a href="1.1_definition.html" class="btn btn-prev"><i class="fas fa-arrow-right"></i> السابق: تعريف المشروع</a>
+                <a href="1.3_objectives.html" class="btn btn-next">التالي: أهداف المشروع <i class="fas fa-arrow-left"></i></a>
+            </nav>
+        </section>
+    </main>
+
+    <!-- نفس كود الجافاسكريبت الموحد مع تعديل مسار fetch -->
+    <script>
+        function setActiveLink() {
+            const currentPagePath = window.location.pathname;
+            let bestMatch = null;
+            document.querySelectorAll('.sidebar-nav a').forEach(link => {
+                const linkPath = new URL(link.href).pathname;
+                if (currentPagePath.endsWith(linkPath)) {
+                    bestMatch = link;
+                }
+            });
+            if (bestMatch) {
+                document.querySelectorAll('.nav-item.active, .submenu a.active').forEach(i => i.classList.remove('active'));
+                bestMatch.classList.add('active');
+                const parentNavItem = bestMatch.closest('.nav-item');
+                if (parentNavItem) parentNavItem.classList.add('active');
+            }
+        }
+
+        function initializeSidebarScripts() {
+            document.querySelectorAll('.nav-toggle').forEach(toggle => {
+                toggle.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    this.parentElement.classList.toggle('active');
+                });
+            });
+            const menuToggle = document.getElementById('menuToggle');
+            const sidebar = document.getElementById('sidebar');
+            if (menuToggle && sidebar) {
+                menuToggle.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    sidebar.classList.toggle('active');
+                });
+            }
+            document.addEventListener('click', function(e) {
+                if (window.innerWidth <= 768 && sidebar?.classList.contains('active') && !sidebar.contains(e.target) && !menuToggle.contains(e.target)) {
+                    sidebar.classList.remove('active');
+                }
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            fetch('../sidebar.html')
+                .then(response => response.ok ? response.text() : Promise.reject('Failed to load sidebar'))
+                .then(data => {
+                    document.getElementById('sidebar-container').innerHTML = data;
+                    initializeSidebarScripts();
+                    setActiveLink();
+                })
+                .catch(error => console.error('خطأ في تحميل الشريط الجانبي:', error));
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,238 @@
+<!-- introduction.html -->
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>المقدمة - نظام إدارة التعلم</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- نفس ملف الأنماط المستخدم في index.html لتوحيد المظهر -->
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --sidebar-width: 280px;
+            --transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275 );
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --radius: 12px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f9f9f9;
+            color: #333;
+            display: flex;
+            min-height: 100vh;
+            direction: rtl;
+        }
+
+        /* --- أنماط الشريط الجانبي (مطابقة لـ index.html) --- */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: linear-gradient(165deg, var(--primary) 0%, #1a2530 100%);
+            color: white;
+            height: 100vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow);
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
+            flex-shrink: 0;
+        }
+        .sidebar-header { padding: 25px 20px; text-align: center; border-bottom: 1px solid rgba(255, 255, 255, 0.1); background: rgba(0, 0, 0, 0.2); }
+        .sidebar-header .logo { display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 10px; }
+        .sidebar-header .logo i { font-size: 2rem; color: var(--secondary); background: rgba(255, 255, 255, 0.1); padding: 10px; border-radius: 50%; }
+        .sidebar-header h1 { font-size: 1.4rem; font-weight: 600; margin: 0; }
+        .sidebar-header p { font-size: 0.85rem; opacity: 0.8; margin: 5px 0 0; }
+        .sidebar-nav { padding: 20px 0; }
+        .nav-item { margin-bottom: 5px; position: relative; }
+        .nav-item a { display: flex; align-items: center; padding: 15px 25px; color: rgba(255, 255, 255, 0.8); text-decoration: none; transition: var(--transition); border-right: 4px solid transparent; }
+        .nav-item a i { margin-left: 15px; font-size: 1.2rem; width: 24px; text-align: center; }
+        .nav-item a:hover, .nav-item.active > a { background: rgba(255, 255, 255, 0.1); color: white; border-right-color: var(--secondary); padding-right: 30px; }
+        .nav-item a:hover i, .nav-item.active > a i { color: var(--secondary); transform: scale(1.1); }
+        .submenu { max-height: 0; overflow: hidden; transition: max-height 0.5s ease; background: rgba(0, 0, 0, 0.2); }
+        .nav-item.active .submenu { max-height: 500px; }
+        .submenu a { padding: 12px 25px 12px 40px; font-size: 0.9rem; border-right: 3px solid transparent; display: block; color: rgba(255, 255, 255, 0.8); text-decoration: none; transition: var(--transition); }
+        .submenu a:hover, .submenu a.active { border-right-color: var(--accent) !important; background: rgba(255, 255, 255, 0.05); padding-right: 35px; color: white; }
+        .submenu a::before { content: "•"; margin-left: 10px; color: var(--secondary); }
+        .nav-toggle .toggle-icon { margin-right: auto; transition: var(--transition); }
+        .nav-item.active > .nav-toggle .toggle-icon { transform: rotate(-180deg); }
+        .mobile-menu-btn { display: none; position: fixed; top: 20px; right: 20px; background: var(--primary); color: white; border: none; border-radius: 8px; width: 45px; height: 45px; font-size: 1.2rem; cursor: pointer; z-index: 1100; transition: var(--transition); }
+        .mobile-menu-btn:hover { background: var(--secondary); transform: rotate(90deg); }
+
+        /* --- أنماط المحتوى الرئيسي للصفحة الداخلية --- */
+        .main-content {
+            flex-grow: 1;
+            overflow-y: auto;
+            height: 100vh;
+            background-color: white;
+        }
+        .content-page {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 60px 40px;
+        }
+        .content-page h1 {
+            color: var(--primary);
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            text-align: center;
+            position: relative;
+            padding-bottom: 15px;
+        }
+        .content-page h1::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: var(--secondary);
+            border-radius: 2px;
+        }
+      .content-page p {
+    margin-bottom: 20px;
+    font-size: 1.1rem;
+    line-height: 1.8;
+    text-align: justify;
+    color: #333; /* <-- أضف هذا السطر هنا */
+}
+
+        .pagination {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 50px;
+            padding-top: 30px;
+            border-top: 1px solid #eee;
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 25px;
+            border-radius: var(--radius);
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+        .btn-next { background: var(--secondary); color: white; }
+        .btn-next:hover { background: #2980b9; transform: translateY(-2px); }
+        .btn-prev { background: var(--primary); color: white; }
+        .btn-prev:hover { background: #1a252f; transform: translateY(-2px); }
+
+        /* تعديلات للشاشات الصغيرة */
+        @media (max-width: 768px) {
+            body { flex-direction: column; }
+            .sidebar { position: fixed; top: 0; right: 0; z-index: 1000; transform: translateX(100%); }
+            .sidebar.active { transform: translateX(0); }
+            .main-content { padding-top: 60px; }
+            .mobile-menu-btn { display: flex; align-items: center; justify-content: center; }
+            .content-page { padding: 40px 20px; }
+            .pagination { flex-direction: column; gap: 15px; align-items: stretch; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+    <!-- حاوية لتحميل الشريط الجانبي -->
+    <div id="sidebar-container"></div>
+
+    <!-- المحتوى الرئيسي للصفحة -->
+    <main class="main-content">
+        <section class="content-page">
+            <h1>المقدمة</h1>
+            
+            <p>في عالم تتلاشى فيه الحدود بين المادي والرقمي، وتقاس فيه قيمة المؤسسات بقدرتها على التكيف والابتكار، لم يعد التحول الرقمي ترفاً، بل ضرورة وجود. وفي قلب هذا التحول يقف قطاع التعليم العالي، الذي يواجه تحدياً مزدوجاً: الحفاظ على أصالة الرسالة الأكاديمية، وتبني أدوات العصر لتقديمها في أبهى حلة.</p>
+            
+            <p>من رحم هذه الحقيقة، وُلدت فكرة مشروع "نظام إدارة التعلم لجامعة الحضارة". هذا المشروع ليس مجرد برنامج حاسوبي، بل هو فلسفة إدارية جديدة، تسعى لتجسيد مفاهيم الإدارة التعليمية الحديثة في بيئة عمل حيوية. إنه منصة متكاملة لإعادة هندسة العمليات التعليمية والإدارية، عبر توحيد البيانات، وأتمتة الإجراءات، وتوفير بوصلة دقيقة من التحليلات والتقارير التي ترشد صناع القرار نحو مستقبل أكثر إشراقاً.</p>
+
+            <p>إن القيمة الجوهرية التي يطرحها المشروع تكمن في قدرته على تحويل التحديات إلى فرص. فهو يعالج تبعثر الموارد التعليمية بتحويلها إلى مكتبة رقمية مركزية، ويواجه بطء دورة التقييم بنظام فوري للملاحظات والدرجات، ويسد فجوة التواصل بجسور رقمية تصل بين الطالب والأستاذ والإدارة في كل وقت وحين.</p>
+
+            <p>لذا، فإن هذا التوثيق لا يمثل فقط استيفاء لمتطلب أكاديمي للحصول على درجة البكالوريوس، بل هو شهادة ميلاد لنموذج تطبيقي رائد، يطمح لأن يكون قصة نجاح تروى، ويساهم في إثراء المعرفة الأكاديمية من جهة، ورسم ملامح مستقبل التعليم الرقمي في جامعتنا العريقة من جهة أخرى.</p>
+
+            <nav class="pagination">
+                <a href="index.html" class="btn btn-prev">→ الصفحة الرئيسية</a>
+                <a href="acknowledgements.html" class="btn btn-next">التالي: الشكر والتقدير ←</a>
+            </nav>
+        </section>
+    </main>
+
+    <script>
+        // دالة لتفعيل الرابط النشط في الشريط الجانبي
+        function setActiveLink() {
+            const currentPage = window.location.pathname.split('/').pop();
+            if (currentPage === '' || currentPage === 'index.html') {
+                document.querySelector('.nav-item a[href="index.html"]')?.parentElement.classList.add('active');
+                return;
+            }
+
+            const links = document.querySelectorAll('.sidebar-nav a');
+            links.forEach(link => {
+                const linkPage = link.getAttribute('href').split('/').pop();
+                if (linkPage === currentPage) {
+                    // إزالة أي كلاس 'active' موجود مسبقاً
+                    document.querySelectorAll('.nav-item.active').forEach(i => i.classList.remove('active'));
+                    document.querySelectorAll('.submenu a.active').forEach(i => i.classList.remove('active'));
+
+                    // إضافة الكلاس للعنصر الحالي
+                    link.classList.add('active');
+                    
+                    // إذا كان الرابط داخل قائمة منسدلة، افتحها
+                    const parentNavItem = link.closest('.nav-item');
+                    if (parentNavItem) {
+                        parentNavItem.classList.add('active');
+                    }
+                }
+            });
+        }
+
+        // دالة لتشغيل السكريبتات الخاصة بالشريط الجانبي
+        function initializeSidebarScripts() {
+            document.querySelectorAll('.nav-toggle').forEach(toggle => {
+                toggle.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const parent = this.parentElement;
+                    // لا تغلق القوائم الأخرى عند فتح واحدة جديدة
+                    parent.classList.toggle('active');
+                });
+            });
+
+            const menuToggle = document.getElementById('menuToggle');
+            const sidebar = document.getElementById('sidebar');
+            if (menuToggle && sidebar) {
+                menuToggle.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    sidebar.classList.toggle('active');
+                });
+            }
+            
+            document.addEventListener('click', function(e) {
+                if (window.innerWidth <= 768 && sidebar && sidebar.classList.contains('active')) {
+                    if (!sidebar.contains(e.target) && !menuToggle.contains(e.target)) {
+                        sidebar.classList.remove('active');
+                    }
+                }
+            });
+        }
+
+        // تحميل الشريط الجانبي وتشغيل السكريبتات
+        document.addEventListener("DOMContentLoaded", function() {
+            fetch('sidebar.html')
+                .then(response => response.ok ? response.text() : Promise.reject('Failed to load'))
+                .then(data => {
+                    document.getElementById('sidebar-container').innerHTML = data;
+                    initializeSidebarScripts();
+                    setActiveLink(); // تفعيل الرابط النشط بعد تحميل الشريط
+                })
+                .catch(error => console.error('خطأ في تحميل الشريط الجانبي:', error));
+        });
+    </script>
+</body>
+</html>

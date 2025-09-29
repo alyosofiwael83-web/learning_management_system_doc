@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>المراجع - نظام إدارة التعلم</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root { --primary: #2c3e50; --secondary: #3498db; --accent: #e74c3c; --success: #2ecc71; --light: #ecf0f1; --sidebar-width: 280px; --transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275  ); --shadow: 0 10px 30px rgba(0, 0, 0, 0.1); --radius: 12px; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #f9f9f9; color: #333; display: flex; min-height: 100vh; direction: rtl; }
+        .sidebar { width: var(--sidebar-width); background: linear-gradient(165deg, var(--primary) 0%, #1a2530 100%); color: white; height: 100vh; overflow-y: auto; box-shadow: var(--shadow); border-left: 1px solid rgba(255, 255, 255, 0.1); flex-shrink: 0; }
+        .main-content { flex-grow: 1; overflow-y: auto; height: 100vh; background-color: white; }
+        .content-page { max-width: 1100px; margin: 0 auto; padding: 60px 40px; color: #333; }
+        .content-page h1 { color: var(--primary); font-size: 2.5rem; margin-bottom: 30px; text-align: center; position: relative; padding-bottom: 15px; display: flex; align-items: center; justify-content: center; gap: 15px; }
+        .content-page h1::after { content: ""; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 100px; height: 4px; background: var(--secondary); border-radius: 2px; }
+        .content-page > p { margin-bottom: 40px; font-size: 1.1rem; line-height: 1.8; text-align: justify; }
+        .content-page h2 { color: var(--primary); margin: 50px 0 25px; font-size: 1.8rem; border-bottom: 2px solid var(--light); padding-bottom: 10px; display: flex; align-items: center; gap: 15px; }
+
+        /* --- تصميم بطاقات المراجع --- */
+        .reference-card {
+            background: #fff;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 40px;
+        }
+        .reference-header {
+            padding: 20px 25px;
+            background: var(--light);
+            border-bottom: 1px solid #e0e0e0;
+            border-radius: var(--radius) var(--radius) 0 0;
+        }
+        .reference-header h2 {
+            margin: 0;
+            border: none;
+            padding: 0;
+        }
+        .reference-list {
+            list-style: none;
+            padding: 25px;
+        }
+        .reference-item {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+            padding: 20px 0;
+            border-bottom: 1px dashed #ccc;
+        }
+        .reference-item:last-child { border-bottom: none; padding-bottom: 0; }
+        .reference-item:first-child { padding-top: 0; }
+        .ref-icon {
+            font-size: 1.8rem;
+            color: var(--secondary);
+            margin-top: 5px;
+        }
+        .ref-details { flex-grow: 1; }
+        .ref-details h4 { font-size: 1.2rem; margin-bottom: 8px; }
+        .ref-details p { font-size: 0.95rem; line-height: 1.6; color: #555; margin-bottom: 15px; }
+        .ref-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 15px;
+            border-radius: 50px;
+            background-color: var(--primary);
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+        .ref-link:hover {
+            background-color: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(52, 152, 219, 0.4);
+        }
+
+        .pagination { display: flex; justify-content: space-between; margin-top: 50px; padding-top: 30px; border-top: 1px solid #eee; }
+        .btn-prev { display: inline-flex; align-items: center; gap: 10px; padding: 12px 25px; border-radius: 50px; text-decoration: none; font-weight: 600; transition: var(--transition); box-shadow: 0 4px 15px rgba(0,0,0,0.1); background: var(--primary); color: white; }
+    </style>
+</head>
+<body>
+    <div id="sidebar-container"></div>
+    <main class="main-content">
+        <section class="content-page">
+            <h1><i class="fas fa-book"></i> المراجع (References)</h1>
+            <p>إن كل عمل معرفي متين يرتكز على أساس من المصادر والمراجع الموثوقة. هذا المشروع لم يكن استثناءً، حيث تم الاعتماد على مجموعة واسعة من التوثيقات الرسمية، والمقالات العلمية، والمكتبات البرمجية التي شكلت مجتمعةً الركيزة الأساسية التي قام عليها هذا النظام.</p>
+
+            <div class="reference-card">
+                <div class="reference-header"><h2><i class="fas fa-file-alt"></i> التوثيقات التقنية الرسمية</h2></div>
+                <ul class="reference-list">
+                    <li class="reference-item">
+                        <i class="fab fa-laravel ref-icon" style="color: #FF2D20;"></i>
+                        <div class="ref-details">
+                            <h4>Laravel 12.x Documentation</h4>
+                            <p>المصدر الأساسي والأهم لفهم بنية إطار العمل، وآليات عمله، وأفضل الممارسات في كتابة الكود. كان المرجع الأول لحل المشاكل المعقدة المتعلقة بالواجهة الخلفية.</p>
+                            <a href="https://laravel.com/docs/11.x" target="_blank" class="ref-link">زيارة المصدر <i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </li>
+                    <li class="reference-item">
+                        <i class="fas fa-bolt ref-icon" style="color: #FB70A9;"></i>
+                        <div class="ref-details">
+                            <h4>Livewire 3.x Documentation</h4>
+                            <p>المرجع الرئيسي لبناء الواجهات التفاعلية والديناميكية. ساعد في فهم دورة حياة المكونات، والتحقق الفوري من البيانات، والتواصل بين المكونات المختلفة.</p>
+                            <a href="https://livewire.laravel.com/docs/quickstart" target="_blank" class="ref-link">زيارة المصدر <i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="reference-card">
+                <div class="reference-header"><h2><i class="fas fa-cogs"></i> أدوات ومكتبات مساعدة</h2></div>
+                <ul class="reference-list">
+                    <li class="reference-item">
+                        <i class="fas fa-bell ref-icon" style="color: #f39c12;"></i>
+                        <div class="ref-details">
+                            <h4>Laravel Notifications</h4>
+                            <p>نظام الإشعارات المدمج في لارافيل، والذي تم الاعتماد عليه لبناء آلية إشعارات فعالة ترسل التنبيهات للمستخدمين عبر قنوات مختلفة (مثل قاعدة البيانات ) عند وقوع أحداث هامة.</p>
+                            <a href="https://laravel.com/docs/11.x/notifications" target="_blank" class="ref-link">زيارة المصدر <i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </li>
+                    <li class="reference-item">
+                        <i class="fas fa-file-excel ref-icon" style="color: #1D6F42;"></i>
+                        <div class="ref-details">
+                            <h4>Laravel Excel (Maatwebsite )</h4>
+                            <p>مكتبة قوية ومشهورة لتصدير واستيراد البيانات من وإلى ملفات Excel و PDF. تم استخدامها في قسم التقارير لتمكين المستخدمين من تصدير البيانات لتحليلها خارج النظام.</p>
+                            <a href="https://docs.laravel-excel.com/3.1/getting-started/" target="_blank" class="ref-link">زيارة المصدر <i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </li>
+                    <li class="reference-item">
+                        <i class="fas fa-chart-bar ref-icon" style="color: #4BC0C0;"></i>
+                        <div class="ref-details">
+                            <h4>Chart.js</h4>
+                            <p>مكتبة جافاسكريبت مفتوحة المصدر استُخدمت لإنشاء الرسوم البيانية التفاعلية والجذابة في لوحات التحكم والتقارير، مما ساعد في عرض البيانات بشكل بصري وسهل الفهم.</p>
+                            <a href="https://www.chartjs.org/docs/latest/" target="_blank" class="ref-link">زيارة المصدر <i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </li>
+                    <li class="reference-item">
+                        <i class="fas fa-images ref-icon" style="color: #8e44ad;"></i>
+                        <div class="ref-details">
+                            <h4>FancyBox</h4>
+                            <p>مكتبة جافاسكريبت استُخدمت لإنشاء معرض الصور التفاعلي في صفحة تصميم الواجهات، مما أتاح عرض الصور بشكل جميل وسلس عند النقر عليها.</p>
+                            <a href="https://fancyapps.com/fancybox/getting-started/" target="_blank" class="ref-link">زيارة المصدر <i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <nav class="pagination">
+                <a href="chapter7/7.2_recommendations.html" class="btn-prev"><i class="fas fa-arrow-right"></i> السابق: التوصيات</a>
+                <!-- لا يوجد زر تالي لأنها الصفحة الأخيرة -->
+            </nav>
+        </section>
+    </main>
+
+    
+    <!-- الكود الموحد للجافاسكريبت -->
+    <script>
+        function setActiveLink() {
+            const currentPath = window.location.pathname;
+            document.querySelectorAll('.sidebar-nav a').forEach(link => {
+                const linkPath = new URL(link.href, window.location.origin).pathname;
+                if (currentPath.endsWith(linkPath.split('/').pop())) {
+                    document.querySelectorAll('.nav-item.active, .submenu a.active').forEach(i => i.classList.remove('active'));
+                    link.classList.add('active');
+                    const parentNavItem = link.closest('.nav-item');
+                    if (parentNavItem) {
+                        parentNavItem.classList.add('active');
+                    }
+                }
+            });
+        }
+
+        function initializeSidebarScripts() {
+            document.querySelectorAll('.nav-toggle').forEach(toggle => {
+                toggle.addEventListener('click', function(e) { e.preventDefault(); this.parentElement.classList.toggle('active'); });
+            });
+            const menuToggle = document.getElementById('menuToggle');
+            const sidebar = document.getElementById('sidebar');
+            if (menuToggle && sidebar) {
+                menuToggle.addEventListener('click', (e) => { e.stopPropagation(); sidebar.classList.toggle('active'); });
+            }
+            document.addEventListener('click', function(e) {
+                if (window.innerWidth <= 768 && sidebar?.classList.contains('active') && !sidebar.contains(e.target) && !menuToggle.contains(e.target)) {
+                    sidebar.classList.remove('active');
+                }
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            fetch('../sidebar.html')
+                .then(response => response.ok ? response.text() : Promise.reject('Failed to load sidebar'))
+                .then(data => {
+                    document.getElementById('sidebar-container').innerHTML = data;
+                    initializeSidebarScripts();
+                    setActiveLink();
+                })
+                .catch(error => console.error('خطأ في تحميل الشريط الجانبي:', error));
+        });
+    </script>
+</body>
+</html>

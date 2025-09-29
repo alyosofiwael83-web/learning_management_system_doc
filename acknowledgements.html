@@ -1,0 +1,162 @@
+<!-- acknowledgements.html -->
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الشكر والتقدير - نظام إدارة التعلم</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- نفس ملف الأنماط الموحد لضمان تناسق المظهر -->
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --sidebar-width: 280px;
+            --transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275 );
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --radius: 12px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+
+        body {
+            background-color: #f9f9f9;
+            color: #333;
+            display: flex;
+            min-height: 100vh;
+            direction: rtl;
+        }
+
+        /* --- أنماط الشريط الجانبي (مطابقة للصفحات الأخرى) --- */
+        .sidebar { width: var(--sidebar-width); background: linear-gradient(165deg, var(--primary) 0%, #1a2530 100%); color: white; height: 100vh; overflow-y: auto; box-shadow: var(--shadow); border-left: 1px solid rgba(255, 255, 255, 0.1); flex-shrink: 0; }
+        .sidebar-header { padding: 25px 20px; text-align: center; border-bottom: 1px solid rgba(255, 255, 255, 0.1); background: rgba(0, 0, 0, 0.2); }
+        .sidebar-header .logo { display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 10px; }
+        .sidebar-header .logo i { font-size: 2rem; color: var(--secondary); background: rgba(255, 255, 255, 0.1); padding: 10px; border-radius: 50%; }
+        .sidebar-header h1 { font-size: 1.4rem; font-weight: 600; margin: 0; }
+        .sidebar-header p { font-size: 0.85rem; opacity: 0.8; margin: 5px 0 0; }
+        .sidebar-nav { padding: 20px 0; }
+        .nav-item { margin-bottom: 5px; position: relative; }
+        .nav-item a { display: flex; align-items: center; padding: 15px 25px; color: rgba(255, 255, 255, 0.8); text-decoration: none; transition: var(--transition); border-right: 4px solid transparent; }
+        .nav-item a i { margin-left: 15px; font-size: 1.2rem; width: 24px; text-align: center; }
+        .nav-item a:hover, .nav-item.active > a { background: rgba(255, 255, 255, 0.1); color: white; border-right-color: var(--secondary); padding-right: 30px; }
+        .nav-item a:hover i, .nav-item.active > a i { color: var(--secondary); transform: scale(1.1); }
+        .submenu { max-height: 0; overflow: hidden; transition: max-height 0.5s ease; background: rgba(0, 0, 0, 0.2); }
+        .nav-item.active .submenu { max-height: 500px; }
+        .submenu a { padding: 12px 25px 12px 40px; font-size: 0.9rem; border-right: 3px solid transparent; display: block; color: rgba(255, 255, 255, 0.8); text-decoration: none; transition: var(--transition); }
+        .submenu a:hover, .submenu a.active { border-right-color: var(--accent) !important; background: rgba(255, 255, 255, 0.05); padding-right: 35px; color: white; }
+        .submenu a::before { content: "•"; margin-left: 10px; color: var(--secondary); }
+        .nav-toggle .toggle-icon { margin-right: auto; transition: var(--transition); }
+        .nav-item.active > .nav-toggle .toggle-icon { transform: rotate(-180deg); }
+        .mobile-menu-btn { display: none; position: fixed; top: 20px; right: 20px; background: var(--primary); color: white; border: none; border-radius: 8px; width: 45px; height: 45px; font-size: 1.2rem; cursor: pointer; z-index: 1100; transition: var(--transition); }
+        .mobile-menu-btn:hover { background: var(--secondary); transform: rotate(90deg); }
+
+        /* --- أنماط المحتوى الرئيسي للصفحة الداخلية --- */
+        .main-content { flex-grow: 1; overflow-y: auto; height: 100vh; background-color: white; }
+        .content-page { max-width: 1000px; margin: 0 auto; padding: 60px 40px; }
+        .content-page h1 { color: var(--primary); font-size: 2.5rem; margin-bottom: 30px; text-align: center; position: relative; padding-bottom: 15px; }
+        .content-page h1::after { content: ""; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 100px; height: 4px; background: var(--secondary); border-radius: 2px; }
+        .content-page h2 { color: var(--secondary); margin: 40px 0 20px; font-size: 1.6rem; border-right: 4px solid var(--accent); padding-right: 15px; }
+        .content-page p { margin-bottom: 20px; font-size: 1.1rem; line-height: 1.8; text-align: justify; color: #333; }
+        
+        /* --- أنماط أزرار التنقل المحسنة --- */
+        .pagination { display: flex; justify-content: space-between; margin-top: 50px; padding-top: 30px; border-top: 1px solid #eee; }
+        .btn { display: inline-flex; align-items: center; gap: 10px; padding: 12px 25px; border-radius: 50px; /* شكل حبوب الدواء */ text-decoration: none; font-weight: 600; transition: var(--transition); box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .btn i { font-size: 1.1rem; }
+        .btn-next { background: var(--secondary); color: white; }
+        .btn-next:hover { background: #2980b9; transform: translateY(-3px) scale(1.05); box-shadow: 0 7px 20px rgba(52, 152, 219, 0.4); }
+        .btn-prev { background: var(--primary); color: white; }
+        .btn-prev:hover { background: #1a252f; transform: translateY(-3px) scale(1.05); box-shadow: 0 7px 20px rgba(44, 62, 80, 0.3); }
+
+        /* تعديلات للشاشات الصغيرة */
+        @media (max-width: 768px) {
+            body { flex-direction: column; }
+            .sidebar { position: fixed; top: 0; right: 0; z-index: 1000; transform: translateX(100%); }
+            .sidebar.active { transform: translateX(0); }
+            .main-content { padding-top: 60px; }
+            .mobile-menu-btn { display: flex; align-items: center; justify-content: center; }
+            .content-page { padding: 40px 20px; }
+            .pagination { flex-direction: column; gap: 15px; align-items: stretch; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+    <!-- حاوية لتحميل الشريط الجانبي -->
+    <div id="sidebar-container"></div>
+
+    <!-- المحتوى الرئيسي للصفحة -->
+    <main class="main-content">
+        <section class="content-page">
+            <h1>الشكر والتقدير</h1>
+            
+            <p>في ختام هذا الجهد المتواضع، وقبل أن يجف مداد الكلمات، نرفع أسمى آيات الشكر والامتنان لمن كانت لهم بصمات خالدة في رحلتنا.</p>
+            <p>نستهل هذا العرفان بتقديم الشكر إلى منبعنا الأول، أهلنا الكرام. هم الذين غرسوا فينا بذور الطموح الأولى، وسقوها بصبر لا ينضب ودعاء لا ينقطع. كانوا لنا السند الذي لا يميل، والحصن الذي نلجأ إليه في مواجهة التحديات. فلولا دعمهم الذي أحاط بنا، ما كان لهذا العمل أن يرى النور.</p>
+
+            <h2>ونتوجه بوافر التقدير</h2>
+            <p>وعميق الامتنان إلى مرشدنا الفاضل، <strong>الدكتور منير المخلافي</strong>. لم يكن مجرد مشرف أكاديمي، بل كان منارة فكرية ألهمتنا، ومعلماً حكيماً علمنا أن المعرفة ليست نصوصاً تُحفظ، بل هي نافذة نطل منها على العالم لنفهمه ونطوره. لقد كان لتوجيهاته السديدة، وحرصه الدائم، وتشجيعه الصادق، الأثر الأكبر في صقل هذا العمل وإخراجه بأفضل صورة. فله منا كل الشكر على البذرة التي زرعها فينا، والتي نعده بأن نرويها لتثمر علماً أوسع وفهماً أعمق.</p>
+            <p>كما يمتد شكرنا إلى زملائنا الأعزاء، رفاق الدرب الذين شاركونا لذة النقاش وحملوا معنا عبء البحث. ففي حواراتنا تبلورت الأفكار، وبتعاوننا تذللت الصعاب، فكانت روح الفريق هي الوقود الذي دفعنا نحو الإنجاز.</p>
+            <p>وإن كان هذا العمل يمثل خطوة متواضعة في مسيرتنا الأكاديمية، فإننا نعده حجر الأساس الذي سنبني عليه صروحاً أكبر في المستقبل. إنه بداية طريق نطمح أن يقودنا نحو آفاق من الإتقان والإبداع، حيث تتحول المعرفة إلى أثر ملموس، والطموح إلى إنجاز يُفتخر به، وتصبح البدايات الصغيرة قصص نجاح عظيمة تُروى.</p>
+
+            <nav class="pagination">
+                <a href="introduction.html" class="btn btn-prev"><i class="fas fa-arrow-right"></i> السابق: المقدمة</a>
+                <a href="chapter1/1.1_definition.html" class="btn btn-next">التالي: تعريف المشروع <i class="fas fa-arrow-left"></i></a>
+            </nav>
+        </section>
+    </main>
+
+    <!-- نفس كود الجافاسكريبت الموحد -->
+    <script>
+        function setActiveLink() {
+            const currentPage = window.location.pathname.split('/').pop();
+            if (currentPage === '' || currentPage === 'index.html') {
+                document.querySelector('.nav-item a[href="index.html"]')?.parentElement.classList.add('active');
+                return;
+            }
+            const links = document.querySelectorAll('.sidebar-nav a');
+            links.forEach(link => {
+                if (link.getAttribute('href').endsWith(currentPage)) {
+                    document.querySelectorAll('.nav-item.active, .submenu a.active').forEach(i => i.classList.remove('active'));
+                    link.classList.add('active');
+                    const parentNavItem = link.closest('.nav-item');
+                    if (parentNavItem) parentNavItem.classList.add('active');
+                }
+            });
+        }
+
+        function initializeSidebarScripts() {
+            document.querySelectorAll('.nav-toggle').forEach(toggle => {
+                toggle.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    this.parentElement.classList.toggle('active');
+                });
+            });
+            const menuToggle = document.getElementById('menuToggle');
+            const sidebar = document.getElementById('sidebar');
+            if (menuToggle && sidebar) {
+                menuToggle.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    sidebar.classList.toggle('active');
+                });
+            }
+            document.addEventListener('click', function(e) {
+                if (window.innerWidth <= 768 && sidebar?.classList.contains('active') && !sidebar.contains(e.target) && !menuToggle.contains(e.target)) {
+                    sidebar.classList.remove('active');
+                }
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            fetch('sidebar.html')
+                .then(response => response.ok ? response.text() : Promise.reject('Failed to load sidebar'))
+                .then(data => {
+                    document.getElementById('sidebar-container').innerHTML = data;
+                    initializeSidebarScripts();
+                    setActiveLink();
+                })
+                .catch(error => console.error('خطأ في تحميل الشريط الجانبي:', error));
+        });
+    </script>
+</body>
+</html>

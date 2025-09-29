@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>6.1 أساليب الاختبار - نظام إدارة التعلم</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.28.0/themes/prism-tomorrow.min.css">
+
+    <style>
+        :root { --primary: #2c3e50; --secondary: #3498db; --accent: #e74c3c; --success: #2ecc71; --warning: #f39c12; --light: #ecf0f1; --sidebar-width: 280px; --transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275  ); --shadow: 0 10px 30px rgba(0, 0, 0, 0.1); --radius: 12px; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #f9f9f9; color: #333; display: flex; min-height: 100vh; direction: rtl; }
+        .sidebar { width: var(--sidebar-width); background: linear-gradient(165deg, var(--primary) 0%, #1a2530 100%); color: white; height: 100vh; overflow-y: auto; box-shadow: var(--shadow); border-left: 1px solid rgba(255, 255, 255, 0.1); flex-shrink: 0; }
+        .main-content { flex-grow: 1; overflow-y: auto; height: 100vh; background-color: white; }
+        .content-page { max-width: 1100px; margin: 0 auto; padding: 60px 40px; color: #333; }
+        .content-page h1 { color: var(--primary); font-size: 2.5rem; margin-bottom: 30px; text-align: center; position: relative; padding-bottom: 15px; display: flex; align-items: center; justify-content: center; gap: 15px; }
+        .content-page h1::after { content: ""; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 100px; height: 4px; background: var(--secondary); border-radius: 2px; }
+        .content-page > p { margin-bottom: 40px; font-size: 1.1rem; line-height: 1.8; text-align: justify; }
+        
+        /* --- تصميم بطاقات أساليب الاختبار --- */
+        .testing-methods-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        .method-card {
+            background: #fff;
+            border: 1px solid #eee;
+            border-radius: var(--radius);
+            padding: 30px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+        .method-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--secondary);
+        }
+        .method-card .icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+        .method-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+        .method-card p {
+            font-size: 1rem;
+            line-height: 1.7;
+            color: #555;
+        }
+        .icon-unit { color: var(--purple, #8e44ad); }
+        .icon-integration { color: var(--secondary); }
+        .icon-user { color: var(--success); }
+
+        /* --- تصميم جدول الملخص --- */
+        .summary-table-container { margin-top: 60px; }
+        .summary-table { width: 100%; border-collapse: collapse; text-align: center; }
+        .summary-table th, .summary-table td { padding: 15px; border: 1px solid #ddd; }
+        .summary-table thead { background-color: var(--primary); color: white; }
+        .summary-table tbody tr:nth-child(even) { background-color: #f9f9f9; }
+        .summary-table .tool-badge {
+            background-color: var(--light);
+            color: var(--primary);
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        .pagination { display: flex; justify-content: space-between; margin-top: 50px; padding-top: 30px; border-top: 1px solid #eee; }
+        .btn { display: inline-flex; align-items: center; gap: 10px; padding: 12px 25px; border-radius: 50px; text-decoration: none; font-weight: 600; transition: var(--transition); box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .btn-prev { background: var(--primary); color: white; }
+        .btn-next { background: var(--secondary); color: white; }
+    </style>
+</head>
+<body>
+    <div id="sidebar-container"></div>
+    <main class="main-content">
+        <section class="content-page">
+            <h1><i class="fas fa-vial"></i> 6.1 أساليب الاختبار (Testing Methods)</h1>
+            <p>إن بناء نظام برمجي لا يكتمل بمجرد كتابة الكود، بل يجب التأكد من أن هذا الكود يعمل كما هو متوقع في جميع الظروف. لذلك، تم اعتماد استراتيجية اختبار متعددة المستويات لضمان جودة النظام، موثوقيته، وخلوه من الأخطاء قدر الإمكان.</p>
+
+            <div class="testing-methods-grid">
+                <div class="method-card">
+                    <div class="icon icon-unit"><i class="fas fa-puzzle-piece"></i></div>
+                    <h3>1. اختبار الوحدة (Unit Testing)</h3>
+                    <p>هو اختبار أصغر جزء من الكود (وحدة) بشكل منعزل، مثل دالة واحدة في موديل. الهدف هو التأكد من أن كل "قطعة" في النظام تعمل بشكل صحيح قبل تجميعها.</p>
+                    <p><strong>مثال:</strong> اختبار دالة `isStudent()` في موديل `User` للتأكد من أنها تعيد `true` عندما يكون دور المستخدم "student".</p>
+                </div>
+                <div class="method-card">
+                    <div class="icon icon-integration"><i class="fas fa-link"></i></div>
+                    <h3>2. اختبار التكامل (Integration Testing)</h3>
+                    <p>بعد التأكد من أن كل وحدة تعمل بمفردها، نقوم باختبار كيفية عمل هذه الوحدات معاً. الهدف هو اكتشاف أي مشاكل في التفاعل بين المكونات المختلفة.</p>
+                    <p><strong>مثال:</strong> اختبار عملية "إضافة دكتور جديد" التي تتضمن التفاعل بين مكون Livewire، موديل `User`، وموديل `Doctor`.</p>
+                </div>
+                <div class="method-card">
+                    <div class="icon icon-user"><i class="fas fa-user-check"></i></div>
+                    <h3>3. اختبار قبول المستخدم (UAT)</h3>
+                    <p>هذا هو الاختبار النهائي الذي يتم من قبل المستخدم الفعلي (أو من يمثله). الهدف هو التأكد من أن النظام يلبي المتطلبات التي تم تحديدها في البداية وأنه سهل الاستخدام.</p>
+                    <p><strong>مثال:</strong> الطلب من طالب تجريبي أن يقوم بتسليم واجب، ومن دكتور تجريبي أن يقوم بتقييمه، ومراقبة تجربتهم.</p>
+                </div>
+            </div>
+
+            <div class="summary-table-container">
+                <h2>ملخص استراتيجية الاختبار</h2>
+                <table class="summary-table">
+                    <thead>
+                        <tr>
+                            <th>نوع الاختبار</th>
+                            <th>الهدف الرئيسي</th>
+                            <th>الأداة المستخدمة</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>اختبار الوحدة</td>
+                            <td>التحقق من صحة أصغر أجزاء الكود</td>
+                            <td><span class="tool-badge">PHPUnit</span></td>
+                        </tr>
+                        <tr>
+                            <td>اختبار التكامل</td>
+                            <td>التحقق من التفاعل بين المكونات</td>
+                            <td><span class="tool-badge">Pest / Laravel Tests</span></td>
+                        </tr>
+                        <tr>
+                            <td>اختبار قبول المستخدم</td>
+                            <td>التحقق من تلبية المتطلبات وسهولة الاستخدام</td>
+                            <td><span class="tool-badge">اختبار يدوي (Manual)</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <nav class="pagination">
+                <a href="../chapter5/5.4_system_integration.html" class="btn btn-prev"><i class="fas fa-arrow-right"></i> السابق: تكامل النظام</a>
+                <a href="6.2_test_results.html" class="btn btn-next">التالي: نتائج الاختبارات <i class="fas fa-arrow-left"></i></a>
+            </nav>
+        </section>
+    </main>
+
+     <!-- الكود الموحد للجافاسكريبت -->
+    <script>
+        function setActiveLink() {
+            const currentPath = window.location.pathname;
+            document.querySelectorAll('.sidebar-nav a').forEach(link => {
+                const linkPath = new URL(link.href, window.location.origin).pathname;
+                if (currentPath.endsWith(linkPath.split('/').pop())) {
+                    document.querySelectorAll('.nav-item.active, .submenu a.active').forEach(i => i.classList.remove('active'));
+                    link.classList.add('active');
+                    const parentNavItem = link.closest('.nav-item');
+                    if (parentNavItem) {
+                        parentNavItem.classList.add('active');
+                    }
+                }
+            });
+        }
+
+        function initializeSidebarScripts() {
+            document.querySelectorAll('.nav-toggle').forEach(toggle => {
+                toggle.addEventListener('click', function(e) { e.preventDefault(); this.parentElement.classList.toggle('active'); });
+            });
+            const menuToggle = document.getElementById('menuToggle');
+            const sidebar = document.getElementById('sidebar');
+            if (menuToggle && sidebar) {
+                menuToggle.addEventListener('click', (e) => { e.stopPropagation(); sidebar.classList.toggle('active'); });
+            }
+            document.addEventListener('click', function(e) {
+                if (window.innerWidth <= 768 && sidebar?.classList.contains('active') && !sidebar.contains(e.target) && !menuToggle.contains(e.target)) {
+                    sidebar.classList.remove('active');
+                }
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            fetch('../sidebar.html')
+                .then(response => response.ok ? response.text() : Promise.reject('Failed to load sidebar'))
+                .then(data => {
+                    document.getElementById('sidebar-container').innerHTML = data;
+                    initializeSidebarScripts();
+                    setActiveLink();
+                })
+                .catch(error => console.error('خطأ في تحميل الشريط الجانبي:', error));
+        });
+    </script>
+</body>
+</html>

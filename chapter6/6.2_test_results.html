@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>6.2 نتائج الاختبارات - نظام إدارة التعلم</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root { --primary: #2c3e50; --secondary: #3498db; --accent: #e74c3c; --success: #2ecc71; --warning: #f39c12; --light: #ecf0f1; --sidebar-width: 280px; --transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275  ); --shadow: 0 10px 30px rgba(0, 0, 0, 0.1); --radius: 12px; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #f9f9f9; color: #333; display: flex; min-height: 100vh; direction: rtl; }
+        .sidebar { width: var(--sidebar-width); background: linear-gradient(165deg, var(--primary) 0%, #1a2530 100%); color: white; height: 100vh; overflow-y: auto; box-shadow: var(--shadow); border-left: 1px solid rgba(255, 255, 255, 0.1); flex-shrink: 0; }
+        .main-content { flex-grow: 1; overflow-y: auto; height: 100vh; background-color: white; }
+        .content-page { max-width: 1100px; margin: 0 auto; padding: 60px 40px; color: #333; }
+        .content-page h1 { color: var(--primary); font-size: 2.5rem; margin-bottom: 30px; text-align: center; position: relative; padding-bottom: 15px; display: flex; align-items: center; justify-content: center; gap: 15px; }
+        .content-page h1::after { content: ""; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 100px; height: 4px; background: var(--secondary); border-radius: 2px; }
+        .content-page > p { margin-bottom: 40px; font-size: 1.1rem; line-height: 1.8; text-align: justify; }
+        .content-page h2 { color: var(--primary); margin: 50px 0 25px; font-size: 1.8rem; border-bottom: 2px solid var(--light); padding-bottom: 10px; display: flex; align-items: center; gap: 15px; }
+
+        /* --- تصميم محاكي الطرفية (Terminal) --- */
+        .terminal {
+            background-color: #1e293b; /* لون داكن */
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: var(--radius);
+            font-family: 'Courier New', Courier, monospace;
+            direction: ltr;
+            text-align: left;
+            box-shadow: var(--shadow);
+        }
+        .terminal .prompt { color: #4ade80; /* أخضر فاتح */ }
+        .terminal .command { color: #f8fafc; /* أبيض */ }
+        .terminal .output { color: #94a3b8; /* رمادي */ }
+        .terminal .success { color: #4ade80; font-weight: bold; }
+        .terminal .summary { margin-top: 15px; }
+
+        /* --- تصميم جدول اختبار التكامل --- */
+        .integration-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        .integration-table th, .integration-table td { padding: 15px; border: 1px solid #ddd; text-align: right; }
+        .integration-table thead { background-color: var(--primary); color: white; }
+        .status-badge {
+            padding: 5px 12px;
+            border-radius: 20px;
+            color: white;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+        .status-success { background-color: var(--success); }
+        .status-fail { background-color: var(--accent); }
+
+        /* --- تصميم بطاقات ملاحظات المستخدمين --- */
+        .feedback-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+        .feedback-card {
+            background: #fff;
+            border-right: 5px solid var(--secondary);
+            padding: 25px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+        .feedback-card .quote {
+            font-style: italic;
+            font-size: 1.1rem;
+            color: #555;
+            margin-bottom: 20px;
+            position: relative;
+            padding-right: 30px;
+        }
+        .feedback-card .quote::before {
+            content: '“';
+            font-size: 3rem;
+            color: var(--secondary);
+            position: absolute;
+            right: -10px;
+            top: -10px;
+            opacity: 0.5;
+        }
+        .feedback-card .author {
+            text-align: left;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .pagination { display: flex; justify-content: space-between; margin-top: 50px; padding-top: 30px; border-top: 1px solid #eee; }
+        .btn { display: inline-flex; align-items: center; gap: 10px; padding: 12px 25px; border-radius: 50px; text-decoration: none; font-weight: 600; transition: var(--transition); box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .btn-prev { background: var(--primary); color: white; }
+        .btn-next { background: var(--secondary); color: white; }
+    </style>
+</head>
+<body>
+    <div id="sidebar-container"></div>
+    <main class="main-content">
+        <section class="content-page">
+            <h1><i class="fas fa-clipboard-check"></i> 6.2 نتائج الاختبارات (Test Results)</h1>
+            <p>بعد تطبيق أساليب الاختبار المنهجية التي تم شرحها سابقاً، تم تجميع وتحليل النتائج للتأكد من أن النظام يعمل بكفاءة وموثوقية. أظهرت النتائج الإجمالية أن النظام مستقر ويلبي المتطلبات الوظيفية وغير الوظيفية بنجاح.</p>
+
+            <h2><i class="fas fa-puzzle-piece"></i> 1. نتائج اختبار الوحدة</h2>
+            <p>تم إجراء اختبارات الوحدة باستخدام إطار العمل `PHPUnit` المدمج مع لارافيل. أظهرت النتائج نجاح جميع الاختبارات الأساسية، مما يؤكد أن كل دالة ومكون صغير في النظام يؤدي وظيفته بشكل صحيح.</p>
+            <div class="terminal">
+                <div><span class="prompt">~ ></span> <span class="command">./vendor/bin/phpunit</span></div>
+                <div class="output">PHPUnit 10.5.20 by Sebastian Bergmann and contributors.</div>
+                <div class="output">Runtime: PHP 8.2.12</div>
+                <div class="output">Configuration: /path/to/project/phpunit.xml</div>
+                  
+
+                <div class="output">........................ <span class="success">24 / 24 (100%)</span></div>
+                  
+
+                <div class="summary">
+                    <span class="success">OK (24 tests, 85 assertions)</span>
+                </div>
+            </div>
+
+            <h2><i class="fas fa-link"></i> 2. نتائج اختبار التكامل</h2>
+            <p>تم تصميم جدول لتتبع نتائج اختبارات التكامل الرئيسية، والتي تركز على تدفق العمليات بين المكونات المختلفة. يوضح الجدول التالي عينة من هذه الاختبارات ونتائجها.</p>
+            <table class="integration-table">
+                <thead>
+                    <tr>
+                        <th>السيناريو</th>
+                        <th>النتيجة المتوقعة</th>
+                        <th>النتيجة الفعلية</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>إنشاء حساب طالب جديد وتفعيله من قبل المدير.</td>
+                        <td>يتم إنشاء الحساب بنجاح، ويظهر في قائمة الطلاب النشطين.</td>
+                        <td><span class="status-badge status-success">ناجح</span></td>
+                    </tr>
+                    <tr>
+                        <td>دكتور يقوم بإنشاء تكليف جديد في مادة معينة.</td>
+                        <td>يظهر التكليف في لوحة تحكم الطلاب المسجلين في نفس المادة.</td>
+                        <td><span class="status-badge status-success">ناجح</span></td>
+                    </tr>
+                    <tr>
+                        <td>طالب يحاول تسليم واجب بعد انتهاء الموعد النهائي.</td>
+                        <td>يمنع النظام عملية التسليم ويعرض رسالة خطأ مناسبة.</td>
+                        <td><span class="status-badge status-success">ناجح</span></td>
+                    </tr>
+                    <tr>
+                        <td>مدير يحاول حذف قسم يحتوي على تخصصات.</td>
+                        <td>يمنع النظام الحذف بسبب وجود علاقات مرتبطة (Foreign Key Constraint).</td>
+                        <td><span class="status-badge status-success">ناجح</span></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2><i class="fas fa-user-check"></i> 3. نتائج اختبار قبول المستخدم (UAT)</h2>
+            <p>تم جمع الملاحظات من المستخدمين التجريبيين (طالب ودكتور) بعد استخدامهم للنظام. كانت ردود الفعل إيجابية بشكل عام، مع التركيز على سهولة الاستخدام وسرعة الاستجابة.</p>
+            <div class="feedback-grid">
+                <div class="feedback-card">
+                    <p class="quote">النظام سريع جداً! أحببت كيف أن كل شيء يتم تحديثه فوراً دون الحاجة لإعادة تحميل الصفحة. تسليم الواجبات أصبح أسهل بكثير.</p>
+                    <div class="author">- طالب تجريبي</div>
+                </div>
+                <div class="feedback-card">
+                    <p class="quote">لوحة التحكم واضحة ومنظمة. أعجبني بشكل خاص قسم تقييم الواجبات، حيث يمكنني رؤية كل التسليمات وتقييمها في مكان واحد.</p>
+                    <div class="author">- دكتور تجريبي</div>
+                </div>
+            </div>
+
+            <nav class="pagination">
+                <a href="6.1_testing_methods.html" class="btn btn-prev"><i class="fas fa-arrow-right"></i> السابق: أساليب الاختبار</a>
+                <a href="6.3_future_maintenance.html" class="btn btn-next">التالي: خطة الصيانة <i class="fas fa-arrow-left"></i></a>
+            </nav>
+        </section>
+    </main>
+
+     <!-- الكود الموحد للجافاسكريبت -->
+    <script>
+        function setActiveLink() {
+            const currentPath = window.location.pathname;
+            document.querySelectorAll('.sidebar-nav a').forEach(link => {
+                const linkPath = new URL(link.href, window.location.origin).pathname;
+                if (currentPath.endsWith(linkPath.split('/').pop())) {
+                    document.querySelectorAll('.nav-item.active, .submenu a.active').forEach(i => i.classList.remove('active'));
+                    link.classList.add('active');
+                    const parentNavItem = link.closest('.nav-item');
+                    if (parentNavItem) {
+                        parentNavItem.classList.add('active');
+                    }
+                }
+            });
+        }
+
+        function initializeSidebarScripts() {
+            document.querySelectorAll('.nav-toggle').forEach(toggle => {
+                toggle.addEventListener('click', function(e) { e.preventDefault(); this.parentElement.classList.toggle('active'); });
+            });
+            const menuToggle = document.getElementById('menuToggle');
+            const sidebar = document.getElementById('sidebar');
+            if (menuToggle && sidebar) {
+                menuToggle.addEventListener('click', (e) => { e.stopPropagation(); sidebar.classList.toggle('active'); });
+            }
+            document.addEventListener('click', function(e) {
+                if (window.innerWidth <= 768 && sidebar?.classList.contains('active') && !sidebar.contains(e.target) && !menuToggle.contains(e.target)) {
+                    sidebar.classList.remove('active');
+                }
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            fetch('../sidebar.html')
+                .then(response => response.ok ? response.text() : Promise.reject('Failed to load sidebar'))
+                .then(data => {
+                    document.getElementById('sidebar-container').innerHTML = data;
+                    initializeSidebarScripts();
+                    setActiveLink();
+                })
+                .catch(error => console.error('خطأ في تحميل الشريط الجانبي:', error));
+        });
+    </script>
+</body>
+</html>

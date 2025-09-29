@@ -1,0 +1,227 @@
+<!-- chapter2/2.5_project_start_request.html (كامل ومصحح) -->
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2.5 طلب البدء بالمشروع - نظام إدارة التعلم</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- الكود الموحد للتنسيقات -->
+    <style>
+  /* الكود الموحد للتنسيقات مع التصحيح النهائي والشامل للون الخط */
+:root { --primary: #2c3e50; --secondary: #3498db; --accent: #e74c3c; --light: #ecf0f1; --sidebar-width: 280px; --transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); --shadow: 0 10px 30px rgba(0, 0, 0, 0.1); --radius: 12px; }
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+body { background-color: #f9f9f9; color: #333; display: flex; min-height: 100vh; direction: rtl; }
+.sidebar { width: var(--sidebar-width); background: linear-gradient(165deg, var(--primary) 0%, #1a2530 100%); color: white; height: 100vh; overflow-y: auto; box-shadow: var(--shadow); border-left: 1px solid rgba(255, 255, 255, 0.1); flex-shrink: 0; }
+.sidebar-header { padding: 25px 20px; text-align: center; border-bottom: 1px solid rgba(255, 255, 255, 0.1); background: rgba(0, 0, 0, 0.2); }
+.sidebar-header .logo { display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 10px; }
+.sidebar-header .logo i { font-size: 2rem; color: var(--secondary); background: rgba(255, 255, 255, 0.1); padding: 10px; border-radius: 50%; }
+.sidebar-header h1 { font-size: 1.4rem; font-weight: 600; margin: 0; }
+.sidebar-header p { font-size: 0.85rem; opacity: 0.8; margin: 5px 0 0; }
+.sidebar-nav { padding: 20px 0; }
+.nav-item { margin-bottom: 5px; position: relative; }
+.nav-item a { display: flex; align-items: center; padding: 15px 25px; color: rgba(255, 255, 255, 0.8); text-decoration: none; transition: var(--transition); border-right: 4px solid transparent; }
+.nav-item a i { margin-left: 15px; font-size: 1.2rem; width: 24px; text-align: center; }
+.nav-item a:hover, .nav-item.active > a { background: rgba(255, 255, 255, 0.1); color: white; border-right-color: var(--secondary); padding-right: 30px; }
+.nav-item a:hover i, .nav-item.active > a i { color: var(--secondary); transform: scale(1.1); }
+.submenu { max-height: 0; overflow: hidden; transition: max-height 0.5s ease; background: rgba(0, 0, 0, 0.2); }
+.nav-item.active .submenu { max-height: 500px; }
+.submenu a { padding: 12px 25px 12px 40px; font-size: 0.9rem; border-right: 3px solid transparent; display: block; color: rgba(255, 255, 255, 0.8); text-decoration: none; transition: var(--transition); }
+.submenu a:hover, .submenu a.active { border-right-color: var(--accent) !important; background: rgba(255, 255, 255, 0.05); padding-right: 35px; color: white; }
+.submenu a::before { content: "•"; margin-left: 10px; color: var(--secondary); }
+.nav-toggle .toggle-icon { margin-right: auto; transition: var(--transition); }
+.nav-item.active > .nav-toggle .toggle-icon { transform: rotate(-180deg); }
+.mobile-menu-btn { display: none; position: fixed; top: 20px; right: 20px; background: var(--primary); color: white; border: none; border-radius: 8px; width: 45px; height: 45px; font-size: 1.2rem; cursor: pointer; z-index: 1100; transition: var(--transition); }
+.mobile-menu-btn:hover { background: var(--secondary); transform: rotate(90deg); }
+.main-content { flex-grow: 1; overflow-y: auto; height: 100vh; background-color: white; }
+.content-page { max-width: 1000px; margin: 0 auto; padding: 60px 40px; }
+.content-page h1 { color: var(--primary); font-size: 2.5rem; margin-bottom: 40px; text-align: center; position: relative; padding-bottom: 15px; }
+.content-page h1::after { content: ""; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 100px; height: 4px; background: var(--secondary); border-radius: 2px; }
+.content-page h2 { color: var(--primary); margin: 50px 0 25px; font-size: 1.8rem; border-bottom: 2px solid var(--light); padding-bottom: 10px; }
+
+/* --- أنماط صندوق الطلب الرسمي --- */
+.official-request-box { background: #fff; border: 1px solid #ddd; border-radius: var(--radius); box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 50px; }
+.request-header { display: flex; align-items: center; gap: 15px; padding: 20px; background: var(--primary); color: white; border-radius: var(--radius) var(--radius) 0 0; }
+.request-header i { font-size: 1.8rem; }
+.request-header h2 { margin: 0; font-size: 1.5rem; }
+.request-body { padding: 25px; }
+.request-body p { font-size: 1.1rem; line-height: 1.8; color: #444; margin-bottom: 15px; }
+.request-footer { display: flex; justify-content: space-between; padding: 20px 25px; background: var(--light); border-top: 1px solid #ddd; border-radius: 0 0 var(--radius) var(--radius); }
+.request-footer p { font-weight: bold; color: var(--primary); margin-bottom: 8px; }
+.request-footer span { display: block; color: #555; }
+
+/* --- أنماط الاستبيان (مصححة بالكامل) --- */
+.questionnaire-container { background: #fff; border: 1px solid #ddd; border-radius: var(--radius); padding: 30px; }
+.questionnaire-header { text-align: center; margin-bottom: 30px; }
+.questionnaire-header h3 { font-size: 1.5rem; color: var(--primary); margin-bottom: 10px; }
+.questionnaire-header p { font-size: 1rem; line-height: 1.7; color: #555; }
+.question-section { margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px dashed #ccc; }
+.question-section:last-child { border-bottom: none; margin-bottom: 0; }
+.question-section h4 { font-size: 1.2rem; color: var(--secondary); margin-bottom: 20px; }
+.question { margin-bottom: 20px; }
+.question > label { display: block; font-weight: 600; margin-bottom: 10px; }
+.question .options { display: flex; flex-wrap: wrap; gap: 20px; }
+.question .options label { font-weight: normal; display: inline-flex; align-items: center; gap: 8px; margin-bottom: 0; cursor: pointer; color: #333 !important; }
+.ranking-list { list-style: none; padding: 0; }
+.ranking-list li { margin-bottom: 10px; display: flex; align-items: center; color: #333 !important; /* <<< هذا هو السطر الإضافي الذي يحل المشكلة */}
+.ranking-list span { display: inline-block; width: 25px; height: 25px; border: 1px solid #ccc; border-radius: 4px; margin-left: 10px; text-align: center; }
+textarea { width: 100%; padding: 10px; border-radius: var(--radius); border: 1px solid #ccc; min-height: 100px; font-family: inherit; }
+
+.pagination { display: flex; justify-content: space-between; margin-top: 50px; padding-top: 30px; border-top: 1px solid #eee; }
+.btn { display: inline-flex; align-items: center; gap: 10px; padding: 12px 25px; border-radius: 50px; text-decoration: none; font-weight: 600; transition: var(--transition); box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+.btn i { font-size: 1.1rem; }
+.btn-next { background: var(--secondary); color: white; }
+.btn-next:hover { background: #2980b9; transform: translateY(-3px) scale(1.05); box-shadow: 0 7px 20px rgba(52, 152, 219, 0.4); }
+.btn-prev { background: var(--primary); color: white; }
+.btn-prev:hover { background: #1a252f; transform: translateY(-3px) scale(1.05); box-shadow: 0 7px 20px rgba(44, 62, 80, 0.3); }
+@media (max-width: 768px) { body { flex-direction: column; } .sidebar { position: fixed; top: 0; right: 0; z-index: 1000; transform: translateX(100%); } .sidebar.active { transform: translateX(0); } .main-content { padding-top: 60px; } .mobile-menu-btn { display: flex; align-items: center; justify-content: center; } .pagination { flex-direction: column; gap: 15px; align-items: stretch; text-align: center; } }
+
+    </style>
+</head>
+<body>
+    <div id="sidebar-container"></div>
+    <main class="main-content">
+        <section class="content-page">
+            <h1>2.5 طلب البدء بالمشروع وجمع البيانات</h1>
+            
+            <div class="official-request-box">
+                <div class="request-header"><i class="fas fa-file-signature"></i><h2>طلب رسمي: الموافقة على بدء تنفيذ المشروع</h2></div>
+                <div class="request-body">
+                    <p>بناءً على التحليل الأولي للمشكلة ودراسة الجدوى التي أثبتت أن المشروع ممكن تقنياً، مجدٍ اقتصادياً، ومقبول تشغيلياً، نتقدم نحن، الطالبان <strong>وائل اليوسفي</strong> و<strong>أكرم اليوسفي</strong>، بهذا الطلب الرسمي للموافقة على البدء الفعلي في مراحل التنفيذ المتقدمة لمشروع "منصة إدارة التعليم الجامعي".</p>
+                    <p>لضمان أن المنتج النهائي يلبي الاحتياجات الفعلية للمستخدمين بدقة، نرى أنه من الضروري الانتقال من التحليل النظري إلى جمع بيانات ميدانية حقيقية. وعليه، نلتمس الموافقة على توزيع الاستبيان المرفق، والذي يهدف إلى قياس رضا المستخدمين وتحديد أولويات الميزات المطلوبة في النظام الجديد.</p>
+                </div>
+                <div class="request-footer">
+                    <div><p><strong>مقدمو الطلب:</strong></p><span>وائل محمد اليوسفي</span><span>أكرم محمد اليوسفي</span></div>
+                    <div><p><strong>التاريخ:</strong></p><span>24 سبتمبر 2025</span></div>
+                </div>
+            </div>
+
+            <h2>تصميم الاستبيان المقترح</h2>
+            <div class="questionnaire-container">
+                <div class="questionnaire-header">
+                    <h3>استبيان حول تطوير منصة إدارة التعليم في جامعة الحضارة</h3>
+                    <p><strong>مقدمة:</strong> تحية طيبة، نحن فريق مشروع تخرج نعمل على تطوير منصة تعليمية جديدة تهدف إلى تسهيل حياتكم الأكاديمية. نقدّر لكم تخصيص بضع دقائق من وقتكم الثمين للإجابة على هذا الاستبيان. إجاباتكم الصريحة ستساعدنا على بناء نظام يلبي احتياجاتكم بشكل أفضل. جميع البيانات ستعامل بسرية تامة ولأغراض البحث العلمي فقط. شكراً لتعاونكم.</p>
+                </div>
+                
+                <div class="question-section">
+                    <h4>القسم الأول: معلومات عامة</h4>
+                    <div class="question">
+                        <label>1. ما هو دورك الحالي في الجامعة؟</label>
+                        <div class="options">
+                            <label><input type="radio" name="role"> طالب</label>
+                            <label><input type="radio" name="role"> دكتور</label>
+                            <label><input type="radio" name="role"> إداري</label>
+                        </div>
+                    </div>
+                    <div class="question">
+                        <label>2. إذا كنت طالباً، في أي سنة دراسية أنت؟</label>
+                        <div class="options">
+                            <label><input type="radio" name="year"> سنة أولى</label>
+                            <label><input type="radio" name="year"> سنة ثانية</label>
+                            <label><input type="radio" name="year"> سنة ثالثة</label>
+                            <label><input type="radio" name="year"> رابعة أو أعلى</label>
+                        </div>
+                    </div>
+                    <div class="question">
+                        <label>3. إذا كنت دكتوراً، كم عدد سنوات خبرتك؟</label>
+                        <div class="options">
+                            <label><input type="radio" name="exp"> أقل من 5</label>
+                            <label><input type="radio" name="exp"> 5 - 10</label>
+                            <label><input type="radio" name="exp"> أكثر من 10</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question-section">
+                    <h4>القسم الثاني: تقييم الأدوات الحالية</h4>
+                    <div class="question">
+                        <label>4. إلى أي مدى أنت راضٍ عن سهولة الوصول للمواد الدراسية حالياً؟</label>
+                        <div class="options">
+                            <label><input type="radio" name="satisfaction"> راضٍ جداً</label>
+                            <label><input type="radio" name="satisfaction"> راضٍ</label>
+                            <label><input type="radio" name="satisfaction"> محايد</label>
+                            <label><input type="radio" name="satisfaction"> غير راضٍ</label>
+                            <label><input type="radio" name="satisfaction"> غير راضٍ إطلاقاً</label>
+                        </div>
+                    </div>
+                    <div class="question">
+                        <label>5. ما هي أكبر صعوبة تواجهك في عملية تسليم واستلام الواجبات؟</label>
+                        <div class="options">
+                            <label><input type="checkbox" name="difficulty"> صعوبة تتبع المواعيد</label>
+                            <label><input type="checkbox" name="difficulty"> عدم وجود مكان موحد</label>
+                            <label><input type="checkbox" name="difficulty"> تأخر الحصول على الدرجات</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question-section">
+                    <h4>القسم الثالث: تقييم الميزات المقترحة</h4>
+                    <div class="question">
+                        <label>6. يرجى ترتيب الميزات التالية حسب أهميتها لك (1 = الأكثر أهمية):</label>
+                        <ul class="ranking-list">
+                            <li><span>( )</span> نظام إشعارات فوري بالتكليفات والدرجات.</li>
+                            <li><span>( )</span> جدول دراسي تفاعلي وسهل الوصول.</li>
+                            <li><span>( )</span> ساحة نقاش مخصصة لكل مادة.</li>
+                            <li><span>( )</span> معرض لمشاريع الطلاب.</li>
+                            <li><span>( )</span> ملف شخصي يعرض إنجازات الطالب.</li>
+                        </ul>
+                    </div>
+                    <div class="question">
+                        <label>7. هل لديك أي اقتراحات أو ميزات إضافية تود رؤيتها؟</label>
+                        <textarea placeholder="اكتب اقتراحاتك هنا..."></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="pagination">
+                <a href="2.4_feasibility_study.html" class="btn btn-prev"><i class="fas fa-arrow-right"></i> السابق: دراسة الجدوى</a>
+                <a href="2.6_risks_management.html" class="btn btn-next">التالي: إدارة المخاطر <i class="fas fa-arrow-left"></i></a>
+            </nav>
+        </section>
+    </main>
+
+    <!-- الكود الموحد والمحسن للجافاسكريبت -->
+    <script>
+        function setActiveLink() {
+            const currentPath = window.location.pathname;
+            document.querySelectorAll('.sidebar-nav a').forEach(link => {
+                const linkPath = new URL(link.href, window.location.origin).pathname;
+                if (currentPath === linkPath) {
+                    document.querySelectorAll('.nav-item.active, .submenu a.active').forEach(i => i.classList.remove('active'));
+                    link.classList.add('active');
+                    const parentNavItem = link.closest('.nav-item');
+                    if (parentNavItem) parentNavItem.classList.add('active');
+                }
+            });
+        }
+
+        function initializeSidebarScripts() {
+            document.querySelectorAll('.nav-toggle').forEach(toggle => {
+                toggle.addEventListener('click', function(e) { e.preventDefault(); this.parentElement.classList.toggle('active'); });
+            });
+            const menuToggle = document.getElementById('menuToggle');
+            const sidebar = document.getElementById('sidebar');
+            if (menuToggle && sidebar) {
+                menuToggle.addEventListener('click', (e) => { e.stopPropagation(); sidebar.classList.toggle('active'); });
+            }
+            document.addEventListener('click', function(e) {
+                if (window.innerWidth <= 768 && sidebar?.classList.contains('active') && !sidebar.contains(e.target) && !menuToggle.contains(e.target)) {
+                    sidebar.classList.remove('active');
+                }
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            fetch('../sidebar.html')
+                .then(response => response.ok ? response.text() : Promise.reject('Failed to load sidebar'))
+                .then(data => {
+                    document.getElementById('sidebar-container').innerHTML = data;
+                    initializeSidebarScripts();
+                    setActiveLink();
+                })
+                .catch(error => console.error('خطأ في تحميل الشريط الجانبي:', error));
+        });
+    </script>
+</body>
+</html>

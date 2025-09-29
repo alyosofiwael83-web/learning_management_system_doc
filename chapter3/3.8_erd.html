@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3.8 مخطط علاقات الكيانات (ERD) - نظام إدارة التعلم</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- الكود الموحد للتنسيقات مع إضافة تنسيقات المخطط -->
+    <style>
+        :root { --primary: #2c3e50; --secondary: #3498db; --accent: #e74c3c; --success: #2ecc71; --purple: #8e44ad; --light: #ecf0f1; --sidebar-width: 280px; --transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275  ); --shadow: 0 10px 30px rgba(0, 0, 0, 0.1); --radius: 12px; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #f9f9f9; color: #333; display: flex; min-height: 100vh; direction: rtl; }
+        .sidebar { width: var(--sidebar-width); background: linear-gradient(165deg, var(--primary) 0%, #1a2530 100%); color: white; height: 100vh; overflow-y: auto; box-shadow: var(--shadow); border-left: 1px solid rgba(255, 255, 255, 0.1); flex-shrink: 0; }
+        .sidebar-header { padding: 25px 20px; text-align: center; border-bottom: 1px solid rgba(255, 255, 255, 0.1); background: rgba(0, 0, 0, 0.2); }
+        .sidebar-header .logo { display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 10px; }
+        .sidebar-header .logo i { font-size: 2rem; color: var(--secondary); background: rgba(255, 255, 255, 0.1); padding: 10px; border-radius: 50%; }
+        .sidebar-header h1 { font-size: 1.4rem; font-weight: 600; margin: 0; }
+        .sidebar-header p { font-size: 0.85rem; opacity: 0.8; margin: 5px 0 0; }
+        .sidebar-nav { padding: 20px 0; }
+        .nav-item { margin-bottom: 5px; position: relative; }
+        .nav-item a { display: flex; align-items: center; padding: 15px 25px; color: rgba(255, 255, 255, 0.8); text-decoration: none; transition: var(--transition); border-right: 4px solid transparent; }
+        .nav-item a i { margin-left: 15px; font-size: 1.2rem; width: 24px; text-align: center; }
+        .nav-item a:hover, .nav-item.active > a { background: rgba(255, 255, 255, 0.1); color: white; border-right-color: var(--secondary); padding-right: 30px; }
+        .nav-item a:hover i, .nav-item.active > a i { color: var(--secondary); transform: scale(1.1); }
+        .submenu { max-height: 0; overflow: hidden; transition: max-height 0.5s ease; background: rgba(0, 0, 0, 0.2); }
+        .nav-item.active .submenu { max-height: 500px; }
+        .submenu a { padding: 12px 25px 12px 40px; font-size: 0.9rem; border-right: 3px solid transparent; display: block; color: rgba(255, 255, 255, 0.8); text-decoration: none; transition: var(--transition); }
+        .submenu a:hover, .submenu a.active { border-right-color: var(--accent) !important; background: rgba(255, 255, 255, 0.05); padding-right: 35px; color: white; }
+        .submenu a::before { content: "•"; margin-left: 10px; color: var(--secondary); }
+        .nav-toggle .toggle-icon { margin-right: auto; transition: var(--transition); }
+        .nav-item.active > .nav-toggle .toggle-icon { transform: rotate(-180deg); }
+        .mobile-menu-btn { display: none; position: fixed; top: 20px; right: 20px; background: var(--primary); color: white; border: none; border-radius: 8px; width: 45px; height: 45px; font-size: 1.2rem; cursor: pointer; z-index: 1100; transition: var(--transition); }
+        .mobile-menu-btn:hover { background: var(--secondary); transform: rotate(90deg); }
+        .main-content { flex-grow: 1; overflow-y: auto; height: 100vh; background-color: white; }
+        .content-page { max-width: 100%; /* عرض كامل لاستيعاب المخطط */ padding: 60px 40px; color: #333; }
+        .content-page h1 { color: var(--primary); font-size: 2.5rem; margin-bottom: 30px; text-align: center; position: relative; padding-bottom: 15px; }
+        .content-page h1::after { content: ""; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 100px; height: 4px; background: var(--secondary); border-radius: 2px; }
+        .content-page > p { max-width: 1000px; margin-right: auto; margin-left: auto; margin-bottom: 40px; font-size: 1.1rem; line-height: 1.8; text-align: justify; }
+
+        /* --- تنسيق حاوية المخطط --- */
+        .mermaid-container {
+            background-color: #f9f9f9;
+            border: 1px solid #e0e0e0;
+            border-radius: var(--radius);
+            padding: 30px;
+            margin-top: 50px;
+            text-align: center;
+            overflow: auto; /* للسماح بالتمرير الأفقي إذا كان المخطط كبيراً */
+        }
+        /* تنسيقات خاصة بمخطط Mermaid لتتناسب مع تصميم الموقع */
+        .mermaid .entity, .mermaid .entity-relation {
+            stroke: var(--primary) !important;
+            fill: var(--light) !important;
+        }
+        .mermaid .entity-title {
+            fill: var(--primary) !important;
+            font-weight: bold !important;
+        }
+        .mermaid .entity-pk, .mermaid .entity-fk, .mermaid .entity-uk {
+            font-weight: bold !important;
+        }
+        .mermaid .entity-pk { fill: var(--accent) !important; }
+        .mermaid .entity-fk { fill: var(--success) !important; }
+        .mermaid .entity-uk { fill: var(--purple) !important; }
+        .mermaid .entity-text {
+            fill: #333 !important;
+        }
+        .mermaid .er-relationship-text {
+            fill: #333 !important;
+            font-size: 0.9em !important;
+        }
+        .mermaid .er-relationship line {
+            stroke: var(--secondary) !important;
+        }
+
+        .pagination { display: flex; justify-content: space-between; margin-top: 50px; padding-top: 30px; border-top: 1px solid #eee; }
+        .btn { display: inline-flex; align-items: center; gap: 10px; padding: 12px 25px; border-radius: 50px; text-decoration: none; font-weight: 600; transition: var(--transition); box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .btn i { font-size: 1.1rem; }
+        .btn-next { background: var(--secondary); color: white; }
+        .btn-next:hover { background: #2980b9; transform: translateY(-3px) scale(1.05); box-shadow: 0 7px 20px rgba(52, 152, 219, 0.4); }
+        .btn-prev { background: var(--primary); color: white; }
+        .btn-prev:hover { background: #1a252f; transform: translateY(-3px) scale(1.05); box-shadow: 0 7px 20px rgba(44, 62, 80, 0.3); }
+        @media (max-width: 768px) { body { flex-direction: column; } .sidebar { position: fixed; top: 0; right: 0; z-index: 1000; transform: translateX(100%); } .sidebar.active { transform: translateX(0); } .main-content { padding-top: 60px; } .mobile-menu-btn { display: flex; align-items: center; justify-content: center; } .pagination { flex-direction: column; gap: 15px; align-items: stretch; text-align: center; } }
+    </style>
+</head>
+<body>
+    <div id="sidebar-container"></div>
+    <main class="main-content">
+        <section class="content-page">
+            <h1>3.8 مخطط علاقات الكيانات (ERD)</h1>
+            <p>مخطط علاقات الكيانات (Entity-Relationship Diagram) هو تمثيل مرئي مفصل لبنية قاعدة البيانات. يوضح هذا المخطط جميع الجداول (الكيانات)، والحقول (الخصائص) داخل كل جدول، وأنواع العلاقات التي تربط بين هذه الجداول. يعتبر هذا المخطط بمثابة الخارطة الهندسية التي تم بناء قاعدة بيانات المشروع عليها، وهو أساسي لفهم كيفية تخزين البيانات وتدفقها داخل النظام.</p>
+
+            <div class="mermaid-container">
+                <div class="mermaid">
+erDiagram
+    users {
+        int id PK
+        string name
+        string email UK
+        string password
+        enum role
+        bool is_active
+    }
+
+    students {
+        int id PK
+        int user_id FK
+        string student_id_number UK
+        string name
+        int batch_id FK
+        int current_academic_year
+        int current_semester
+        string status
+    }
+
+    doctors {
+        int id PK
+        int user_id FK
+        string name
+        string email UK
+    }
+
+    departments {
+        int id PK
+        string name
+    }
+
+    specializations {
+        int id PK
+        string name
+        int department_id FK
+        string duration
+    }
+
+    batches {
+        int id PK
+        string name
+        int start_year
+        int specialization_id FK
+        int current_academic_year
+        int current_semester
+    }
+
+    courses {
+        int id PK
+        string name
+        string code UK
+        string type
+    }
+
+    specialization_course_academic_period {
+        int id PK
+        int specialization_id FK
+        int course_id FK
+        int doctor_id FK
+        int academic_year
+        int semester
+    }
+
+    lectures {
+        int id PK
+        string title
+        int course_id FK
+        int doctor_id FK
+        date lecture_date
+    }
+
+    lecture_files {
+        int id PK
+        int lecture_id FK
+        string file_path
+    }
+
+    assignments {
+        int id PK
+        string title
+        int course_id FK
+        int doctor_id FK
+        datetime deadline
+    }
+
+    submissions {
+        int id PK
+        int assignment_id FK
+        int student_id FK
+        string status
+        int grade
+    }
+
+    submission_files {
+        int id PK
+        int submission_id FK
+        string file_path
+    }
+
+    projects {
+        int id PK
+        string title
+        int student_id FK
+        int batch_id FK
+        int specialization_id FK
+        int course_id FK
+        int doctor_id FK
+        string status
+    }
+
+    project_student {
+        int project_id FK
+        int student_id FK
+    }
+
+    discussions {
+        int id PK
+        string title
+        int course_id FK
+        int student_id FK
+        string status
+    }
+
+    discussion_replies {
+        int id PK
+        int discussion_id FK
+        int user_id FK
+        text content
+    }
+
+    schedules {
+        int id PK
+        int specialization_course_academic_period_id FK
+        int location_id FK
+        enum day_of_week
+        time start_time
+        time end_time
+    }
+
+    locations {
+        int id PK
+        string name UK
+        string type
+    }
+
+    announcements {
+        int id PK
+        string title
+        int user_id FK
+        enum target_type
+        int target_id
+    }
+
+    users ||--o{ students : "has one"
+    users ||--o{ doctors : "has one"
+    users ||--o{ announcements : "creates"
+    users ||--o{ discussion_replies : "writes"
+
+    departments ||--|{ specializations : "has many"
+    specializations ||--|{ batches : "has many"
+    specializations ||--o{ projects : "related to"
+    specializations }o--o{ courses : "many-to-many via pivot"
+
+    batches ||--|{ students : "contains"
+    batches ||--o{ projects : "related to"
+
+    students ||--|{ submissions : "submits"
+    students ||--o{ projects : "creates"
+    students }o--o{ projects : "participates in"
+    students ||--|{ discussions : "starts"
+
+    doctors ||--|{ lectures : "gives"
+    doctors ||--|{ assignments : "creates"
+    doctors }o--o{ courses : "teaches"
+    doctors }o--o{ projects : "supervises"
+
+    courses ||--|{ lectures : "has many"
+    courses ||--|{ assignments : "has many"
+    courses ||--|{ discussions : "has many"
+    courses }o--o{ specializations : "many-to-many via pivot"
+
+    specialization_course_academic_period ||--|{ schedules : "has many"
+    specialization_course_academic_period }o--|| doctors : "assigned to"
+    specialization_course_academic_period }o--|| specializations : "part of"
+    specialization_course_academic_period }o--|| courses : "part of"
+
+    locations ||--|{ schedules : "hosts"
+
+    lectures ||--|{ lecture_files : "has many"
+    assignments ||--|{ submissions : "has many"
+    submissions ||--|{ submission_files : "has many"
+
+    projects ||--|{ project_student : "has many"
+    project_student }o--|| students : "member"
+
+    discussions ||--|{ discussion_replies : "has many"
+                </div>
+            </div>
+
+            <nav class="pagination">
+                <a href="3.7_dfd.html" class="btn btn-prev"><i class="fas fa-arrow-right"></i> السابق: مخطط تدفق البيانات</a>
+                <a href="../chapter4/4.1_database_design.html" class="btn btn-next">التالي: تصميم قاعدة البيانات <i class="fas fa-arrow-left"></i></a>
+            </nav>
+        </section>
+    </main>
+
+    <!-- (بداية) السكريبتات اللازمة لتشغيل المخطط -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'base', // استخدام ثيم أساسي لتطبيق تنسيقاتنا الخاصة
+            er: {
+                useMaxWidth: true
+            }
+        } );
+    </script>
+    <!-- (نهاية) السكريبتات اللازمة لتشغيل المخطط -->
+
+    <!-- الكود الموحد للجافاسكريبت -->
+    <script>
+        function setActiveLink() { /* ... */ }
+        function initializeSidebarScripts() { /* ... */ }
+        document.addEventListener("DOMContentLoaded", function() {
+            fetch('../sidebar.html')
+                .then(response => response.ok ? response.text() : Promise.reject('Failed to load sidebar'))
+                .then(data => {
+                    document.getElementById('sidebar-container').innerHTML = data;
+                    initializeSidebarScripts();
+                    setActiveLink();
+                })
+                .catch(error => console.error('خطأ في تحميل الشريط الجانبي:', error));
+        });
+    </script>
+</body>
+</html>

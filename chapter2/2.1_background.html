@@ -1,0 +1,145 @@
+<!-- chapter2/2.1_background.html (جاهز للاستخدام) -->
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2.1 خلفية الدراسة - نظام إدارة التعلم</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- الكود الموحد للتنسيقات -->
+    <style>
+/* الكود الموحد للتنسيقات مع تصحيح لون نص القائمة */
+:root { --primary: #2c3e50; --secondary: #3498db; --accent: #e74c3c; --light: #ecf0f1; --sidebar-width: 280px; --transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); --shadow: 0 10px 30px rgba(0, 0, 0, 0.1); --radius: 12px; }
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+body { background-color: #f9f9f9; color: #333; display: flex; min-height: 100vh; direction: rtl; }
+.sidebar { width: var(--sidebar-width); background: linear-gradient(165deg, var(--primary) 0%, #1a2530 100%); color: white; height: 100vh; overflow-y: auto; box-shadow: var(--shadow); border-left: 1px solid rgba(255, 255, 255, 0.1); flex-shrink: 0; }
+.sidebar-header { padding: 25px 20px; text-align: center; border-bottom: 1px solid rgba(255, 255, 255, 0.1); background: rgba(0, 0, 0, 0.2); }
+.sidebar-header .logo { display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 10px; }
+.sidebar-header .logo i { font-size: 2rem; color: var(--secondary); background: rgba(255, 255, 255, 0.1); padding: 10px; border-radius: 50%; }
+.sidebar-header h1 { font-size: 1.4rem; font-weight: 600; margin: 0; }
+.sidebar-header p { font-size: 0.85rem; opacity: 0.8; margin: 5px 0 0; }
+.sidebar-nav { padding: 20px 0; }
+.nav-item { margin-bottom: 5px; position: relative; }
+.nav-item a { display: flex; align-items: center; padding: 15px 25px; color: rgba(255, 255, 255, 0.8); text-decoration: none; transition: var(--transition); border-right: 4px solid transparent; }
+.nav-item a i { margin-left: 15px; font-size: 1.2rem; width: 24px; text-align: center; }
+.nav-item a:hover, .nav-item.active > a { background: rgba(255, 255, 255, 0.1); color: white; border-right-color: var(--secondary); padding-right: 30px; }
+.nav-item a:hover i, .nav-item.active > a i { color: var(--secondary); transform: scale(1.1); }
+.submenu { max-height: 0; overflow: hidden; transition: max-height 0.5s ease; background: rgba(0, 0, 0, 0.2); }
+.nav-item.active .submenu { max-height: 500px; }
+.submenu a { padding: 12px 25px 12px 40px; font-size: 0.9rem; border-right: 3px solid transparent; display: block; color: rgba(255, 255, 255, 0.8); text-decoration: none; transition: var(--transition); }
+.submenu a:hover, .submenu a.active { border-right-color: var(--accent) !important; background: rgba(255, 255, 255, 0.05); padding-right: 35px; color: white; }
+.submenu a::before { content: "•"; margin-left: 10px; color: var(--secondary); }
+.nav-toggle .toggle-icon { margin-right: auto; transition: var(--transition); }
+.nav-item.active > .nav-toggle .toggle-icon { transform: rotate(-180deg); }
+.mobile-menu-btn { display: none; position: fixed; top: 20px; right: 20px; background: var(--primary); color: white; border: none; border-radius: 8px; width: 45px; height: 45px; font-size: 1.2rem; cursor: pointer; z-index: 1100; transition: var(--transition); }
+.mobile-menu-btn:hover { background: var(--secondary); transform: rotate(90deg); }
+.main-content { flex-grow: 1; overflow-y: auto; height: 100vh; background-color: white; }
+.content-page { max-width: 1000px; margin: 0 auto; padding: 60px 40px; }
+.content-page h1 { color: var(--primary); font-size: 2.5rem; margin-bottom: 40px; text-align: center; position: relative; padding-bottom: 15px; }
+.content-page h1::after { content: ""; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 100px; height: 4px; background: var(--secondary); border-radius: 2px; }
+
+/* --- أنماط أقسام المعلومات --- */
+.info-section { margin-bottom: 45px; background: #f9f9f9; border-radius: var(--radius); padding: 30px; border-right: 5px solid var(--primary); }
+.info-header { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; color: var(--primary); }
+.info-header i { font-size: 2rem; }
+.info-header h2 { font-size: 1.8rem; margin: 0; }
+.info-section p { font-size: 1.1rem; line-height: 1.8; color: #444; margin-bottom: 15px; }
+.info-section p:last-child { margin-bottom: 0; }
+
+/* --- قائمة مخصصة (مع تصحيح لون الخط) --- */
+.custom-list { list-style: none; padding: 0; }
+.custom-list li { position: relative; padding-right: 30px; margin-bottom: 15px; font-size: 1.1rem; line-height: 1.7; color: #444; /* <-- هذا هو السطر الذي تم تعديله */ }
+.custom-list li::before { content: '✔'; position: absolute; right: 0; top: 5px; color: var(--secondary); font-weight: bold; }
+
+.pagination { display: flex; justify-content: space-between; margin-top: 50px; padding-top: 30px; border-top: 1px solid #eee; }
+.btn { display: inline-flex; align-items: center; gap: 10px; padding: 12px 25px; border-radius: 50px; text-decoration: none; font-weight: 600; transition: var(--transition); box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+.btn i { font-size: 1.1rem; }
+.btn-next { background: var(--secondary); color: white; }
+.btn-next:hover { background: #2980b9; transform: translateY(-3px) scale(1.05); box-shadow: 0 7px 20px rgba(52, 152, 219, 0.4); }
+.btn-prev { background: var(--primary); color: white; }
+.btn-prev:hover { background: #1a252f; transform: translateY(-3px) scale(1.05); box-shadow: 0 7px 20px rgba(44, 62, 80, 0.3); }
+@media (max-width: 768px) { body { flex-direction: column; } .sidebar { position: fixed; top: 0; right: 0; z-index: 1000; transform: translateX(100%); } .sidebar.active { transform: translateX(0); } .main-content { padding-top: 60px; } .mobile-menu-btn { display: flex; align-items: center; justify-content: center; } .pagination { flex-direction: column; gap: 15px; align-items: stretch; text-align: center; } }
+
+    </style>
+</head>
+<body>
+    <div id="sidebar-container"></div>
+    <main class="main-content">
+        <section class="content-page">
+            <h1>2.1 خلفية الدراسة (Background)</h1>
+            
+            <div class="info-section">
+                <div class="info-header"><i class="fas fa-university"></i><h2>الوضع الراهن للتعليم العالي</h2></div>
+                <p>يشهد قطاع التعليم العالي في جميع أنحاء العالم تحولاً جذرياً مدفوعاً بالتقدم التكنولوجي. لم تعد العملية التعليمية مقتصرة على القاعات الدراسية التقليدية، بل أصبحت تعتمد بشكل متزايد على المنصات الرقمية وأنظمة إدارة التعلم (LMS) التي تسهل التواصل وتوفر وصولاً سهلاً للمواد التعليمية.</p>
+                <p><strong>ولكن، على الرغم من أهمية هذه الأنظمة،</strong> إلا أن العديد من الحلول المتاحة تعاني من قصور واضح. فالأنظمة التقليدية غالباً ما تكون بطيئة، ذات واجهات معقدة، وعمليات حيوية شبه يدوية، مما يسبب تشتتاً في الجهود ويزيد من العبء الإداري.</p>
+                <p>إن هذا القصور لا يؤثر فقط على الكفاءة الإدارية، بل يمتد تأثيره السلبي ليصل إلى جودة العملية التعليمية نفسها، مما يحد من قدرة الطالب على التحصيل العلمي ويزيد من الفجوة بينه وبين الدكتور.</p>
+            </div>
+
+            <div class="info-section">
+                <div class="info-header"><i class="fas fa-rocket"></i><h2>الحل المقترح: منصة إدارة التعليم الجامعي</h2></div>
+                <p>من هذا المنطلق، يأتي مشروع "منصة إدارة التعليم الجامعي" كحل متكامل ومبتكر يهدف إلى سد هذه الفجوة. تم تصميم المنصة لتخدم الأدوار الرئيسية في الجامعة (المدير، الدكتور، الطالب) عبر توفير واجهات حديثة، سريعة، وسهلة الاستخدام مبنية باستخدام إطار العمل <strong>Livewire 3</strong>. تسعى المنصة إلى مركزية جميع العمليات الأكاديمية في مكان واحد، بدءاً من إدارة الهيكل التنظيمي للجامعة وصولاً إلى التفاعل اليومي داخل الفصول الدراسية الافتراضية.</p>
+            </div>
+
+            <div class="info-section">
+                <div class="info-header"><i class="fas fa-check-double"></i><h2>تتمثل الأهداف الرئيسية للمشروع في تحقيق ما يلي:</h2></div>
+                <ul class="custom-list">
+                    <li>توفير بيئة تعليمية تفاعلية: من خلال تمكين الطلاب من المشاركة في ساحات النقاش وإدارة مشاريعهم الدراسية بشكل تعاوني.</li>
+                    <li>أتمتة العمليات الإدارية: مثل بناء الجداول الدراسية المعقدة، وإدارة المستخدمين وصلاحياتهم، وتعيين المواد الدراسية للتخصصات المختلفة.</li>
+                    <li>تحسين كفاءة التواصل: عبر نظام إشعارات فوري يُبقي جميع الأطراف على اطلاع دائم، بالإضافة إلى نظام إعلانات موجهة تضمن وصول المعلومة للشخص المعني.</li>
+                    <li>تسهيل الوصول للمعلومات: من خلال تصميم واجهات مخصصة لكل مستخدم تعرض له البيانات والوظائف التي تهمه بشكل مباشر، مما يقلل من التشتت ويزيد من التركيز.</li>
+                </ul>
+            </div>
+
+            <nav class="pagination">
+                <a href="../chapter1/1.8_gantt_chart.html" class="btn btn-prev"><i class="fas fa-arrow-right"></i> السابق: مخطط جانت</a>
+                <a href="2.2_literature_review.html" class="btn btn-next">التالي: الدراسات السابقة <i class="fas fa-arrow-left"></i></a>
+            </nav>
+        </section>
+    </main>
+
+    <!-- الكود الموحد والمحسن للجافاسكريبت -->
+    <script>
+        function setActiveLink() {
+            const currentPath = window.location.pathname;
+            document.querySelectorAll('.sidebar-nav a').forEach(link => {
+                const linkPath = new URL(link.href, window.location.origin).pathname;
+                if (currentPath === linkPath) {
+                    document.querySelectorAll('.nav-item.active, .submenu a.active').forEach(i => i.classList.remove('active'));
+                    link.classList.add('active');
+                    const parentNavItem = link.closest('.nav-item');
+                    if (parentNavItem) parentNavItem.classList.add('active');
+                }
+            });
+        }
+
+        function initializeSidebarScripts() {
+            document.querySelectorAll('.nav-toggle').forEach(toggle => {
+                toggle.addEventListener('click', function(e) { e.preventDefault(); this.parentElement.classList.toggle('active'); });
+            });
+            const menuToggle = document.getElementById('menuToggle');
+            const sidebar = document.getElementById('sidebar');
+            if (menuToggle && sidebar) {
+                menuToggle.addEventListener('click', (e) => { e.stopPropagation(); sidebar.classList.toggle('active'); });
+            }
+            document.addEventListener('click', function(e) {
+                if (window.innerWidth <= 768 && sidebar?.classList.contains('active') && !sidebar.contains(e.target) && !menuToggle.contains(e.target)) {
+                    sidebar.classList.remove('active');
+                }
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            // المسار الصحيح من داخل مجلد chapter2
+            fetch('../sidebar.html')
+                .then(response => response.ok ? response.text() : Promise.reject('Failed to load sidebar'))
+                .then(data => {
+                    document.getElementById('sidebar-container').innerHTML = data;
+                    initializeSidebarScripts();
+                    setActiveLink();
+                })
+                .catch(error => console.error('خطأ في تحميل الشريط الجانبي:', error));
+        });
+    </script>
+</body>
+</html>
